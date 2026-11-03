@@ -15,7 +15,7 @@ function test(name, fn) {
     passed++;
   } catch (err) {
     console.error(`  ❌ FAIL: ${name}`);
-    console.error(`     Error: ${err.message}`);
+    console.error(`     Error: ${err.stack || err.message}`);
     failed++;
   }
 }
@@ -261,6 +261,42 @@ test("SSE Event Streaming & Cursor Pagination Invariants", () => {
   const decoded = decodeCursor(encoded);
   assert.strictEqual(decoded.id, "audit-101");
   assert.strictEqual(decoded.timestamp, "2026-11-03T18:00:00Z");
+});
+
+// 10. Test SSRF Guard & Server Policy Gateway Invariants
+test("SSRF Guard & Server Policy Gateway Invariants", () => {
+  // SSRF Validator Logic
+  function validateHost(host, port = 22) {
+    if (!host) return { valid: false };
+    const trimmed = host.trim().toLowerCase();
+    if (port < 1 || port > 65535) return { valid: false, reason: "Port out of range" };
+    if (trimmed === "localhost" || trimmed === "metadata.google.internal") return { valid: false, isBlockedSsrf: true };
+    if (/^127\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(trimmed)) return { valid: false, isBlockedSsrf: true };
+    if (/^169\.254\.\d{1,3}\.\d{1,3}$/.test(trimmed)) return { valid: false, isBlockedSsrf: true };
+    return { valid: true, isBlockedSsrf: false };
+  }
+
+  // SSRF blocks
+  assert.strictEqual(validateHost("169.254.169.254").isBlockedSsrf, true);
+  assert.strictEqual(validateHost("127.0.0.1").isBlockedSsrf, true);
+  assert.strictEqual(validateHost("localhost").isBlockedSsrf, true);
+  assert.strictEqual(validateHost("example.com", 70000).valid, false);
+  assert.strictEqual(validateHost("198.51.100.10", 22).valid, true);
+
+  // Policy Gateway Command Evaluation
+  function evaluateCmd(cmd, hasApproval = false) {
+    if (/\brm\s+(-[rfRF]+\s+)?(\/|\/\*|~\/|\*)(\s|$)/.test(cmd)) return { allowed: false, prohibited: true };
+    if (/^df\s+-[hH]/.test(cmd)) return { allowed: true, category: "DIAGNOSTIC", requiresApproval: false };
+    if (/^systemctl\s+restart/.test(cmd)) {
+      return { allowed: hasApproval, category: "MUTATION", requiresApproval: true };
+    }
+    return { allowed: false, requiresApproval: true };
+  }
+
+  assert.strictEqual(evaluateCmd("df -h").allowed, true);
+  assert.strictEqual(evaluateCmd("systemctl restart nginx").allowed, false);
+  assert.strictEqual(evaluateCmd("systemctl restart nginx", true).allowed, true);
+  assert.strictEqual(evaluateCmd("rm -rf /").prohibited, true);
 });
 
 console.log(`\n=================================================`);

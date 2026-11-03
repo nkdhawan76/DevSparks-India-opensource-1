@@ -11,14 +11,14 @@ import {
 import { redactSecrets } from "@/core/logger";
 
 const PROHIBITED_PATTERNS: RegExp[] = [
-  /\brm\s+(-[rfRF]+\s+)?(\/|\/\*|~\/|\*)\b/,
+  /\brm\s+(-[rfRF]+\s+)?(\/|\/\*|~\/|\*)(\s|$)/,
   /\bmkfs\b/,
   /\bdd\s+if=/,
   /:\(\)\s*\{\s*:\s*\|\s*:\s*&\s*\}\s*;\s*:/, // Fork bomb
   /\bchmod\s+(-[rR]+\s+)?777\s+\//,
   /\biptables\s+-F\b/,
   /\bufw\s+disable\b/,
-  /\b(sh|bash|zsh)\s+-i\b/, // Interactive raw shell
+  /\b(sh|bash|zsh)\s+-i(\s|$)/, // Interactive raw shell
   />\s*\/dev\/sd[a-z]/, // Raw disk overwrite
 ];
 
