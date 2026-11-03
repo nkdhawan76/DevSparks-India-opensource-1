@@ -299,328 +299,206 @@ test("SSRF Guard & Server Policy Gateway Invariants", () => {
   assert.strictEqual(evaluateCmd("rm -rf /").prohibited, true);
 });
 
-// 11. Test Deployment Pipeline State Machine & Rollback Invariants
-test("Deployment Pipeline State Machine & Rollback Invariants", () => {
-  function runPipeline(req, auditReady = true, healthFails = false) {
-    if (req.environment === "production" && (!req.approvedBy || !req.token)) {
-      return { status: "FAILED", reason: "Missing approval" };
-    }
-    if (!auditReady) {
-      return { status: "FAILED", reason: "Audit failed" };
-    }
-    if (healthFails) {
-      if (req.autoRollback) {
-        return { status: "ROLLED_BACK", rolledBack: true, reason: "Health check failed" };
-      }
-      return { status: "FAILED", rolledBack: false, reason: "Health check failed" };
-    }
-    return { status: "SUCCESS", stepsCompleted: 5 };
+// 14. Test Database Migration SQL Schema Verification
+test("Database Migration SQL Schema Verification", () => {
+  const fs = await_or_sync_fs();
+  const migrationPath = "./migrations/0001_initial_schema.sql";
+  assert(fs.existsSync(migrationPath), "Migration file 0001_initial_schema.sql must exist");
+  
+  const sql = fs.readFileSync(migrationPath, "utf-8");
+  const expectedTables = [
+    "users",
+    "sessions",
+    "workspaces",
+    "workspace_members",
+    "projects",
+    "audit_rules",
+    "audit_runs",
+    "audit_findings",
+    "ai_provider_connections",
+    "ai_conversations",
+    "ai_messages",
+    "ai_usage_events",
+    "jobs",
+    "audit_events",
+    "secret_store",
+    "servers",
+    "server_operations",
+    "deployments",
+    "monitoring_checks",
+    "monitoring_results",
+    "incidents",
+  ];
+
+  for (const table of expectedTables) {
+    const tableRegex = new RegExp(`CREATE\\s+TABLE\\s+(?:IF\\s+NOT\\s+EXISTS\\s+)?${table}\\b`, "i");
+    assert(tableRegex.test(sql), `Schema must define table '${table}'`);
   }
 
-  // 1. Missing approval for production blocks deployment
-  const unapprovedProd = runPipeline({ environment: "production", autoRollback: true });
-  assert.strictEqual(unapprovedProd.status, "FAILED");
-  assert.strictEqual(unapprovedProd.reason, "Missing approval");
-
-  // 2. Failed pre-deploy audit blocks deployment
-  const auditBlocked = runPipeline({ environment: "production", approvedBy: "admin", token: "tok-123" }, false);
-  assert.strictEqual(auditBlocked.status, "FAILED");
-  assert.strictEqual(auditBlocked.reason, "Audit failed");
-
-  // 3. Successful deployment
-  const successDeploy = runPipeline({ environment: "production", approvedBy: "admin", token: "tok-123", autoRollback: true }, true, false);
-  assert.strictEqual(successDeploy.status, "SUCCESS");
-  assert.strictEqual(successDeploy.stepsCompleted, 5);
-
-  // 4. Automatic rollback on health check failure
-  const rollbackDeploy = runPipeline({ environment: "production", approvedBy: "admin", token: "tok-123", autoRollback: true }, true, true);
-  assert.strictEqual(rollbackDeploy.status, "ROLLED_BACK");
-  assert.strictEqual(rollbackDeploy.rolledBack, true);
+  // Verify UUID primary key usage
+  assert(sql.includes("gen_random_uuid()"), "Schema must use gen_random_uuid() for primary keys");
 });
 
-// 12. Test Synthetic Monitoring State Machine & Alert Invariants
-test("Synthetic Monitoring State Machine & Alert Invariants", () => {
-  class MockMonitorTracker {
-    constructor(threshold = 3) {
-      this.threshold = threshold;
-      this.failures = 0;
-      this.status = "HEALTHY";
-      this.alerts = [];
-      this.checks = [];
-    }
-
-    record(isUp, latency = 40) {
-      this.checks.push({ isUp, latency });
-      if (isUp) {
-        const wasDown = this.status === "DOWN";
-        this.failures = 0;
-        this.status = "HEALTHY";
-        if (wasDown) {
-          this.alerts.push({ type: "RECOVERED" });
-        }
-      } else {
-        this.failures++;
-        if (this.failures >= this.threshold) {
-          this.status = "DOWN";
-          this.alerts.push({ type: "DOWN", failures: this.failures });
-        } else {
-          this.status = "DEGRADED";
-        }
+// Helper for sync fs
+function await_or_sync_fs() {
+  return {
+    existsSync: (p) => {
+      try {
+        return require("node:fs").existsSync(p);
+      } catch {
+        return false;
       }
-    }
-
-    getUptime() {
-      const up = this.checks.filter(c => c.isUp).length;
-      return Number(((up / this.checks.length) * 100).toFixed(1));
-    }
-  }
-
-  const tracker = new MockMonitorTracker(3);
-
-  // Probe 1: Success -> HEALTHY
-  tracker.record(true, 35);
-  assert.strictEqual(tracker.status, "HEALTHY");
-  assert.strictEqual(tracker.alerts.length, 0);
-
-  // Probe 2: Failure 1 -> DEGRADED
-  tracker.record(false, 0);
-  assert.strictEqual(tracker.status, "DEGRADED");
-  assert.strictEqual(tracker.failures, 1);
-  assert.strictEqual(tracker.alerts.length, 0);
-
-  // Probe 3: Failure 2 -> DEGRADED
-  tracker.record(false, 0);
-  assert.strictEqual(tracker.status, "DEGRADED");
-  assert.strictEqual(tracker.failures, 2);
-
-  // Probe 4: Failure 3 -> DOWN (threshold reached)
-  tracker.record(false, 0);
-  assert.strictEqual(tracker.status, "DOWN");
-  assert.strictEqual(tracker.alerts.length, 1);
-  assert.strictEqual(tracker.alerts[0].type, "DOWN");
-
-  // Probe 5: Success -> RECOVERED alert generated, status HEALTHY
-  tracker.record(true, 42);
-  assert.strictEqual(tracker.status, "HEALTHY");
-  assert.strictEqual(tracker.failures, 0);
-  assert.strictEqual(tracker.alerts.length, 2);
-  assert.strictEqual(tracker.alerts[1].type, "RECOVERED");
-
-  // Uptime: 2 up out of 5 checks = 40.0%
-  assert.strictEqual(tracker.getUptime(), 40.0);
-});
-
-// 13. Test Multi-Tier Entitlement Gating & Resource Quotas
-test("Multi-Tier Entitlement Gating & Resource Quota Invariants", () => {
-  const TIERS = {
-    free: { maxServers: 1, monthlyAudits: 50, advancedAudit: false },
-    pro: { maxServers: 5, monthlyAudits: 500, advancedAudit: true },
+    },
+    readFileSync: (p, enc) => require("node:fs").readFileSync(p, enc),
   };
+}
 
-  function checkTierAccess(tierKey, feature, currentUsage = 0) {
-    const tier = TIERS[tierKey];
-    if (!tier) return { allowed: false, reason: "Invalid tier" };
-
-    if (feature === "audit.advanced") {
-      return { allowed: tier.advancedAudit };
-    }
-
-    if (feature === "deployment.vps") {
-      if (currentUsage >= tier.maxServers) {
-        return { allowed: false, reason: "Server quota reached", limit: tier.maxServers, remaining: 0 };
+// 15. Test Monitoring Webhook Dispatcher & SSRF Invariant
+test("Monitoring Webhook Dispatcher & SSRF Invariants", () => {
+  // URL Masking
+  function maskWebhookUrl(url) {
+    try {
+      const parsed = new URL(url);
+      const parts = parsed.pathname.split("/").filter(Boolean);
+      if (parts.length > 2) {
+        const last = parts[parts.length - 1];
+        parts[parts.length - 1] = last.length > 6 ? `${last.slice(0, 4)}...${last.slice(-2)}` : "***";
+        parsed.pathname = "/" + parts.join("/");
       }
-      return { allowed: true, limit: tier.maxServers, remaining: tier.maxServers - currentUsage };
-    }
-
-    if (feature === "audit.basic") {
-      if (currentUsage >= tier.monthlyAudits) {
-        return { allowed: false, reason: "Audit limit exceeded", limit: tier.monthlyAudits, remaining: 0 };
-      }
-      return { allowed: true, limit: tier.monthlyAudits, remaining: tier.monthlyAudits - currentUsage };
-    }
-
-    return { allowed: true };
-  }
-
-  // 1. Free tier blocks 2nd server
-  const freeServer1 = checkTierAccess("free", "deployment.vps", 0);
-  assert.strictEqual(freeServer1.allowed, true);
-  assert.strictEqual(freeServer1.remaining, 1);
-
-  const freeServer2 = checkTierAccess("free", "deployment.vps", 1);
-  assert.strictEqual(freeServer2.allowed, false);
-  assert.strictEqual(freeServer2.reason, "Server quota reached");
-
-  // 2. Pro tier allows 5 servers
-  const proServer = checkTierAccess("pro", "deployment.vps", 3);
-  assert.strictEqual(proServer.allowed, true);
-  assert.strictEqual(proServer.remaining, 2);
-
-  // 3. Advanced audit feature flag
-  assert.strictEqual(checkTierAccess("free", "audit.advanced").allowed, false);
-  assert.strictEqual(checkTierAccess("pro", "audit.advanced").allowed, true);
-});
-
-// 11. Test Deployment Pipeline State Machine & Rollback Invariants
-test("Deployment Pipeline State Machine & Rollback Invariants", () => {
-  function runPipeline(req, auditReady = true, healthFails = false) {
-    if (req.environment === "production" && (!req.approvedBy || !req.token)) {
-      return { status: "FAILED", reason: "Missing approval" };
-    }
-    if (!auditReady) {
-      return { status: "FAILED", reason: "Audit failed" };
-    }
-    if (healthFails) {
-      if (req.autoRollback) {
-        return { status: "ROLLED_BACK", rolledBack: true, reason: "Health check failed" };
-      }
-      return { status: "FAILED", rolledBack: false, reason: "Health check failed" };
-    }
-    return { status: "SUCCESS", stepsCompleted: 5 };
-  }
-
-  // 1. Missing approval for production blocks deployment
-  const unapprovedProd = runPipeline({ environment: "production", autoRollback: true });
-  assert.strictEqual(unapprovedProd.status, "FAILED");
-  assert.strictEqual(unapprovedProd.reason, "Missing approval");
-
-  // 2. Failed pre-deploy audit blocks deployment
-  const auditBlocked = runPipeline({ environment: "production", approvedBy: "admin", token: "tok-123" }, false);
-  assert.strictEqual(auditBlocked.status, "FAILED");
-  assert.strictEqual(auditBlocked.reason, "Audit failed");
-
-  // 3. Successful deployment
-  const successDeploy = runPipeline({ environment: "production", approvedBy: "admin", token: "tok-123", autoRollback: true }, true, false);
-  assert.strictEqual(successDeploy.status, "SUCCESS");
-  assert.strictEqual(successDeploy.stepsCompleted, 5);
-
-  // 4. Automatic rollback on health check failure
-  const rollbackDeploy = runPipeline({ environment: "production", approvedBy: "admin", token: "tok-123", autoRollback: true }, true, true);
-  assert.strictEqual(rollbackDeploy.status, "ROLLED_BACK");
-  assert.strictEqual(rollbackDeploy.rolledBack, true);
-});
-
-// 12. Test Synthetic Monitoring State Machine & Alert Invariants
-test("Synthetic Monitoring State Machine & Alert Invariants", () => {
-  class MockMonitorTracker {
-    constructor(threshold = 3) {
-      this.threshold = threshold;
-      this.failures = 0;
-      this.status = "HEALTHY";
-      this.alerts = [];
-      this.checks = [];
-    }
-
-    record(isUp, latency = 40) {
-      this.checks.push({ isUp, latency });
-      if (isUp) {
-        const wasDown = this.status === "DOWN";
-        this.failures = 0;
-        this.status = "HEALTHY";
-        if (wasDown) {
-          this.alerts.push({ type: "RECOVERED" });
-        }
-      } else {
-        this.failures++;
-        if (this.failures >= this.threshold) {
-          this.status = "DOWN";
-          this.alerts.push({ type: "DOWN", failures: this.failures });
-        } else {
-          this.status = "DEGRADED";
-        }
-      }
-    }
-
-    getUptime() {
-      const up = this.checks.filter(c => c.isUp).length;
-      return Number(((up / this.checks.length) * 100).toFixed(1));
+      return parsed.toString();
+    } catch {
+      return "[MALFORMED_URL]";
     }
   }
 
-  const tracker = new MockMonitorTracker(3);
+  const masked = maskWebhookUrl("https://hooks.slack.com/services/T00000000/B00000000/SECRET_WEBHOOK_TOKEN_1234");
+  assert(!masked.includes("SECRET_WEBHOOK_TOKEN_1234"), "Raw secret webhook token must not be printed");
+  assert(masked.includes("SECR...34"), "Token should be partially masked");
 
-  // Probe 1: Success -> HEALTHY
-  tracker.record(true, 35);
-  assert.strictEqual(tracker.status, "HEALTHY");
-  assert.strictEqual(tracker.alerts.length, 0);
+  // SSRF Guard for Webhooks
+  function validateWebhookUrl(url) {
+    const parsed = new URL(url);
+    const host = parsed.hostname.toLowerCase();
+    if (host === "localhost" || host === "127.0.0.1" || host === "169.254.169.254" || host.startsWith("10.") || host.startsWith("192.168.")) {
+      return { allowed: false, isBlockedSsrf: true };
+    }
+    return { allowed: true, isBlockedSsrf: false };
+  }
 
-  // Probe 2: Failure 1 -> DEGRADED
-  tracker.record(false, 0);
-  assert.strictEqual(tracker.status, "DEGRADED");
-  assert.strictEqual(tracker.failures, 1);
-  assert.strictEqual(tracker.alerts.length, 0);
+  assert.strictEqual(validateWebhookUrl("https://127.0.0.1/webhook").isBlockedSsrf, true);
+  assert.strictEqual(validateWebhookUrl("http://169.254.169.254/latest/meta-data").isBlockedSsrf, true);
+  assert.strictEqual(validateWebhookUrl("https://hooks.slack.com/services/T1/B1/K1").allowed, true);
 
-  // Probe 3: Failure 2 -> DEGRADED
-  tracker.record(false, 0);
-  assert.strictEqual(tracker.status, "DEGRADED");
-  assert.strictEqual(tracker.failures, 2);
+  // HMAC Signature generation
+  const secret = "test-webhook-secret-key";
+  const payload = JSON.stringify({ event: "deploycheck.monitoring.alert", type: "DOWN" });
+  const hmac = crypto.createHmac("sha256", secret);
+  hmac.update(payload);
+  const signature = `sha256=${hmac.digest("hex")}`;
 
-  // Probe 4: Failure 3 -> DOWN (threshold reached)
-  tracker.record(false, 0);
-  assert.strictEqual(tracker.status, "DOWN");
-  assert.strictEqual(tracker.alerts.length, 1);
-  assert.strictEqual(tracker.alerts[0].type, "DOWN");
-
-  // Probe 5: Success -> RECOVERED alert generated, status HEALTHY
-  tracker.record(true, 42);
-  assert.strictEqual(tracker.status, "HEALTHY");
-  assert.strictEqual(tracker.failures, 0);
-  assert.strictEqual(tracker.alerts.length, 2);
-  assert.strictEqual(tracker.alerts[1].type, "RECOVERED");
-
-  // Uptime: 2 up out of 5 checks = 40.0%
-  assert.strictEqual(tracker.getUptime(), 40.0);
+  assert(signature.startsWith("sha256="), "HMAC signature must start with sha256=");
+  assert.strictEqual(signature.length, 7 + 64, "SHA-256 hex signature must be 64 chars long");
 });
 
-// 13. Test Multi-Tier Entitlement Gating & Resource Quotas
-test("Multi-Tier Entitlement Gating & Resource Quota Invariants", () => {
-  const TIERS = {
-    free: { maxServers: 1, monthlyAudits: 50, advancedAudit: false },
-    pro: { maxServers: 5, monthlyAudits: 500, advancedAudit: true },
+// 14. Test Database Migration SQL Schema Verification
+test("Database Migration SQL Schema Verification", () => {
+  const fs = await_or_sync_fs();
+  const migrationPath = "./migrations/0001_initial_schema.sql";
+  assert(fs.existsSync(migrationPath), "Migration file 0001_initial_schema.sql must exist");
+  
+  const sql = fs.readFileSync(migrationPath, "utf-8");
+  const expectedTables = [
+    "users",
+    "sessions",
+    "workspaces",
+    "workspace_members",
+    "projects",
+    "audit_rules",
+    "audit_runs",
+    "audit_findings",
+    "ai_provider_connections",
+    "ai_conversations",
+    "ai_messages",
+    "ai_usage_events",
+    "jobs",
+    "audit_events",
+    "secret_store",
+    "servers",
+    "server_operations",
+    "deployments",
+    "monitoring_checks",
+    "monitoring_results",
+    "incidents",
+  ];
+
+  for (const table of expectedTables) {
+    const tableRegex = new RegExp(`CREATE\\s+TABLE\\s+(?:IF\\s+NOT\\s+EXISTS\\s+)?${table}\\b`, "i");
+    assert(tableRegex.test(sql), `Schema must define table '${table}'`);
+  }
+
+  // Verify UUID primary key usage
+  assert(sql.includes("gen_random_uuid()"), "Schema must use gen_random_uuid() for primary keys");
+});
+
+// Helper for sync fs
+function await_or_sync_fs() {
+  return {
+    existsSync: (p) => {
+      try {
+        return require("node:fs").existsSync(p);
+      } catch {
+        return false;
+      }
+    },
+    readFileSync: (p, enc) => require("node:fs").readFileSync(p, enc),
   };
+}
 
-  function checkTierAccess(tierKey, feature, currentUsage = 0) {
-    const tier = TIERS[tierKey];
-    if (!tier) return { allowed: false, reason: "Invalid tier" };
-
-    if (feature === "audit.advanced") {
-      return { allowed: tier.advancedAudit };
-    }
-
-    if (feature === "deployment.vps") {
-      if (currentUsage >= tier.maxServers) {
-        return { allowed: false, reason: "Server quota reached", limit: tier.maxServers, remaining: 0 };
+// 15. Test Monitoring Webhook Dispatcher & SSRF Invariant
+test("Monitoring Webhook Dispatcher & SSRF Invariants", () => {
+  // URL Masking
+  function maskWebhookUrl(url) {
+    try {
+      const parsed = new URL(url);
+      const parts = parsed.pathname.split("/").filter(Boolean);
+      if (parts.length > 2) {
+        const last = parts[parts.length - 1];
+        parts[parts.length - 1] = last.length > 6 ? `${last.slice(0, 4)}...${last.slice(-2)}` : "***";
+        parsed.pathname = "/" + parts.join("/");
       }
-      return { allowed: true, limit: tier.maxServers, remaining: tier.maxServers - currentUsage };
+      return parsed.toString();
+    } catch {
+      return "[MALFORMED_URL]";
     }
-
-    if (feature === "audit.basic") {
-      if (currentUsage >= tier.monthlyAudits) {
-        return { allowed: false, reason: "Audit limit exceeded", limit: tier.monthlyAudits, remaining: 0 };
-      }
-      return { allowed: true, limit: tier.monthlyAudits, remaining: tier.monthlyAudits - currentUsage };
-    }
-
-    return { allowed: true };
   }
 
-  // 1. Free tier blocks 2nd server
-  const freeServer1 = checkTierAccess("free", "deployment.vps", 0);
-  assert.strictEqual(freeServer1.allowed, true);
-  assert.strictEqual(freeServer1.remaining, 1);
+  const masked = maskWebhookUrl("https://hooks.slack.com/services/T00000000/B00000000/SECRET_WEBHOOK_TOKEN_1234");
+  assert(!masked.includes("SECRET_WEBHOOK_TOKEN_1234"), "Raw secret webhook token must not be printed");
+  assert(masked.includes("SECR...34"), "Token should be partially masked");
 
-  const freeServer2 = checkTierAccess("free", "deployment.vps", 1);
-  assert.strictEqual(freeServer2.allowed, false);
-  assert.strictEqual(freeServer2.reason, "Server quota reached");
+  // SSRF Guard for Webhooks
+  function validateWebhookUrl(url) {
+    const parsed = new URL(url);
+    const host = parsed.hostname.toLowerCase();
+    if (host === "localhost" || host === "127.0.0.1" || host === "169.254.169.254" || host.startsWith("10.") || host.startsWith("192.168.")) {
+      return { allowed: false, isBlockedSsrf: true };
+    }
+    return { allowed: true, isBlockedSsrf: false };
+  }
 
-  // 2. Pro tier allows 5 servers
-  const proServer = checkTierAccess("pro", "deployment.vps", 3);
-  assert.strictEqual(proServer.allowed, true);
-  assert.strictEqual(proServer.remaining, 2);
+  assert.strictEqual(validateWebhookUrl("https://127.0.0.1/webhook").isBlockedSsrf, true);
+  assert.strictEqual(validateWebhookUrl("http://169.254.169.254/latest/meta-data").isBlockedSsrf, true);
+  assert.strictEqual(validateWebhookUrl("https://hooks.slack.com/services/T1/B1/K1").allowed, true);
 
-  // 3. Advanced audit feature flag
-  assert.strictEqual(checkTierAccess("free", "audit.advanced").allowed, false);
-  assert.strictEqual(checkTierAccess("pro", "audit.advanced").allowed, true);
+  // HMAC Signature generation
+  const secret = "test-webhook-secret-key";
+  const payload = JSON.stringify({ event: "deploycheck.monitoring.alert", type: "DOWN" });
+  const hmac = crypto.createHmac("sha256", secret);
+  hmac.update(payload);
+  const signature = `sha256=${hmac.digest("hex")}`;
+
+  assert(signature.startsWith("sha256="), "HMAC signature must start with sha256=");
+  assert.strictEqual(signature.length, 7 + 64, "SHA-256 hex signature must be 64 chars long");
 });
 
 console.log(`\n=================================================`);
