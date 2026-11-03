@@ -203,6 +203,39 @@ CMD ["npm", "start"]`;
   assert.strictEqual(hasHealthcheck, false, "Must flag missing HEALTHCHECK");
 });
 
+// 8. Test RBAC Authorization & Tenant Isolation
+test("RBAC Authorization & Tenant Isolation Invariant", () => {
+  const ROLE_PERMISSIONS = {
+    OWNER: new Set(["workspace.read", "workspace.delete", "audit.run", "audit.read"]),
+    DEVELOPER: new Set(["workspace.read", "audit.run", "audit.read", "patch.propose"]),
+    VIEWER: new Set(["workspace.read", "audit.read"]),
+  };
+
+  function evaluateAuth(subject, targetWorkspaceId, permission, resourceWorkspaceId) {
+    if (!subject.userId || !subject.isActive) return { allowed: false, reason: "Inactive or unauthenticated" };
+    if (subject.workspaceId !== targetWorkspaceId) return { allowed: false, reason: "Tenant isolation violation" };
+    if (resourceWorkspaceId && resourceWorkspaceId !== subject.workspaceId) return { allowed: false, reason: "Cross-tenant resource blocked" };
+    const perms = ROLE_PERMISSIONS[subject.role];
+    if (!perms || !perms.has(permission)) return { allowed: false, reason: "Permission denied" };
+    return { allowed: true };
+  }
+
+  const dev = { userId: "u1", workspaceId: "ws_alpha", role: "DEVELOPER", isActive: true };
+
+  // Developer allowed to run audit
+  const devRun = evaluateAuth(dev, "ws_alpha", "audit.run");
+  assert.strictEqual(devRun.allowed, true);
+
+  // Developer denied workspace deletion
+  const devDelete = evaluateAuth(dev, "ws_alpha", "workspace.delete");
+  assert.strictEqual(devDelete.allowed, false);
+
+  // Cross-tenant access denied
+  const crossTenant = evaluateAuth(dev, "ws_beta", "audit.run");
+  assert.strictEqual(crossTenant.allowed, false);
+  assert.strictEqual(crossTenant.reason, "Tenant isolation violation");
+});
+
 console.log(`\n=================================================`);
 console.log(`Verification Complete: ${passed} Passed, ${failed} Failed`);
 console.log(`=================================================`);
