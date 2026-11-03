@@ -15,7 +15,6 @@
     "lint": "eslint . --ext .ts,.tsx",
     "typecheck": "tsc --noEmit",
     "test": "node scripts/verify-mvp.mjs",
-    "test:unit": "node --test src/**/*.test.ts",
     "audit": "node scripts/run-audit.mjs"
   },
   "dependencies": {
