@@ -187,3 +187,4 @@ console.log(` Readiness Score: ${isReady ? "✅ READY FOR DEPLOYMENT" : "❌ DEP
 console.log("================================================================================\n");
 
 process.exit(isReady ? 0 : 1);
+
