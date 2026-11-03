@@ -25,3 +25,4 @@ AI provider keys (e.g. OpenRouter) are user-owned:
 2. The control plane encrypts the key immediately using **AES-256-GCM** authenticated encryption.
 3. Raw API keys are **never** stored in plaintext, never printed to application logs, and never returned in API payloads.
 4. Client interfaces receive a masked representation (`sk-or••••••••1234`).
+

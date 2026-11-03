@@ -69,3 +69,4 @@ export const DockerCheckerRule: AuditRule = {
     return findings;
   },
 };
+

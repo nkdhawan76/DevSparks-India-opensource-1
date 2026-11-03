@@ -44,3 +44,4 @@ export interface AuthorizationDecision {
   reason?: string;
   matchedPermission?: PermissionKey;
 }
+

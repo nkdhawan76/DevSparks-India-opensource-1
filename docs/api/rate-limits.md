@@ -23,3 +23,4 @@ When a rate limit is exceeded, the server returns HTTP `429 Too Many Requests` w
 - **General REST Reads:** 120 requests / minute per IP / session.
 - **Audit Submissions:** 10 audit runs / minute per workspace.
 - **AI Requests:** 20 requests / minute per workspace (subject to upstream BYOK provider rate limits).
+

@@ -30,3 +30,4 @@ When an endpoint is scheduled for deprecation:
 1. It is marked as `deprecated: true` in `docs/api/openapi.yaml`.
 2. A `Deprecation: true` response header is added.
 3. The endpoint remains functional for at least one minor release cycle before removal.
+

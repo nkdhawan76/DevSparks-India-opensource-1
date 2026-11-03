@@ -58,3 +58,4 @@ Authorization: Bearer <DEPLOYCHECK_API_KEY>
 ```
 
 When `meta.hasMore` is `false`, the client has reached the end of the collection and `nextCursor` will be `null`.
+

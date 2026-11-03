@@ -65,3 +65,4 @@ export const ROLE_PERMISSIONS: Record<WorkspaceRole, ReadonlySet<PermissionKey>>
     "entitlements.manage",
   ]),
 };
+

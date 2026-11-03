@@ -31,3 +31,4 @@ DevSparks DeployCheck uses standard HTTP status codes paired with structured, ma
 | `ENTITLEMENT_DENIED` | `403` | Feature is gated by workspace plan or quota exceeded. |
 | `AUDIT_FAILED` | `500` | Static analysis worker encountered an execution error. |
 | `INTERNAL_ERROR` | `500` | Unhandled server error. |
+
