@@ -338,3 +338,4 @@ CREATE TABLE IF NOT EXISTS incidents (
 );
 
 CREATE INDEX IF NOT EXISTS idx_incidents_workspace ON incidents(workspace_id, status);
+

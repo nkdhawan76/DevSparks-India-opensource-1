@@ -4,7 +4,7 @@
  * Enforces SSRF invariants and credential redaction.
  */
 
-import * as crypto from "node:crypto";
+import crypto from "crypto";
 import { secureLogger } from "../../core/logger";
 import { SsrfGuard } from "../server/ssrf-guard";
 import { MonitorAlertNotification, MonitorTarget } from "./types";
@@ -57,8 +57,10 @@ export class WebhookDispatcher {
       if (pathParts.length > 2) {
         // Redact tokens at the end of path
         const lastPart = pathParts[pathParts.length - 1];
-        const masked = lastPart.length > 6 ? `${lastPart.slice(0, 4)}...${lastPart.slice(-2)}` : "***";
-        pathParts[pathParts.length - 1] = masked;
+        if (lastPart) {
+          const masked = lastPart.length > 6 ? `${lastPart.slice(0, 4)}...${lastPart.slice(-2)}` : "***";
+          pathParts[pathParts.length - 1] = masked;
+        }
         parsed.pathname = "/" + pathParts.join("/");
       }
       return parsed.toString();
@@ -229,3 +231,4 @@ export class WebhookDispatcher {
     return results;
   }
 }
+

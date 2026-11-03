@@ -3,8 +3,8 @@
  * Adheres to ARD Section 13 invariants.
  */
 
-import * as fs from "node:fs";
-import * as path from "node:path";
+import fs from "fs";
+import path from "path";
 import { secureLogger } from "../core/logger";
 
 export interface MigrationFile {
@@ -41,17 +41,20 @@ export class MigrationRunner {
 
     const files = fs
       .readdirSync(this.migrationsDir)
-      .filter((file) => file.endsWith(".sql"))
+      .filter((file: string) => file.endsWith(".sql"))
       .sort();
 
-    return files.map((filename) => {
+    return files.map((filename: string) => {
       const fullPath = path.join(this.migrationsDir, filename);
       const sql = fs.readFileSync(fullPath, "utf-8");
       
       // Extract table names created in this migration
-      const tableMatches = Array.from(
+      const matches = Array.from(
         sql.matchAll(/CREATE\s+TABLE\s+(?:IF\s+NOT\s+EXISTS\s+)?([a-zA-Z0-9_]+)/gi)
-      ).map((match) => match[1]);
+      ) as unknown as RegExpMatchArray[];
+      const tableMatches: string[] = matches
+        .map((m) => (m && m[1] ? String(m[1]) : ""))
+        .filter((name): name is string => Boolean(name));
 
       return {
         id: path.basename(filename, ".sql"),
@@ -109,3 +112,4 @@ export class MigrationRunner {
     }
   }
 }
+
