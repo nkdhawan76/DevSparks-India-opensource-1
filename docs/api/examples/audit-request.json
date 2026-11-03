@@ -1,0 +1,20 @@
+{
+  "projectId": "proj_01j7abc890123456789012",
+  "workspaceId": "ws_01j7def123456789012345",
+  "commitHash": "4fb5389a1c2e3f4b5c6d7e8f9a0b1c2d3e4f5a6b",
+  "branch": "feat/payment-gateway",
+  "files": [
+    {
+      "path": "package.json",
+      "content": "{\n  \"name\": \"sample-app\",\n  \"dependencies\": {\n    \"express\": \"*\"\n  }\n}"
+    },
+    {
+      "path": ".env",
+      "content": "STRIPE_SECRET_KEY=EXAMPLE_EXPOSED_STRIPE_SECRET_KEY_MOCK"
+    },
+    {
+      "path": "Dockerfile",
+      "content": "FROM node:latest\nWORKDIR /app\nCOPY . .\nCMD [\"npm\", \"start\"]"
+    }
+  ]
+}

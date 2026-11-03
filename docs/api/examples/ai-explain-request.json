@@ -1,0 +1,9 @@
+{
+  "findingId": "docker-unpinned-base-image",
+  "ruleId": "DOC-001",
+  "filePath": "Dockerfile",
+  "codeSnippet": "FROM node:latest\nWORKDIR /app\nCOPY . .\nCMD [\"npm\", \"start\"]",
+  "language": "dockerfile",
+  "userPrompt": "How should I pin this image and make it production-ready?",
+  "stream": false
+}

@@ -1,0 +1,63 @@
+{
+  "id": "audit-1798992000000",
+  "projectId": "proj_01j7abc890123456789012",
+  "workspaceId": "ws_01j7def123456789012345",
+  "status": "FAILED",
+  "startedAt": "2026-11-03T18:00:00.000Z",
+  "completedAt": "2026-11-03T18:00:00.240Z",
+  "scannerVersion": "1.3.0",
+  "detectedStack": {
+    "framework": "express",
+    "language": "javascript",
+    "runtime": "node",
+    "hasDocker": true,
+    "hasDatabase": false
+  },
+  "findings": [
+    {
+      "id": "sec-001-stripe-key",
+      "ruleId": "SEC-001",
+      "severity": "CRITICAL",
+      "category": "SECURITY",
+      "title": "Exposed Credential: Stripe API Key",
+      "description": "Hardcoded live Stripe secret API key detected in repository files.",
+      "filePath": ".env",
+      "lineStart": 1,
+      "remediation": "Revoke the exposed key in the Stripe Dashboard immediately and migrate to an environment variable store.",
+      "aiFixAvailable": true
+    },
+    {
+      "id": "dep-wildcard-express",
+      "ruleId": "DEP-002",
+      "severity": "HIGH",
+      "category": "DEPENDENCY",
+      "title": "Wildcard Dependency Version: express",
+      "description": "Dependency 'express' specifies wildcard version '*'. Wildcard dependencies introduce breaking changes into production deployments.",
+      "filePath": "package.json",
+      "lineStart": 4,
+      "remediation": "Pin the dependency to an exact semantic version (e.g. ^4.19.2).",
+      "aiFixAvailable": true
+    },
+    {
+      "id": "docker-unpinned-base-image",
+      "ruleId": "DOC-001",
+      "severity": "MEDIUM",
+      "category": "CONFIGURATION",
+      "title": "Unpinned Docker Base Image",
+      "description": "The Dockerfile FROM statement uses an unpinned or ':latest' image tag.",
+      "filePath": "Dockerfile",
+      "lineStart": 1,
+      "remediation": "Pin the base image to a specific version or SHA digest (e.g., node:20-alpine).",
+      "aiFixAvailable": true
+    }
+  ],
+  "summary": {
+    "totalFindings": 3,
+    "criticalCount": 1,
+    "highCount": 1,
+    "mediumCount": 1,
+    "lowCount": 0,
+    "infoCount": 0,
+    "isDeployReady": false
+  }
+}

@@ -9,12 +9,14 @@ import { detectProjectStack } from "./rules/stack-detector";
 import { SecretScannerRule } from "./rules/secret-scanner";
 import { DependencyCheckerRule } from "./rules/dependency-checker";
 import { EnvCheckerRule } from "./rules/env-checker";
+import { DockerCheckerRule } from "./rules/docker-checker";
 
 export class AuditEngine {
   private rules: AuditRule[] = [
     SecretScannerRule,
     DependencyCheckerRule,
     EnvCheckerRule,
+    DockerCheckerRule,
   ];
 
   public registerRule(rule: AuditRule) {

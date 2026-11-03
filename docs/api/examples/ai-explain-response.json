@@ -1,0 +1,13 @@
+{
+  "explanation": "Pinning base image versions prevents unpredictable upstream breaking changes during CI/CD builds. In addition, using an Alpine-based image reduces attack surface and container size.",
+  "patch": {
+    "targetFile": "Dockerfile",
+    "originalCode": "FROM node:latest\nWORKDIR /app\nCOPY . .\nCMD [\"npm\", \"start\"]",
+    "replacementCode": "FROM node:20.12.0-alpine3.19\nWORKDIR /app\nCOPY package*.json ./\nRUN npm ci --only=production\nCOPY . .\nUSER node\nEXPOSE 3000\nCMD [\"npm\", \"start\"]",
+    "rationale": "Pins Node.js 20 LTS on Alpine Linux, isolates dependencies, and switches to non-privileged 'node' user."
+  },
+  "confidenceScore": 0.98,
+  "warnings": [
+    "Verify whether any native addons require libc dependencies before switching from Debian to Alpine."
+  ]
+}

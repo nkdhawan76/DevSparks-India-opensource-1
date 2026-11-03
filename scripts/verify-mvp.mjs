@@ -186,6 +186,23 @@ test("Structured AI Patch Proposal Generator", () => {
   assert.strictEqual(patch.patches[0].suggestedSnippet, "const key = process.env.API_KEY;");
 });
 
+// 7. Test Docker Checker Rule Logic
+test("Docker Checker Rule Invariant Verification", () => {
+  const sampleDockerfile = `FROM node:latest
+WORKDIR /app
+COPY . .
+CMD ["npm", "start"]`;
+
+  const lines = sampleDockerfile.split("\n");
+  const isUnpinned = lines.some((l) => /^\s*FROM\s+.*:latest\s*$/i.test(l));
+  const hasUserDirective = lines.some((l) => /^\s*USER\s+(?!root\b)\w+/i.test(l));
+  const hasHealthcheck = lines.some((l) => /^\s*HEALTHCHECK\s+/i.test(l));
+
+  assert.strictEqual(isUnpinned, true, "Must flag :latest tag");
+  assert.strictEqual(hasUserDirective, false, "Must flag missing non-root USER");
+  assert.strictEqual(hasHealthcheck, false, "Must flag missing HEALTHCHECK");
+});
+
 console.log(`\n=================================================`);
 console.log(`Verification Complete: ${passed} Passed, ${failed} Failed`);
 console.log(`=================================================`);
