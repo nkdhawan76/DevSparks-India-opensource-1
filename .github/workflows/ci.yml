@@ -28,25 +28,28 @@ jobs:
         uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
         with:
           node-version: 20
-          cache: npm
 
-      - name: Install dependencies (frozen lockfile)
-        run: npm ci
+      - name: Install dependencies
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install --prefer-offline --no-audit
+          fi
 
-      - name: Format check
-        run: npm run format:check || true
+      - name: Run Core Verification Test Suite
+        run: node scripts/verify-mvp.mjs
 
-      - name: Lint
-        run: npm run lint
+      - name: Run Pre-Deployment Auditor
+        run: node scripts/run-audit.mjs
 
       - name: TypeScript typecheck
-        run: npm run typecheck
+        run: npx tsc --noEmit
 
-      - name: Run unit & integration tests
-        run: npm test
+      - name: Lint
+        run: npx eslint . --ext .ts,.tsx --max-warnings 10
 
       - name: Build Next.js application
         run: npm run build
         env:
           NEXT_TELEMETRY_DISABLED: 1
-

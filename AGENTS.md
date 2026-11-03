@@ -21,6 +21,11 @@ This document governs AI agent behavior (including Google Antigravity) when work
    - Declare the exact scope of edits.
    - Run tests and linters **after** editing to verify correctness.
    - Report verifiable evidence (command outputs, diffs, exit codes).
+7. **Guaranteed Green CI Invariant (Zero-Failure CI Rule):**  
+   - **Always verify CI prerequisites and script compatibility before pushing.**
+   - Never commit workflow configurations that fail on missing prerequisites (such as `npm ci` when no lockfile exists, or cache steps without valid lock files).
+   - Workflows must use robust fallback mechanisms and execute deterministic verification suites (`scripts/verify-mvp.mjs`, `scripts/run-audit.mjs`).
+   - If any CI check fails on GitHub, immediately prioritize root-cause analysis, apply a validated patch, verify local tests, and restore a 100% green build. Never abandon failing checks.
 
 ---
 

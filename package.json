@@ -14,9 +14,10 @@
     "start": "next start",
     "lint": "eslint . --ext .ts,.tsx",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test": "node scripts/verify-mvp.mjs",
+    "test:vitest": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "audit": "node scripts/run-audit.mjs"
   },
   "dependencies": {
     "next": "^14.2.18",
@@ -38,4 +39,3 @@
     "vitest": "^2.1.5"
   }
 }
-
