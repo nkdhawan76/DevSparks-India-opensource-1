@@ -64,22 +64,65 @@ test("Secret Redaction in Logs & Prompts", () => {
   const SENSITIVE_PATTERNS = [
     /sk-[a-zA-Z0-9]{20,}/g,
     /ghp_[a-zA-Z0-9]{36}/g,
-    /bearer\s+[a-zA-Z0-9._~+/-]+=*/gi,
+    /bearer\s+[a-zA-Z0-9._~+/-]+={0,2}/gi,
+    /password=["'][^"'\r\n]{1,256}["']/gi,
+    /api[_-]?key=["'][^"'\r\n]{1,256}["']/gi,
   ];
 
+  function redactPemKeys(input) {
+    const beginMarker = "-----BEGIN ";
+    const endMarker = "-----END ";
+    let result = input;
+    let searchPos = 0;
+
+    while (searchPos < result.length) {
+      const startIndex = result.indexOf(beginMarker, searchPos);
+      if (startIndex === -1) break;
+
+      const endIndex = result.indexOf(endMarker, startIndex);
+      if (endIndex === -1) break;
+
+      const trailingDashes = result.indexOf("-----", endIndex + endMarker.length);
+      if (trailingDashes === -1) break;
+
+      const blockEnd = trailingDashes + 5;
+      const pemBlock = result.substring(startIndex, blockEnd);
+
+      if (pemBlock.includes("PRIVATE KEY")) {
+        result = result.substring(0, startIndex) + "[REDACTED_SECRET]" + result.substring(blockEnd);
+        searchPos = startIndex + "[REDACTED_SECRET]".length;
+      } else {
+        searchPos = blockEnd;
+      }
+    }
+
+    return result;
+  }
+
   function redactSecrets(input) {
-    let redacted = input;
+    let redacted = redactPemKeys(input);
     for (const pattern of SENSITIVE_PATTERNS) {
       redacted = redacted.replace(pattern, "[REDACTED_SECRET]");
     }
     return redacted;
   }
 
+  // Test API key and Bearer token
   const input = "Error calling OpenRouter: API key sk-abcdef12345678901234567890 failed. Bearer eyJhbGciOi...";
   const cleaned = redactSecrets(input);
-
   assert(!cleaned.includes("sk-abcdef12345678901234567890"));
   assert(cleaned.includes("[REDACTED_SECRET]"));
+
+  // Test PEM private key redaction
+  const pemInput = "Log: connecting with -----BEGIN RSA PRIVATE KEY-----\nMIIEogIBAAKCAQEA0...\n-----END RSA PRIVATE KEY----- on port 22";
+  const cleanedPem = redactSecrets(pemInput);
+  assert(!cleanedPem.includes("MIIEogIBAAKCAQEA0"));
+  assert(cleanedPem.includes("Log: connecting with [REDACTED_SECRET] on port 22"));
+
+  // Test that public certificates are preserved
+  const certInput = "Cert: -----BEGIN CERTIFICATE-----\nMIIDXTCCAkWgAwIBAgIJAK...\n-----END CERTIFICATE-----";
+  const cleanedCert = redactSecrets(certInput);
+  assert(cleanedCert.includes("MIIDXTCCAkWgAwIBAgIJAK"));
 });
 
 // 4. Test Audit Engine Logic & Stack Detection
