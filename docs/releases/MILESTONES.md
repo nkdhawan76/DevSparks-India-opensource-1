@@ -62,38 +62,43 @@ A milestone or feature is considered **Done** only when:
 
 ---
 
-### 🔒 Milestone M3: Secure Server & VPS Connections (Planned)
+### 🔒 Milestone M3: Secure Server & VPS Connections (Completed)
 - **Scope:** SSH connection testing, host key verification, credential isolation, and diagnostic inspection.
-- **Planned Capabilities:**
-  - Parameterized SSH gateway runner with strictly scoped keys.
-  - SSRF protection against cloud metadata endpoints (`169.254.169.254`).
-  - System resource telemetry (CPU, RAM, disk usage).
-  - Strict human approval gate before executing any operational mutations.
-- **Status:** **PLANNED** (Target for Stage 3).
+- **Deliverables:**
+  - `src/modules/server/ssrf-guard.ts`: Strict SSRF protection blocking loopback (`127.0.0.0/8`, `::1`) and cloud metadata (`169.254.169.254`, `169.254.0.0/16`).
+  - `src/modules/server/policy-gateway.ts`: Command evaluation gateway separating read-only diagnostics from gated mutations, blocking destructive commands (`rm -rf /`, `mkfs`, fork bombs).
+  - `src/app/api/v1/servers/validate/route.ts`: Pre-flight server connection validator.
+  - `src/app/api/v1/servers/diagnostics/route.ts`: System resource telemetry (CPU, RAM, disk, uptime, active containers).
+- **Status:** **COMPLETED** (Green CI verified on `main`).
 
 ---
 
-### 🚀 Milestone M4: Guided Policy-Controlled Deployment (Planned)
+### 🚀 Milestone M4: Guided Policy-Controlled Deployment (Completed)
 - **Scope:** Automated deployment scripts, rollback triggers, and deployment history logs.
-- **Planned Capabilities:**
-  - Deployment pipelines for Next.js, Node.js, and Docker applications.
-  - Zero-downtime deployment workflows (blue/green or rolling restart).
-  - Automatic rollback on failed health checks.
-- **Status:** **PLANNED** (Target for Stage 4).
+- **Deliverables:**
+  - `src/modules/deployment/pipeline.ts`: Policy-governed deployment orchestrator enforcing pre-deploy audit gating and sequential steps.
+  - Automatic rollback engine restoring previous stable snapshot upon health check probe failure.
+  - `src/app/api/v1/deployments/route.ts`: Deployment lifecycle triggers (`POST`) and cursor-paginated deployment history (`GET`).
+- **Status:** **COMPLETED** (Green CI verified on `main`).
 
 ---
 
-### 📊 Milestone M5: Post-Deployment Monitoring & Maintenance (Planned)
+### 📊 Milestone M5: Post-Deployment Monitoring & Maintenance (Completed)
 - **Scope:** Synthetic health check scheduler, uptime tracking, alert notifications.
-- **Planned Capabilities:**
-  - Periodic HTTP/TCP health checks with latency recording.
-  - Webhook and email alert dispatching.
-  - Post-deployment stability reports.
-- **Status:** **PLANNED** (Target for Stage 5).
+- **Deliverables:**
+  - `src/modules/monitoring/engine.ts`: Multi-probe engine (HTTP, TCP, TLS certs) with failure threshold state transitions (`HEALTHY`, `DEGRADED`, `DOWN`).
+  - Automated alert generator dispatching `DOWN` and `RECOVERED` events.
+  - Telemetry analytics calculating uptime percentage, average response latency, and p95 latency.
+  - `src/app/api/v1/monitoring/targets/route.ts` & `src/app/api/v1/monitoring/checks/route.ts`.
+- **Status:** **COMPLETED** (Green CI verified on `main`).
 
 ---
 
-### ☁️ Milestone M6: Plans & DevSparks Cloud (Planned)
-- **Scope:** Multi-tenant workspace quotas, enterprise audit retention, team collaboration.
-- **Status:** **PLANNED** (Target for Stage 6).
+### ☁️ Milestone M6: Plans & DevSparks Cloud (Completed)
+- **Scope:** Multi-tenant workspace quotas, enterprise audit retention, team collaboration, plan tier matrix.
+- **Deliverables:**
+  - `src/modules/entitlements/service.ts`: Multi-tier plan definitions (`free`, `pro`, `enterprise`, `self_hosted_standard`).
+  - Server quota gating (`maxServers`) and monitoring target quota gating (`maxMonitors`).
+  - `src/app/api/v1/workspaces/plan/route.ts`: Workspace plan details, feature flags, and usage quota tracking.
+- **Status:** **COMPLETED** (Green CI verified on `main`).
 

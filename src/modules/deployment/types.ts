@@ -62,3 +62,4 @@ export interface DeploymentExecutionResult {
   rollbackTriggered: boolean;
   failureReason?: string;
 }
+

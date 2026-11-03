@@ -55,3 +55,4 @@ export interface MonitorUptimeSummary {
   averageLatencyMs: number;
   p95LatencyMs: number;
 }
+
