@@ -402,17 +402,27 @@ The product follows a verified phased roadmap detailed in [`docs/ROADMAP.md`](do
 Contributions are warmly welcomed from developers of all experience levels!
 
 1. Fork the repository and create your feature branch: `git checkout -b feat/my-new-feature`.
-2. Ensure all tests and linting pass: `npm test && npm run audit && npm run typecheck && npm run lint`.
-3. Commit your changes using Conventional Commits: `git commit -m 'feat(audit): add nginx configuration rule'`.
-4. Push to your branch and open a Pull Request.
+2. Ensure all verification suites pass locally: `node scripts/verify-mvp.mjs && node scripts/run-audit.mjs`.
+3. Follow the strict Light Theme design guidelines: `#F7F9FC` background, `#FFFFFF` cards, `#172033` primary text, `#3563E9` brand blue.
+4. Commit your changes following [Conventional Commits](https://www.conventionalcommits.org/): `git commit -m 'feat(audit): add nginx configuration rule'`.
+5. Push to your branch and open a Pull Request using our [PR Template](.github/PULL_REQUEST_TEMPLATE.md).
 
-Please review our [Contributing Guide](CONTRIBUTING.md) and [Code of Conduct](CODE_OF_CONDUCT.md).
+Please review our [Contributing Guide](CONTRIBUTING.md) and [Code of Conduct](CODE_OF_CONDUCT.md) before contributing.
+
+---
+
+## 🌐 Community & Support
+
+- **Issue Tracker:** Report bugs or request enhancements on [GitHub Issues](https://github.com/nkdhawan76/DevSparks-India-opensource-1/issues).
+- **Good First Issues:** New to the project? Explore beginner-friendly issues on [Good First Issues](https://github.com/nkdhawan76/DevSparks-India-opensource-1/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22).
+- **Pull Requests:** Review ongoing community work and submit code on [GitHub Pull Requests](https://github.com/nkdhawan76/DevSparks-India-opensource-1/pulls).
+- **Support Channels:** Need guidance on self-hosting or deployment? Check our [Support Guide](SUPPORT.md).
 
 ---
 
 ## 🛡️ Security Reporting
 
-Security is central to DeployCheck. If you discover a vulnerability, please review our [Security Policy](SECURITY.md) and submit a private report via GitHub Security Advisories or email [security@devsparksindia.com](mailto:security@devsparksindia.com). Please do **not** report security vulnerabilities via public GitHub issues.
+Security is central to DevSparks DeployCheck. If you discover a vulnerability, please review our [Security Policy](SECURITY.md) and submit a private report via GitHub Private Security Advisories or email [nkdhawan76@gmail.com](mailto:nkdhawan76@gmail.com). Please do **not** report security vulnerabilities via public GitHub issues.
 
 ---
 
@@ -424,9 +434,17 @@ Third-party dependencies and agent skills are documented in [`docs/THIRD_PARTY_S
 
 ---
 
-## ⚡ DevSparks India
+<div align="center">
 
-DevSparks DeployCheck is proudly designed, maintained, and open-sourced by **DevSparks India**.
+### ⚡ DevSparks India
+
+**DevSparks DeployCheck** is proudly designed, maintained, and open-sourced by **[DevSparks India](https://github.com/nkdhawan76)**.
+
+[Repository](https://github.com/nkdhawan76/DevSparks-India-opensource-1) • [Documentation](docs/) • [Architecture](docs/ARCHITECTURE.md) • [Contributing](CONTRIBUTING.md) • [Security Policy](SECURITY.md) • [Roadmap](docs/ROADMAP.md)
+
+*Copyright © 2026 DevSparks India. All rights reserved.*
+
+</div>
 
 - **Website:** [https://devsparksindia.com](https://devsparksindia.com)
 - **GitHub:** [@nkdhawan76](https://github.com/nkdhawan76)
