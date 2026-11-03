@@ -54,8 +54,8 @@ export default function DeployCheckDashboard() {
         const data = await res.json();
         setSystemHealth(data.status || "healthy");
       }
-    } catch {
-      // Fallback
+    } catch (_err) {
+      // Fallback to healthy state
     } finally {
       setIsRefreshing(false);
     }
@@ -82,7 +82,7 @@ export default function DeployCheckDashboard() {
           setLiveAuditResult(data.data);
         }
       }
-    } catch {
+    } catch (_err) {
       // Fallback
     } finally {
       setLiveAuditLoading(false);
@@ -108,15 +108,19 @@ export default function DeployCheckDashboard() {
         const reader = res.body.getReader();
         const decoder = new TextDecoder();
         let accumulated = "";
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          const chunk = decoder.decode(value);
-          accumulated += chunk;
-          setStreamedAiText(accumulated);
+        let streamFinished = false;
+        while (!streamFinished) {
+          const result = await reader.read();
+          if (result.done) {
+            streamFinished = true;
+          } else if (result.value) {
+            const chunk = decoder.decode(result.value);
+            accumulated += chunk;
+            setStreamedAiText(accumulated);
+          }
         }
       }
-    } catch {
+    } catch (_err) {
       // Fallback
     } finally {
       setIsStreamingAi(false);
