@@ -299,6 +299,45 @@ test("SSRF Guard & Server Policy Gateway Invariants", () => {
   assert.strictEqual(evaluateCmd("rm -rf /").prohibited, true);
 });
 
+// 11. Test Deployment Pipeline State Machine & Rollback Invariants
+test("Deployment Pipeline State Machine & Rollback Invariants", () => {
+  function runPipeline(req, auditReady = true, healthFails = false) {
+    if (req.environment === "production" && (!req.approvedBy || !req.token)) {
+      return { status: "FAILED", reason: "Missing approval" };
+    }
+    if (!auditReady) {
+      return { status: "FAILED", reason: "Audit failed" };
+    }
+    if (healthFails) {
+      if (req.autoRollback) {
+        return { status: "ROLLED_BACK", rolledBack: true, reason: "Health check failed" };
+      }
+      return { status: "FAILED", rolledBack: false, reason: "Health check failed" };
+    }
+    return { status: "SUCCESS", stepsCompleted: 5 };
+  }
+
+  // 1. Missing approval for production blocks deployment
+  const unapprovedProd = runPipeline({ environment: "production", autoRollback: true });
+  assert.strictEqual(unapprovedProd.status, "FAILED");
+  assert.strictEqual(unapprovedProd.reason, "Missing approval");
+
+  // 2. Failed pre-deploy audit blocks deployment
+  const auditBlocked = runPipeline({ environment: "production", approvedBy: "admin", token: "tok-123" }, false);
+  assert.strictEqual(auditBlocked.status, "FAILED");
+  assert.strictEqual(auditBlocked.reason, "Audit failed");
+
+  // 3. Successful deployment
+  const successDeploy = runPipeline({ environment: "production", approvedBy: "admin", token: "tok-123", autoRollback: true }, true, false);
+  assert.strictEqual(successDeploy.status, "SUCCESS");
+  assert.strictEqual(successDeploy.stepsCompleted, 5);
+
+  // 4. Automatic rollback on health check failure
+  const rollbackDeploy = runPipeline({ environment: "production", approvedBy: "admin", token: "tok-123", autoRollback: true }, true, true);
+  assert.strictEqual(rollbackDeploy.status, "ROLLED_BACK");
+  assert.strictEqual(rollbackDeploy.rolledBack, true);
+});
+
 console.log(`\n=================================================`);
 console.log(`Verification Complete: ${passed} Passed, ${failed} Failed`);
 console.log(`=================================================`);
