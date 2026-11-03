@@ -98,7 +98,7 @@ test("Audit Engine Stack Detection & Finding Logic", () => {
         const pkg = JSON.parse(pkgStr);
         const deps = { ...(pkg.dependencies || {}), ...(pkg.devDependencies || {}) };
         if (deps["next"]) framework = "Next.js";
-      } catch {}
+      } catch { }
     }
 
     return { runtime: "Node.js", framework, packageManager, hasTypeScript };
@@ -297,6 +297,168 @@ test("SSRF Guard & Server Policy Gateway Invariants", () => {
   assert.strictEqual(evaluateCmd("systemctl restart nginx").allowed, false);
   assert.strictEqual(evaluateCmd("systemctl restart nginx", true).allowed, true);
   assert.strictEqual(evaluateCmd("rm -rf /").prohibited, true);
+});
+
+// 11. Test Deployment Pipeline State Machine & Rollback Invariants
+test("Deployment Pipeline State Machine & Rollback Invariants", () => {
+  function runPipeline(req, auditReady = true, healthFails = false) {
+    if (req.environment === "production" && (!req.approvedBy || !req.token)) {
+      return { status: "FAILED", reason: "Missing approval" };
+    }
+    if (!auditReady) {
+      return { status: "FAILED", reason: "Audit failed" };
+    }
+    if (healthFails) {
+      if (req.autoRollback) {
+        return { status: "ROLLED_BACK", rolledBack: true, reason: "Health check failed" };
+      }
+      return { status: "FAILED", rolledBack: false, reason: "Health check failed" };
+    }
+    return { status: "SUCCESS", stepsCompleted: 5 };
+  }
+
+  // 1. Missing approval for production blocks deployment
+  const unapprovedProd = runPipeline({ environment: "production", autoRollback: true });
+  assert.strictEqual(unapprovedProd.status, "FAILED");
+  assert.strictEqual(unapprovedProd.reason, "Missing approval");
+
+  // 2. Failed pre-deploy audit blocks deployment
+  const auditBlocked = runPipeline({ environment: "production", approvedBy: "admin", token: "tok-123" }, false);
+  assert.strictEqual(auditBlocked.status, "FAILED");
+  assert.strictEqual(auditBlocked.reason, "Audit failed");
+
+  // 3. Successful deployment
+  const successDeploy = runPipeline({ environment: "production", approvedBy: "admin", token: "tok-123", autoRollback: true }, true, false);
+  assert.strictEqual(successDeploy.status, "SUCCESS");
+  assert.strictEqual(successDeploy.stepsCompleted, 5);
+
+  // 4. Automatic rollback on health check failure
+  const rollbackDeploy = runPipeline({ environment: "production", approvedBy: "admin", token: "tok-123", autoRollback: true }, true, true);
+  assert.strictEqual(rollbackDeploy.status, "ROLLED_BACK");
+  assert.strictEqual(rollbackDeploy.rolledBack, true);
+});
+
+// 12. Test Synthetic Monitoring State Machine & Alert Invariants
+test("Synthetic Monitoring State Machine & Alert Invariants", () => {
+  class MockMonitorTracker {
+    constructor(threshold = 3) {
+      this.threshold = threshold;
+      this.failures = 0;
+      this.status = "HEALTHY";
+      this.alerts = [];
+      this.checks = [];
+    }
+
+    record(isUp, latency = 40) {
+      this.checks.push({ isUp, latency });
+      if (isUp) {
+        const wasDown = this.status === "DOWN";
+        this.failures = 0;
+        this.status = "HEALTHY";
+        if (wasDown) {
+          this.alerts.push({ type: "RECOVERED" });
+        }
+      } else {
+        this.failures++;
+        if (this.failures >= this.threshold) {
+          this.status = "DOWN";
+          this.alerts.push({ type: "DOWN", failures: this.failures });
+        } else {
+          this.status = "DEGRADED";
+        }
+      }
+    }
+
+    getUptime() {
+      const up = this.checks.filter(c => c.isUp).length;
+      return Number(((up / this.checks.length) * 100).toFixed(1));
+    }
+  }
+
+  const tracker = new MockMonitorTracker(3);
+
+  // Probe 1: Success -> HEALTHY
+  tracker.record(true, 35);
+  assert.strictEqual(tracker.status, "HEALTHY");
+  assert.strictEqual(tracker.alerts.length, 0);
+
+  // Probe 2: Failure 1 -> DEGRADED
+  tracker.record(false, 0);
+  assert.strictEqual(tracker.status, "DEGRADED");
+  assert.strictEqual(tracker.failures, 1);
+  assert.strictEqual(tracker.alerts.length, 0);
+
+  // Probe 3: Failure 2 -> DEGRADED
+  tracker.record(false, 0);
+  assert.strictEqual(tracker.status, "DEGRADED");
+  assert.strictEqual(tracker.failures, 2);
+
+  // Probe 4: Failure 3 -> DOWN (threshold reached)
+  tracker.record(false, 0);
+  assert.strictEqual(tracker.status, "DOWN");
+  assert.strictEqual(tracker.alerts.length, 1);
+  assert.strictEqual(tracker.alerts[0].type, "DOWN");
+
+  // Probe 5: Success -> RECOVERED alert generated, status HEALTHY
+  tracker.record(true, 42);
+  assert.strictEqual(tracker.status, "HEALTHY");
+  assert.strictEqual(tracker.failures, 0);
+  assert.strictEqual(tracker.alerts.length, 2);
+  assert.strictEqual(tracker.alerts[1].type, "RECOVERED");
+
+  // Uptime: 2 up out of 5 checks = 40.0%
+  assert.strictEqual(tracker.getUptime(), 40.0);
+});
+
+// 13. Test Multi-Tier Entitlement Gating & Resource Quotas
+test("Multi-Tier Entitlement Gating & Resource Quota Invariants", () => {
+  const TIERS = {
+    free: { maxServers: 1, monthlyAudits: 50, advancedAudit: false },
+    pro: { maxServers: 5, monthlyAudits: 500, advancedAudit: true },
+  };
+
+  function checkTierAccess(tierKey, feature, currentUsage = 0) {
+    const tier = TIERS[tierKey];
+    if (!tier) return { allowed: false, reason: "Invalid tier" };
+
+    if (feature === "audit.advanced") {
+      return { allowed: tier.advancedAudit };
+    }
+
+    if (feature === "deployment.vps") {
+      if (currentUsage >= tier.maxServers) {
+        return { allowed: false, reason: "Server quota reached", limit: tier.maxServers, remaining: 0 };
+      }
+      return { allowed: true, limit: tier.maxServers, remaining: tier.maxServers - currentUsage };
+    }
+
+    if (feature === "audit.basic") {
+      if (currentUsage >= tier.monthlyAudits) {
+        return { allowed: false, reason: "Audit limit exceeded", limit: tier.monthlyAudits, remaining: 0 };
+      }
+      return { allowed: true, limit: tier.monthlyAudits, remaining: tier.monthlyAudits - currentUsage };
+    }
+
+    return { allowed: true };
+  }
+
+  // 1. Free tier blocks 2nd server
+  const freeServer1 = checkTierAccess("free", "deployment.vps", 0);
+  assert.strictEqual(freeServer1.allowed, true);
+  assert.strictEqual(freeServer1.remaining, 1);
+
+  const freeServer2 = checkTierAccess("free", "deployment.vps", 1);
+  assert.strictEqual(freeServer2.allowed, false);
+  assert.strictEqual(freeServer2.reason, "Server quota reached");
+
+  // 2. Pro tier allows 5 servers
+  const proServer = checkTierAccess("pro", "deployment.vps", 3);
+  assert.strictEqual(proServer.allowed, true);
+  assert.strictEqual(proServer.remaining, 2);
+
+  // 3. Advanced audit feature flag
+  assert.strictEqual(checkTierAccess("free", "audit.advanced").allowed, false);
+  assert.strictEqual(checkTierAccess("pro", "audit.advanced").allowed, true);
 });
 
 // 11. Test Deployment Pipeline State Machine & Rollback Invariants
