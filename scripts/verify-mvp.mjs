@@ -410,6 +410,57 @@ test("Synthetic Monitoring State Machine & Alert Invariants", () => {
   assert.strictEqual(tracker.getUptime(), 40.0);
 });
 
+// 13. Test Multi-Tier Entitlement Gating & Resource Quotas
+test("Multi-Tier Entitlement Gating & Resource Quota Invariants", () => {
+  const TIERS = {
+    free: { maxServers: 1, monthlyAudits: 50, advancedAudit: false },
+    pro: { maxServers: 5, monthlyAudits: 500, advancedAudit: true },
+  };
+
+  function checkTierAccess(tierKey, feature, currentUsage = 0) {
+    const tier = TIERS[tierKey];
+    if (!tier) return { allowed: false, reason: "Invalid tier" };
+
+    if (feature === "audit.advanced") {
+      return { allowed: tier.advancedAudit };
+    }
+
+    if (feature === "deployment.vps") {
+      if (currentUsage >= tier.maxServers) {
+        return { allowed: false, reason: "Server quota reached", limit: tier.maxServers, remaining: 0 };
+      }
+      return { allowed: true, limit: tier.maxServers, remaining: tier.maxServers - currentUsage };
+    }
+
+    if (feature === "audit.basic") {
+      if (currentUsage >= tier.monthlyAudits) {
+        return { allowed: false, reason: "Audit limit exceeded", limit: tier.monthlyAudits, remaining: 0 };
+      }
+      return { allowed: true, limit: tier.monthlyAudits, remaining: tier.monthlyAudits - currentUsage };
+    }
+
+    return { allowed: true };
+  }
+
+  // 1. Free tier blocks 2nd server
+  const freeServer1 = checkTierAccess("free", "deployment.vps", 0);
+  assert.strictEqual(freeServer1.allowed, true);
+  assert.strictEqual(freeServer1.remaining, 1);
+
+  const freeServer2 = checkTierAccess("free", "deployment.vps", 1);
+  assert.strictEqual(freeServer2.allowed, false);
+  assert.strictEqual(freeServer2.reason, "Server quota reached");
+
+  // 2. Pro tier allows 5 servers
+  const proServer = checkTierAccess("pro", "deployment.vps", 3);
+  assert.strictEqual(proServer.allowed, true);
+  assert.strictEqual(proServer.remaining, 2);
+
+  // 3. Advanced audit feature flag
+  assert.strictEqual(checkTierAccess("free", "audit.advanced").allowed, false);
+  assert.strictEqual(checkTierAccess("pro", "audit.advanced").allowed, true);
+});
+
 console.log(`\n=================================================`);
 console.log(`Verification Complete: ${passed} Passed, ${failed} Failed`);
 console.log(`=================================================`);

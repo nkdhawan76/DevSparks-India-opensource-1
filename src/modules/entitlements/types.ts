@@ -21,10 +21,22 @@ export interface EntitlementDecision {
   remaining?: number;
 }
 
+export type PlanTierKey = "free" | "pro" | "enterprise" | "self_hosted_standard";
+
 export interface WorkspacePlan {
-  planKey: "free" | "pro" | "self_hosted_standard";
+  planKey: PlanTierKey;
   displayName: string;
   features: Record<FeatureKey, boolean>;
   monthlyAuditLimit: number;
+  maxServers: number;
+  maxMonitors: number;
+  retentionDays: number;
+}
+
+export interface WorkspaceUsageMetrics {
+  workspaceId: string;
+  auditsThisMonth: number;
+  activeServersCount: number;
+  activeMonitorsCount: number;
 }
 
