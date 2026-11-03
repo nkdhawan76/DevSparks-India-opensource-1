@@ -47,6 +47,37 @@ export async function POST(req: NextRequest) {
       `Remediation suggestion for: ${findingTitle}`
     );
 
+    // Support Server-Sent Events (SSE) streaming when stream: true
+    if (body.stream === true) {
+      const encoder = new TextEncoder();
+      const explanation = `AI Analysis for ${findingTitle}: This issue should be remediated prior to production deployment to ensure system security and reliability.`;
+      const sseChunks = [
+        JSON.stringify({ type: "start", findingId }),
+        JSON.stringify({ type: "chunk", text: `Analyzing finding '${findingTitle}'...\n` }),
+        JSON.stringify({ type: "chunk", text: "Evaluating security impact and constructing verified structured patch...\n" }),
+        JSON.stringify({ type: "patch", patch }),
+        JSON.stringify({ type: "explanation", explanation, sanitizedPrompt }),
+        "[DONE]",
+      ];
+
+      const stream = new ReadableStream({
+        async start(controller) {
+          for (const chunk of sseChunks) {
+            controller.enqueue(encoder.encode(`data: ${chunk}\n\n`));
+          }
+          controller.close();
+        },
+      });
+
+      return new Response(stream, {
+        headers: {
+          "Content-Type": "text/event-stream; charset=utf-8",
+          "Cache-Control": "no-cache, no-transform",
+          "Connection": "keep-alive",
+        },
+      });
+    }
+
     return NextResponse.json({
       success: true,
       data: {

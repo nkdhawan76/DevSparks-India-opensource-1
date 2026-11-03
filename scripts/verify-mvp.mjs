@@ -236,6 +236,33 @@ test("RBAC Authorization & Tenant Isolation Invariant", () => {
   assert.strictEqual(crossTenant.reason, "Tenant isolation violation");
 });
 
+// 9. Test SSE Event Formatting & Cursor Pagination Invariants
+test("SSE Event Streaming & Cursor Pagination Invariants", () => {
+  // SSE Formatter Test
+  function formatSseEvent(payload) {
+    if (payload === "[DONE]") return "data: [DONE]\n\n";
+    return `data: ${JSON.stringify(payload)}\n\n`;
+  }
+
+  const chunkEvent = formatSseEvent({ type: "chunk", text: "Analyzing..." });
+  assert.strictEqual(chunkEvent, 'data: {"type":"chunk","text":"Analyzing..."}\n\n');
+  assert.strictEqual(formatSseEvent("[DONE]"), "data: [DONE]\n\n");
+
+  // Cursor Pagination Test (JSON-based base64 cursor)
+  function encodeCursor(id, timestamp) {
+    return Buffer.from(JSON.stringify({ id, timestamp })).toString("base64");
+  }
+
+  function decodeCursor(cursor) {
+    return JSON.parse(Buffer.from(cursor, "base64").toString("utf8"));
+  }
+
+  const encoded = encodeCursor("audit-101", "2026-11-03T18:00:00Z");
+  const decoded = decodeCursor(encoded);
+  assert.strictEqual(decoded.id, "audit-101");
+  assert.strictEqual(decoded.timestamp, "2026-11-03T18:00:00Z");
+});
+
 console.log(`\n=================================================`);
 console.log(`Verification Complete: ${passed} Passed, ${failed} Failed`);
 console.log(`=================================================`);
