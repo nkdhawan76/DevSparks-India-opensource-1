@@ -1,4 +1,5 @@
-import { describe, it, expect } from "vitest";
+import { describe, it } from "node:test";
+import assert from "node:assert";
 import { AuditEngine } from "./engine";
 import { ProjectContext } from "./types";
 
@@ -29,13 +30,13 @@ describe("AuditEngine", () => {
 
     const result = await engine.run(context);
 
-    expect(result.status).toBe("SUCCESS");
-    expect(result.detectedStack.framework).toBe("Next.js");
-    expect(result.detectedStack.packageManager).toBe("pnpm");
-    expect(result.detectedStack.hasTypeScript).toBe(true);
-    expect(result.summary.criticalCount).toBe(0);
-    expect(result.summary.highCount).toBe(0);
-    expect(result.summary.isDeployReady).toBe(true);
+    assert.strictEqual(result.status, "SUCCESS");
+    assert.strictEqual(result.detectedStack.framework, "Next.js");
+    assert.strictEqual(result.detectedStack.packageManager, "pnpm");
+    assert.strictEqual(result.detectedStack.hasTypeScript, true);
+    assert.strictEqual(result.summary.criticalCount, 0);
+    assert.strictEqual(result.summary.highCount, 0);
+    assert.strictEqual(result.summary.isDeployReady, true);
   });
 
   it("should flag critical findings when secrets and committed .env exist", async () => {
@@ -61,14 +62,14 @@ describe("AuditEngine", () => {
 
     const result = await engine.run(context);
 
-    expect(result.status).toBe("FAILED");
-    expect(result.summary.isDeployReady).toBe(false);
-    expect(result.summary.criticalCount).toBeGreaterThanOrEqual(2);
+    assert.strictEqual(result.status, "FAILED");
+    assert.strictEqual(result.summary.isDeployReady, false);
+    assert(result.summary.criticalCount >= 2);
 
     const ruleIds = result.findings.map((f) => f.ruleId);
-    expect(ruleIds).toContain("SEC-001"); // Secret scanner
-    expect(ruleIds).toContain("CFG-001"); // Committed .env
-    expect(ruleIds).toContain("DEP-002"); // Missing lockfile
+    assert(ruleIds.includes("SEC-001")); // Secret scanner
+    assert(ruleIds.includes("CFG-001")); // Committed .env
+    assert(ruleIds.includes("DEP-002")); // Missing lockfile
   });
 });
 

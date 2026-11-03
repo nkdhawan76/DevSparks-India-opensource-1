@@ -106,3 +106,4 @@ All commits must follow the [Conventional Commits](https://www.conventionalcommi
 - `docs(scope): update documentation`
 - `test(scope): add or improve tests`
 - `chore(scope): repository maintenance`
+

@@ -1,4 +1,5 @@
-import { describe, it, expect } from "vitest";
+import { describe, it } from "node:test";
+import assert from "node:assert";
 import { EntitlementService } from "./service";
 
 describe("EntitlementService", () => {
@@ -11,15 +12,15 @@ describe("EntitlementService", () => {
       usage: 10,
     });
 
-    expect(auditDecision.allowed).toBe(true);
-    expect(auditDecision.remaining).toBe(990);
+    assert.strictEqual(auditDecision.allowed, true);
+    assert.strictEqual(auditDecision.remaining, 990);
 
     const aiDecision = await service.check({
       workspaceId: "ws-1",
       feature: "ai.assistance",
     });
 
-    expect(aiDecision.allowed).toBe(true);
+    assert.strictEqual(aiDecision.allowed, true);
   });
 
   it("should deny future modules (vps, monitoring) before release gates", async () => {
@@ -30,8 +31,8 @@ describe("EntitlementService", () => {
       feature: "deployment.vps",
     });
 
-    expect(vpsDecision.allowed).toBe(false);
-    expect(vpsDecision.reason).toContain("not enabled");
+    assert.strictEqual(vpsDecision.allowed, false);
+    assert(vpsDecision.reason?.includes("not enabled"));
   });
 
   it("should enforce audit quotas atomically", async () => {
@@ -43,8 +44,8 @@ describe("EntitlementService", () => {
       usage: 1000,
     });
 
-    expect(overQuotaDecision.allowed).toBe(false);
-    expect(overQuotaDecision.remaining).toBe(0);
+    assert.strictEqual(overQuotaDecision.allowed, false);
+    assert.strictEqual(overQuotaDecision.remaining, 0);
   });
 });
 

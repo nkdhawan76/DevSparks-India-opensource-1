@@ -117,3 +117,4 @@ For exhaustive low-level specifications, see:
 - [`docs/ARD.md`](docs/ARD.md) — Architectural Requirements Document (Complete Spec).
 - [`docs/decisions/`](docs/decisions/) — Architectural Decision Records (ADRs 0001–0005).
 - [`docs/api/openapi.yaml`](docs/api/openapi.yaml) — OpenAPI 3.1 REST Contract.
+
