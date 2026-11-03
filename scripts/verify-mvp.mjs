@@ -338,6 +338,78 @@ test("Deployment Pipeline State Machine & Rollback Invariants", () => {
   assert.strictEqual(rollbackDeploy.rolledBack, true);
 });
 
+// 12. Test Synthetic Monitoring State Machine & Alert Invariants
+test("Synthetic Monitoring State Machine & Alert Invariants", () => {
+  class MockMonitorTracker {
+    constructor(threshold = 3) {
+      this.threshold = threshold;
+      this.failures = 0;
+      this.status = "HEALTHY";
+      this.alerts = [];
+      this.checks = [];
+    }
+
+    record(isUp, latency = 40) {
+      this.checks.push({ isUp, latency });
+      if (isUp) {
+        const wasDown = this.status === "DOWN";
+        this.failures = 0;
+        this.status = "HEALTHY";
+        if (wasDown) {
+          this.alerts.push({ type: "RECOVERED" });
+        }
+      } else {
+        this.failures++;
+        if (this.failures >= this.threshold) {
+          this.status = "DOWN";
+          this.alerts.push({ type: "DOWN", failures: this.failures });
+        } else {
+          this.status = "DEGRADED";
+        }
+      }
+    }
+
+    getUptime() {
+      const up = this.checks.filter(c => c.isUp).length;
+      return Number(((up / this.checks.length) * 100).toFixed(1));
+    }
+  }
+
+  const tracker = new MockMonitorTracker(3);
+
+  // Probe 1: Success -> HEALTHY
+  tracker.record(true, 35);
+  assert.strictEqual(tracker.status, "HEALTHY");
+  assert.strictEqual(tracker.alerts.length, 0);
+
+  // Probe 2: Failure 1 -> DEGRADED
+  tracker.record(false, 0);
+  assert.strictEqual(tracker.status, "DEGRADED");
+  assert.strictEqual(tracker.failures, 1);
+  assert.strictEqual(tracker.alerts.length, 0);
+
+  // Probe 3: Failure 2 -> DEGRADED
+  tracker.record(false, 0);
+  assert.strictEqual(tracker.status, "DEGRADED");
+  assert.strictEqual(tracker.failures, 2);
+
+  // Probe 4: Failure 3 -> DOWN (threshold reached)
+  tracker.record(false, 0);
+  assert.strictEqual(tracker.status, "DOWN");
+  assert.strictEqual(tracker.alerts.length, 1);
+  assert.strictEqual(tracker.alerts[0].type, "DOWN");
+
+  // Probe 5: Success -> RECOVERED alert generated, status HEALTHY
+  tracker.record(true, 42);
+  assert.strictEqual(tracker.status, "HEALTHY");
+  assert.strictEqual(tracker.failures, 0);
+  assert.strictEqual(tracker.alerts.length, 2);
+  assert.strictEqual(tracker.alerts[1].type, "RECOVERED");
+
+  // Uptime: 2 up out of 5 checks = 40.0%
+  assert.strictEqual(tracker.getUptime(), 40.0);
+});
+
 console.log(`\n=================================================`);
 console.log(`Verification Complete: ${passed} Passed, ${failed} Failed`);
 console.log(`=================================================`);
