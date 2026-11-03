@@ -15,3 +15,4 @@ Treating AI-generated text as executable shell commands or allowing models unres
 ## Consequences
 - Prompt injections cannot achieve arbitrary command execution.
 - Human operators retain full supervisory control over all codebase and infrastructure changes.
+

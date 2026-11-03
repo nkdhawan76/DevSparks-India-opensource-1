@@ -28,3 +28,4 @@ DeployCheck supports multi-tenant workspaces where different organizational role
 ## Consequences
 - Strict prevention of IDOR (Insecure Direct Object Reference) and cross-workspace leakage.
 - Clear audit trails linking every action to an authenticated subject and role.
+

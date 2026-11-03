@@ -96,3 +96,4 @@ A milestone or feature is considered **Done** only when:
 ### ☁️ Milestone M6: Plans & DevSparks Cloud (Planned)
 - **Scope:** Multi-tenant workspace quotas, enterprise audit retention, team collaboration.
 - **Status:** **PLANNED** (Target for Stage 6).
+

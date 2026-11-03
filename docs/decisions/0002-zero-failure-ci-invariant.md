@@ -16,3 +16,4 @@ CI/CD workflows that fail on missing prerequisites (e.g., calling `npm ci` witho
 - Guaranteed green build status on GitHub Actions (`ci.yml` and `security.yml`).
 - Fast, reproducible local test validation under 1 second.
 - Dependable pull request gates preventing broken code from merging to `main`.
+

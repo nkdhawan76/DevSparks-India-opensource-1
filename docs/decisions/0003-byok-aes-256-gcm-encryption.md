@@ -15,3 +15,4 @@ DeployCheck operates on a Bring-Your-Own-Key (BYOK) architecture where workspace
 ## Consequences
 - Workspace BYOK keys remain protected against database snapshot leaks and unauthorized inspection.
 - Full compliance with GitHub Secret Scanning and Push Protection rules.
+

@@ -26,3 +26,4 @@ DeployCheck is an engineering platform developed by DevSparks India for develope
 - High visual consistency and alignment with approved Figma/PNG design mockups in `UI Design/`.
 - Elimination of dual-theme CSS complexity and accessibility contrast regressions.
 - All SVG charts (health doughnut, deployment trends) must use light canvas backgrounds with explicit labels and units.
+
