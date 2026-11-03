@@ -183,13 +183,23 @@ All interface mockups adhere strictly to the **Strict Light Theme Only** design 
 | Dashboard View | Mockup File | Description |
 | :--- | :--- | :--- |
 | **Super Admin Dashboard** | [`UI Design/Super Admin Dashboard with Sidebar Toggle.png`](UI%20Design/Super%20Admin%20Dashboard%20with%20Sidebar%20Toggle.png) | Unified KPI cards, project health doughnut chart, and trend line. |
+| **Project Workspace** | [`UI Design/DevSparks Project Dashboard.png`](UI%20Design/DevSparks%20Project%20Dashboard.png) | Workspace overview with project metrics, status badges, and quick actions. |
 | **Pre-Deployment Audits** | [`UI Design/DevSparks Audit Report Dashboard.png`](UI%20Design/DevSparks%20Audit%20Report%20Dashboard.png) | Static analysis findings grouped by Critical, High, and Warnings. |
-| **AI Coding Assistant & Diff** | [`UI Design/DevSparks AI Coding Assistant Dashboard.png`](UI%20Design/DevSparks%20AI%20Coding%20Assistant%20Dashboard.png) | Side-by-side visual diff review modal with human approval gate. |
+| **AI Deployment & Remediation** | [`UI Design/DevSparks AI Deployment Dashboard.png`](UI%20Design/DevSparks%20AI%20Deployment%20Dashboard.png) | Side-by-side visual diff review modal with human approval gate. |
 | **Deployment Pipelines** | [`UI Design/DevSparks DeployCheck Deployments Dashboard.png`](UI%20Design/DevSparks%20DeployCheck%20Deployments%20Dashboard.png) | Deployment step tracker, release history, and rollback states. |
 | **Synthetic Monitoring** | [`UI Design/DevSparks DeployCheck Monitoring Dashboard.png`](UI%20Design/DevSparks%20DeployCheck%20Monitoring%20Dashboard.png) | Uptime %, p95 latency, probe response status, and incident ledger. |
 | **VPS Server Management** | [`UI Design/DevSparks VPS Server Management Dashboard.png`](UI%20Design/DevSparks%20VPS%20Server%20Management%20Dashboard.png) | Connected servers, host-key fingerprints, and policy gateway status. |
-| **Users & RBAC Management** | [`UI Design/DevSparks Users Management Dashboard.png`](UI%20Design/DevSparks%20Users%20Management%20Dashboard.png) | Workspace team members, permission roles, and activity audits. |
-| **Profile Settings** | [`UI Design/DevSparks Profile Settings Dashboard.png`](UI%20Design/DevSparks%20Profile%20Settings%20Dashboard.png) | User profile, notification preferences, and workspace settings. |
+| **SSH Web Console** | [`UI Design/DevSparks SSH Console Dashboard.png`](UI%20Design/DevSparks%20SSH%20Console%20Dashboard.png) | Policy-governed web terminal with command allowlisting and live redaction. |
+| **System & Deployment Logs** | [`UI Design/DevSparks DeployCheck Logs Dashboard.png`](UI%20Design/DevSparks%20DeployCheck%20Logs%20Dashboard.png) | Structured log viewer with level filtering, auto-scroll, and secret masking. |
+| **Users Management** | [`UI Design/DevSparks Users Management Dashboard.png`](UI%20Design/DevSparks%20Users%20Management%20Dashboard.png) | Workspace team members, permission roles, and activity audits. |
+| **Roles & Permissions** | [`UI Design/DevSparks Roles & Permissions Dashboard.png`](UI%20Design/DevSparks%20Roles%20%26%20Permissions%20Dashboard.png) | Granular RBAC permissions matrix across workspace and server resources. |
+| **Plans & Billing** | [`UI Design/DevSparks DeployCheck Plans & Billing Dashboard.png`](UI%20Design/DevSparks%20DeployCheck%20Plans%20%26%20Billing%20Dashboard.png) | Tier comparison (Starter, Pro, Team, Enterprise) and active quota usage. |
+| **Subscription Management** | [`UI Design/DevSparks Subscription Management Dashboard.png`](UI%20Design/DevSparks%20Subscription%20Management%20Dashboard.png) | Workspace billing cycles, payment methods, and automated invoice history. |
+| **Notifications Center** | [`UI Design/DevSparks DeployCheck Notifications Dashboard.png`](UI%20Design/DevSparks%20DeployCheck%20Notifications%20Dashboard.png) | Multi-channel alert preferences, incident notifications, and audit webhooks. |
+| **Workspace Settings** | [`UI Design/DevSparks DeployCheck Settings Dashboard.png`](UI%20Design/DevSparks%20DeployCheck%20Settings%20Dashboard.png) | Global organization configurations, Git integrations, and BYOK AI provider tokens. |
+| **Profile Settings** | [`UI Design/DevSparks Profile Settings Dashboard.png`](UI%20Design/DevSparks%20Profile%20Settings%20Dashboard.png) | User profile details, session activity, and personal credentials. |
+| **Authentication & Onboarding** | [`UI Design/DevSparks DeployCheck Login and Signup Mockup.png`](UI%20Design/DevSparks%20DeployCheck%20Login%20and%20Signup%20Mockup.png) | Clean developer sign-in, MFA verification, and workspace registration. |
+| **Project Setup Wizard** | [`UI Design/DevSparks DeployCheck Project Setup.png`](UI%20Design/DevSparks%20DeployCheck%20Project%20Setup.png) | Step-by-step repository connection, stack detection, and initial audit baseline. |
 
 ---
 
@@ -246,7 +256,7 @@ devsparks-deploycheck/
 │       ├── monitoring/          # Synthetic probe tracker & webhook dispatcher
 │       ├── rbac/                # Role-based authorization & tenant isolation matrix
 │       └── server/              # SSRF guard & policy gateway command filter
-├── UI Design/                   # 13 verified light-theme product mockups
+├── UI Design/                   # 18 verified light-theme product mockups
 ├── .editorconfig                # Universal indentation and whitespace formatting
 ├── .env.example                 # Environment configuration template
 ├── .eslintrc.json               # ESLint configuration
