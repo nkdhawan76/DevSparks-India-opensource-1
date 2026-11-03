@@ -27,3 +27,4 @@ Enforces high-density, accessible, and purposeful user interfaces while strictly
 3. **KPI & Chart Standards:**  
    - Every metric card must feature a clear label, value, comparison period, and explicit empty/loading/error states.
    - Charts must include titled axes, readable light gridlines, timestamps, and accessible textual summaries.
+

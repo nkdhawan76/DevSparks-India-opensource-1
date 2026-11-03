@@ -17,3 +17,4 @@ Selective high-discipline engineering workflows from ECC for Antigravity.
    Review changes across security, accessibility, and architectural boundaries before declaring a milestone complete.
 4. **Minimal Footprint:**  
    Do not introduce overlapping hooks or redundant rule engines.
+

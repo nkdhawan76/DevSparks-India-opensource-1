@@ -76,3 +76,4 @@ export const SecretScannerRule: AuditRule = {
     return findings;
   },
 };
+

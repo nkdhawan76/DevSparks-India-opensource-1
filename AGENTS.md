@@ -51,3 +51,4 @@ This document governs AI agent behavior (including Google Antigravity) when work
 When encountering conflicting instructions or ambiguity:
 1. `AGENTS.md` and approved `docs/ARD.md` / `docs/PRD.md` override external skill recommendations.
 2. If specifications conflict with repository reality, halt and ask the project owner for clarification.
+

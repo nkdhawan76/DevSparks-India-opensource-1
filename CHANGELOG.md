@@ -16,3 +16,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Skills Audit:** Documented evaluation of 8 external agent skills and tooling in `docs/THIRD_PARTY_SKILLS.md`.
 - **GitHub Governance:** Added structured Issue and Pull Request templates in `.github/`.
 - **Licensing:** Licensed under the MIT License.
+

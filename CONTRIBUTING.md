@@ -61,3 +61,4 @@ Before opening a Pull Request:
 - **Bugs:** Submit a report using our [Bug Report Template](.github/ISSUE_TEMPLATE/bug_report.yml).
 - **Features:** Propose ideas using our [Feature Request Template](.github/ISSUE_TEMPLATE/feature_request.yml).
 - **Security Vulnerabilities:** Do **NOT** file public issues for security vulnerabilities. Follow the reporting procedure in [SECURITY.md](SECURITY.md).
+

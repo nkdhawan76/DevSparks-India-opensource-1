@@ -31,3 +31,4 @@ Once reaching `1.0.0`:
   - Database migration instructions (if any).
   - Breaking changes or deprecation notices.
   - Security acknowledgements.
+

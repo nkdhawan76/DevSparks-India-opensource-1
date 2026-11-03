@@ -39,3 +39,4 @@ describe("AI Key Encryption (AES-256-GCM)", () => {
     expect(masked).not.toContain("9876543210");
   });
 });
+

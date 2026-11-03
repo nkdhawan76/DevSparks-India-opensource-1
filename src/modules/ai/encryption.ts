@@ -66,3 +66,4 @@ export function maskApiKey(apiKey: string): string {
   const end = apiKey.slice(-4);
   return `${start}••••••••${end}`;
 }
+

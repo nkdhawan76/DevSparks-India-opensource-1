@@ -25,3 +25,4 @@ Gravitas enforces strict operational discipline for agentic development.
 ## Operating Rule
 
 > "Report what actually happened, not what you intended. When you claim something is done, fixed, or verified — that claim rests on output you observed."
+

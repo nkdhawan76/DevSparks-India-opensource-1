@@ -71,3 +71,4 @@ describe("AuditEngine", () => {
     expect(ruleIds).toContain("DEP-002"); // Missing lockfile
   });
 });
+

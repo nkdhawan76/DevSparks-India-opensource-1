@@ -42,3 +42,4 @@ If you discover a security vulnerability in DevSparks DeployCheck, report it pri
 - **Isolated Execution:** User builds and test runs must occur in disposable container environments without Docker socket mounting.
 - **BYOK Credential Protection:** AI provider keys are encrypted at rest with authenticated encryption and never returned in API payloads or client bundles.
 - **Policy Enforcement:** AI models are never granted direct command-line or shell execution authority. Sensitive operations require human approval and execution logs are append-only.
+

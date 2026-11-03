@@ -48,3 +48,4 @@ export class EntitlementDeniedError extends AppError {
     );
   }
 }
+

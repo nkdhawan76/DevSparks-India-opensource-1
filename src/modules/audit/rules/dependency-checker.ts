@@ -76,3 +76,4 @@ export const DependencyCheckerRule: AuditRule = {
     return findings;
   },
 };
+

@@ -24,3 +24,4 @@ If you encounter a reproducible defect in implemented features:
 
 ### 4. Security Concerns
 For security-related issues, please refer to [SECURITY.md](SECURITY.md). Do not post security flaws publicly.
+

@@ -39,3 +39,4 @@ export interface AIPatchSuggestion {
   isApplied: boolean;
   createdAt: string;
 }
+

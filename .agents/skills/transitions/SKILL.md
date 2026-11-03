@@ -17,3 +17,4 @@ Provides lightweight, conflict-free transition patterns for DevSparks DeployChec
    Use localized Tailwind utility classes or custom properties to prevent CSS collisions.
 4. **License Compliance:**  
    Use permitted free patterns. Do not redistribute the collection as a competing UI pack.
+

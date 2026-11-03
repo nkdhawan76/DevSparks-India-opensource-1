@@ -48,3 +48,4 @@ export const EnvCheckerRule: AuditRule = {
     return findings;
   },
 };
+

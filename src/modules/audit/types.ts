@@ -70,3 +70,4 @@ export interface ProjectContext {
   projectId: string;
   files: Map<string, string>; // In-memory map of file paths to content (virtual runner)
 }
+

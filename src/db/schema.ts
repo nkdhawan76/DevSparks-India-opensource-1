@@ -107,3 +107,4 @@ export interface DbAuditEvent {
   metadataRedacted?: Record<string, unknown>;
   createdAt: Date;
 }
+

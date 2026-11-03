@@ -27,3 +27,4 @@ export interface WorkspacePlan {
   features: Record<FeatureKey, boolean>;
   monthlyAuditLimit: number;
 }
+

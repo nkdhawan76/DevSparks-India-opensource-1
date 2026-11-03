@@ -47,3 +47,4 @@ body:
       placeholder: "Node 26.13, Windows 11, pnpm 9"
     validations:
       required: true
+

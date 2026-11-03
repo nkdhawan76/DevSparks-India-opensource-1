@@ -35,3 +35,4 @@
 1. Establish project governance and documentation first (Milestone M0).
 2. Commit initial standards and request human approval prior to pushing to `origin/main`.
 3. Proceed to Stage 1 (Technical Design) and Stage 2 (Repository Foundation with TypeScript + Vitest + ESLint) once Section 21 decisions are approved.
+

@@ -17,3 +17,4 @@ Select defensive analysis patterns for DevSparks DeployCheck:
    Verify that regex scanners sanitize environment variables and API keys before logging or sending context to AI providers.
 4. **Isolated Runner Boundaries:**  
    Ensure child processes and containers run as non-root with timeout limits, egress restrictions, and without Docker socket access.
+
