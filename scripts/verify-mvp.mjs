@@ -58,7 +58,7 @@ test("Key Masking for UI Presentation", () => {
   assert(!masked.includes("9876543210"));
 });
 
-// 3. Test Secret Redaction in Logs
+// 3. Test Secret Redaction in Logs & Prompts
 test("Secret Redaction in Logs & Prompts", () => {
   const SENSITIVE_PATTERNS = [
     /sk-[a-zA-Z0-9]{20,}/g,
@@ -153,9 +153,41 @@ test("Server-Side Entitlement Gating", () => {
   assert.strictEqual(quotaExceeded.allowed, false);
 });
 
+// 6. Test Structured AI Patch Generation
+test("Structured AI Patch Proposal Generator", () => {
+  function generatePatchSuggestion(findingId, filePath, original, replacement, explanation) {
+    return {
+      id: "patch-123",
+      findingId,
+      model: "meta-llama/llama-3-8b-instruct:free",
+      summary: explanation,
+      patches: [{
+        filePath,
+        originalSnippet: original,
+        suggestedSnippet: replacement,
+        diffSummary: `Update ${filePath} to resolve finding`,
+        explanation,
+      }],
+      isApplied: false,
+    };
+  }
+
+  const patch = generatePatchSuggestion(
+    "SEC-001",
+    "src/config.ts",
+    "const key = 'sk-12345';",
+    "const key = process.env.API_KEY;",
+    "Extract secret to environment variable"
+  );
+
+  assert.strictEqual(patch.findingId, "SEC-001");
+  assert.strictEqual(patch.patches[0].filePath, "src/config.ts");
+  assert.strictEqual(patch.isApplied, false);
+  assert.strictEqual(patch.patches[0].suggestedSnippet, "const key = process.env.API_KEY;");
+});
+
 console.log(`\n=================================================`);
 console.log(`Verification Complete: ${passed} Passed, ${failed} Failed`);
 console.log(`=================================================`);
 
 if (failed > 0) process.exit(1);
-
