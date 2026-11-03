@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security Vulnerability Reporting
+    url: https://github.com/nkdhawan76/DevSparks-India-opensource-1/security/advisories/new
+    about: Please report security vulnerabilities privately here or via nkdhawan76@gmail.com
+  - name: Community Discussions & Questions
+    url: https://github.com/nkdhawan76/DevSparks-India-opensource-1/discussions
+    about: Ask questions and propose ideas in GitHub Discussions

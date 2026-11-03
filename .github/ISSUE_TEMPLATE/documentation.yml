@@ -1,0 +1,19 @@
+name: Documentation
+description: Suggest improvements or report errors in documentation
+title: "docs: "
+labels: ["documentation"]
+body:
+  - type: textarea
+    id: details
+    attributes:
+      label: Documentation Issue / Proposed Change
+      description: What page, section, or API specification needs improvement?
+    validations:
+      required: true
+  - type: input
+    id: doc_path
+    attributes:
+      label: Affected Document Path
+      placeholder: "docs/PRD.md or docs/api/openapi.yaml"
+    validations:
+      required: true

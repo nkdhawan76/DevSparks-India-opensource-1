@@ -1,0 +1,46 @@
+name: Feature Request
+description: Propose a new capability or architectural improvement
+title: "feat: "
+labels: ["feature", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please verify that your request aligns with the DeployCheck roadmap and approved PRD/ARD before filing.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: Is your feature request related to a specific problem or friction point?
+    validations:
+      required: true
+  - type: textarea
+    id: proposed_solution
+    attributes:
+      label: Proposed Solution
+      description: Describe your proposed design or solution clearly.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Any alternative designs or temporary workarounds considered?
+  - type: dropdown
+    id: module
+    attributes:
+      label: Target Module
+      options:
+        - "Module 1: Accounts & Workspaces"
+        - "Module 2: Project Management"
+        - "Module 3: Audit Engine"
+        - "Module 4: AI Assistance"
+        - "Module 5: Feature Entitlements"
+        - "Module 6: Server Connections"
+        - "Module 7: Prompt-driven Operations"
+        - "Module 8: Deployment Engine"
+        - "Module 9: Website Health Monitoring"
+        - "Module 10: Audit Logs & Notifications"
+        - "Module 11: Administration"
+    validations:
+      required: true
