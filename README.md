@@ -198,6 +198,7 @@ All interface mockups adhere strictly to the **Strict Light Theme Only** design 
 | **Subscription Management** | [`UI Design/DevSparks Subscription Management Dashboard.png`](UI%20Design/DevSparks%20Subscription%20Management%20Dashboard.png) | Workspace billing cycles, payment methods, and automated invoice history. |
 | **Notifications Center** | [`UI Design/DevSparks DeployCheck Notifications Dashboard.png`](UI%20Design/DevSparks%20DeployCheck%20Notifications%20Dashboard.png) | Multi-channel alert preferences, incident notifications, and audit webhooks. |
 | **Workspace Settings** | [`UI Design/DevSparks DeployCheck Settings Dashboard.png`](UI%20Design/DevSparks%20DeployCheck%20Settings%20Dashboard.png) | Global organization configurations, Git integrations, and BYOK AI provider tokens. |
+| **Website Settings** | [`UI Design/DevSparks Website Settings Dashboard.png`](UI%20Design/DevSparks%20Website%20Settings%20Dashboard.png) | Custom domain mapping, SSL certificate automation, and reverse proxy rules. |
 | **Profile Settings** | [`UI Design/DevSparks Profile Settings Dashboard.png`](UI%20Design/DevSparks%20Profile%20Settings%20Dashboard.png) | User profile details, session activity, and personal credentials. |
 | **Authentication & Onboarding** | [`UI Design/DevSparks DeployCheck Login and Signup Mockup.png`](UI%20Design/DevSparks%20DeployCheck%20Login%20and%20Signup%20Mockup.png) | Clean developer sign-in, MFA verification, and workspace registration. |
 | **Project Setup Wizard** | [`UI Design/DevSparks DeployCheck Project Setup.png`](UI%20Design/DevSparks%20DeployCheck%20Project%20Setup.png) | Step-by-step repository connection, stack detection, and initial audit baseline. |
@@ -257,7 +258,7 @@ devsparks-deploycheck/
 │       ├── monitoring/          # Synthetic probe tracker & webhook dispatcher
 │       ├── rbac/                # Role-based authorization & tenant isolation matrix
 │       └── server/              # SSRF guard & policy gateway command filter
-├── UI Design/                   # 19 verified light-theme product mockups
+├── UI Design/                   # 20 verified light-theme product mockups
 ├── .editorconfig                # Universal indentation and whitespace formatting
 ├── .env.example                 # Environment configuration template
 ├── .eslintrc.json               # ESLint configuration
