@@ -1,8 +1,7 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  // STRICT LIGHT THEME: darkMode is explicitly disabled
-  darkMode: "class",
+  // STRICT LIGHT THEME: Dark mode is disabled across all components
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -13,20 +12,28 @@ const config: Config = {
     extend: {
       colors: {
         deploycheck: {
-          bg: "#F7F9FC",
+          bg: "#F7F8FC",
           surface: "#FFFFFF",
-          primary: "#172033",
+          primary: "#17172A",
           secondary: "#667085",
-          border: "#E4E7EC",
+          border: "#E5E7EB",
+          purple: {
+            DEFAULT: "#5938F5",
+            hover: "#4726DB",
+            light: "#F0EEFF",
+          },
           blue: {
             DEFAULT: "#3563E9",
             hover: "#264FC7",
             light: "#EFF4FF",
+            secondary: "#3988F7",
           },
           violet: "#6D5EF7",
-          success: "#16803D",
-          warning: "#B7791F",
-          error: "#C62828",
+          success: "#16A34A",
+          warning: "#F59E0B",
+          error: "#DC2626",
+          danger: "#DC2626",
+          info: "#2563EB",
         },
       },
     },

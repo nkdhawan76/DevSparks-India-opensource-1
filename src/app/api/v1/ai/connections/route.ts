@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Encrypt the key at rest using AES-256-GCM
-    const encrypted = encryptSecret(apiKey);
+    const _encrypted = encryptSecret(apiKey);
 
     // Prepare response DTO — NEVER return raw or decrypted key
     const responseDto = {

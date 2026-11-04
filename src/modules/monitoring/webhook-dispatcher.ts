@@ -78,7 +78,7 @@ export class WebhookDispatcher {
     target?: MonitorTarget
   ): Record<string, unknown> {
     const isDown = alert.type === "DOWN";
-    const statusColor = isDown ? "#EF4444" : alert.type === "RECOVERED" ? "#10B981" : "#F59E0B";
+    const _statusColor = isDown ? "#EF4444" : alert.type === "RECOVERED" ? "#10B981" : "#F59E0B";
     const statusEmoji = isDown ? "🔴" : alert.type === "RECOVERED" ? "🟢" : "⚠️";
 
     switch (provider) {

@@ -60,7 +60,7 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const limitParam = searchParams.get("limit");
-    const cursor = searchParams.get("cursor");
+    const _cursor = searchParams.get("cursor");
     const projectId = searchParams.get("projectId");
 
     const limit = Math.min(Math.max(Number(limitParam) || 20, 1), 100);

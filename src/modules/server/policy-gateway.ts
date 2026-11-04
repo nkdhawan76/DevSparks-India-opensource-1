@@ -5,7 +5,6 @@
 
 import {
   CommandPolicyEvaluation,
-  ServerCommandCategory,
   ServerCommandRequest,
 } from "./types";
 import { redactSecrets } from "@/core/logger";

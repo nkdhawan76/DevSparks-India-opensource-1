@@ -48,7 +48,7 @@ export class SsrfGuard {
     const match = trimmed.match(ipv4Regex);
 
     if (match) {
-      const [_, o1, o2, o3, o4] = match.map(Number);
+      const [, o1, o2, o3, o4] = match.map(Number);
 
       if (o1 > 255 || o2 > 255 || o3 > 255 || o4 > 255) {
         return { isValid: false, isBlockedSsrf: false, reason: "Invalid IPv4 address format" };
