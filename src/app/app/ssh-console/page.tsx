@@ -6,3 +6,4 @@ import { SshConsoleView } from "@/components/views/SshConsoleView";
 export default function SshConsolePage() {
   return <SshConsoleView />;
 }
+

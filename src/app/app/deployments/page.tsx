@@ -6,3 +6,4 @@ import { DeploymentsView } from "@/components/views/DeploymentsView";
 export default function DeploymentsPage() {
   return <DeploymentsView />;
 }
+

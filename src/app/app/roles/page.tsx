@@ -6,3 +6,4 @@ import { UsersRolesView } from "@/components/views/UsersRolesView";
 export default function RolesPage() {
   return <UsersRolesView />;
 }
+

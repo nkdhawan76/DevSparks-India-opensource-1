@@ -6,3 +6,4 @@ import { PlansBillingView } from "@/components/views/PlansBillingView";
 export default function PlansPage() {
   return <PlansBillingView />;
 }
+

@@ -6,3 +6,4 @@ import { LogsSeoView } from "@/components/views/LogsSeoView";
 export default function SeoPage() {
   return <LogsSeoView />;
 }
+
