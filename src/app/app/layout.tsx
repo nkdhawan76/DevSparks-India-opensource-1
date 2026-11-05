@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { Header } from "@/components/common/Header";
 import { Sidebar, NavView } from "@/components/common/Sidebar";
@@ -10,13 +10,39 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
 
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
   const [systemHealth, setSystemHealth] = useState<string>("healthy");
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [currentUser, setCurrentUser] = useState<{ name: string; role: string }>({
+    name: "Nikhil Dhawan",
+    role: "Super Admin",
+  });
 
   // Global Diff Review Modal
   const [diffModalOpen, setDiffModalOpen] = useState(false);
   const [diffApprovalStatus, setDiffApprovalStatus] = useState<"pending" | "approved" | "rejected">("pending");
+
+  useEffect(() => {
+    fetch("/api/v1/auth/me")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.user) {
+          const roleLabel =
+            data.user.role === "OWNER"
+              ? "Super Admin"
+              : data.user.role === "ADMIN"
+              ? "Admin"
+              : data.user.role === "DEVELOPER"
+              ? "Developer"
+              : "Viewer";
+          setCurrentUser({
+            name: data.user.name || data.user.email.split("@")[0],
+            role: roleLabel,
+          });
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   // Determine active view from pathname
   const getActiveView = (): NavView => {
@@ -88,15 +114,15 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-screen bg-[#F7F8FC] text-[#17172A] font-sans antialiased">
-      {/* Persistent Collapsible Sidebar */}
+      {/* Permanent Desktop Sidebar + Mobile Responsive Drawer */}
       <Sidebar
         activeView={activeView}
         onSelectView={handleSelectView}
-        collapsed={sidebarCollapsed}
-        onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
+        mobileOpen={mobileDrawerOpen}
+        onCloseMobile={() => setMobileDrawerOpen(false)}
       />
 
-      {/* Main Area */}
+      {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0">
         <Header
           currentSection={viewTitles[activeView]}
@@ -105,11 +131,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           onRefreshHealth={refreshHealth}
           onRunAudit={() => router.push("/app/audits")}
           onOpenNotifications={() => router.push("/app/notifications")}
-          onToggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)}
+          onToggleSidebar={() => setMobileDrawerOpen(!mobileDrawerOpen)}
           onNavigateView={(view) => handleSelectView(view as NavView)}
+          userFullName={currentUser.name}
+          userRole={currentUser.role}
         />
 
-        <main className="flex-1 p-6 lg:p-8 overflow-y-auto">
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
           {children}
         </main>
       </div>
@@ -125,4 +153,3 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
-

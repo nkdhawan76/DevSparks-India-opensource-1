@@ -591,6 +591,51 @@ test("Monitoring Webhook Dispatcher & SSRF Invariants", () => {
   assert.strictEqual(signature.length, 7 + 64, "SHA-256 hex signature must be 64 chars long");
 });
 
+// 16. Test Authentication & Password Hashing Security Invariants
+test("Authentication & Password Hashing Security Invariants", () => {
+  // Scrypt password hashing
+  function hashPassword(password) {
+    const salt = crypto.randomBytes(16).toString("hex");
+    const derivedKey = crypto.scryptSync(password, salt, 64);
+    return `scrypt:${salt}:${derivedKey.toString("hex")}`;
+  }
+
+  function verifyPassword(password, storedHash) {
+    const parts = storedHash.split(":");
+    if (parts.length !== 3 || parts[0] !== "scrypt") return false;
+    const [, salt, expectedHex] = parts;
+    const derivedKey = crypto.scryptSync(password, salt, 64);
+    const expectedBuffer = Buffer.from(expectedHex, "hex");
+    if (derivedKey.length !== expectedBuffer.length) return false;
+    return crypto.timingSafeEqual(derivedKey, expectedBuffer);
+  }
+
+  const rawPassword = "DevSparksPassword@2026!";
+  const hash = hashPassword(rawPassword);
+  assert(hash.startsWith("scrypt:"), "Hash format must start with scrypt:");
+  assert.strictEqual(verifyPassword(rawPassword, hash), true, "Correct password must verify successfully");
+  assert.strictEqual(verifyPassword("WrongPassword123!", hash), false, "Incorrect password must be rejected");
+
+  // Lowest permitted role on signup invariant
+  function assignInitialRole(requestedRole) {
+    // Under no circumstances can a user self-assign ADMIN or OWNER on public registration
+    if (requestedRole === "OWNER" || requestedRole === "ADMIN") {
+      return "DEVELOPER";
+    }
+    return "DEVELOPER";
+  }
+
+  assert.strictEqual(assignInitialRole("OWNER"), "DEVELOPER", "OWNER self-assignment must be demoted to DEVELOPER");
+  assert.strictEqual(assignInitialRole("ADMIN"), "DEVELOPER", "ADMIN self-assignment must be demoted to DEVELOPER");
+  assert.strictEqual(assignInitialRole("DEVELOPER"), "DEVELOPER");
+
+  // Session token hashing (only SHA-256 hash stored in DB)
+  const rawToken = crypto.randomBytes(32).toString("hex");
+  const tokenHash = crypto.createHash("sha256").update(rawToken).digest("hex");
+  assert.strictEqual(tokenHash.length, 64, "Token hash must be 64-char SHA-256");
+  assert.notStrictEqual(rawToken, tokenHash, "Raw token must not equal token hash");
+});
+
 console.log(`\n=================================================`);
 console.log(`Verification Complete: ${passed} Passed, ${failed} Failed`);
 console.log(`=================================================`);

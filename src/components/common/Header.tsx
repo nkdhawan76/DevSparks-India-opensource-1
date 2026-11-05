@@ -45,6 +45,15 @@ export function Header({
   const [showNotificationPopup, setShowNotificationPopup] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
 
+  const handleSignOut = async () => {
+    try {
+      await fetch("/api/v1/auth/logout", { method: "POST" });
+    } catch {
+      // Ignore
+    }
+    window.location.href = "/login";
+  };
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
@@ -63,9 +72,9 @@ export function Header({
         {onToggleSidebar && (
           <button
             onClick={onToggleSidebar}
-            className="p-2 rounded-xl text-slate-500 hover:text-[#17172A] hover:bg-slate-50 transition-colors border border-transparent hover:border-[#E5E7EB]"
-            title="Toggle Sidebar"
-            aria-label="Toggle Sidebar"
+            className="lg:hidden p-2 rounded-xl text-slate-500 hover:text-[#17172A] hover:bg-slate-50 transition-colors border border-transparent hover:border-[#E5E7EB]"
+            title="Toggle Navigation Menu"
+            aria-label="Toggle Navigation Menu"
           >
             <Menu size={18} />
           </button>
@@ -215,7 +224,7 @@ export function Header({
               <button
                 onClick={() => {
                   setShowProfileMenu(false);
-                  onNavigateView?.("auth");
+                  handleSignOut();
                 }}
                 className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-[#DC2626] hover:bg-rose-50 font-medium transition-colors"
               >
