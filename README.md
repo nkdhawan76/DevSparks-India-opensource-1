@@ -163,7 +163,7 @@ DevSparks DeployCheck enforces four non-negotiable security invariants:
 
 | Component | Technology | Version | Purpose |
 | :--- | :--- | :--- | :--- |
-| **Frontend Framework** | Next.js (App Router) | `14.2.18` | Light-themed responsive dashboard, diff viewer, charts |
+| **Frontend Framework** | Next.js (App Router) | `14.2.35` | Light-themed responsive dashboard, diff viewer, charts |
 | **UI Library** | React | `18.3.1` | Component lifecycle, interactive modals, client-side streaming |
 | **Styling** | Tailwind CSS | `3.4.15` | Strict Light Theme tokens (`#F7F9FC`, `#FFFFFF`, `#172033`) |
 | **Language** | TypeScript | `5.6.3` | End-to-end static typing across UI, API, and core modules |
@@ -209,7 +209,7 @@ All interface mockups adhere strictly to the **Strict Light Theme Only** design 
 
 ```text
 devsparks-deploycheck/
-├── .agents/skills/              # Antigravity agent skills (hallmark, ponytail, gravitas, etc.)
+├── .agents/skills/              # Antigravity agent skills (unslop, hallmark, ponytail, gravitas, etc.)
 ├── .github/
 │   ├── ISSUE_TEMPLATE/          # Issue templates (bug, feature, documentation)
 │   ├── workflows/
@@ -245,9 +245,14 @@ devsparks-deploycheck/
 │   │   │   ├── monitoring/      # /api/v1/monitoring/targets, /checks
 │   │   │   ├── servers/         # /api/v1/servers/validate, /diagnostics
 │   │   │   └── workspaces/      # /api/v1/workspaces/plan
+│   │   ├── app/                 # Deep-link App Router pages (/app/dashboard, /app/projects, etc.)
+│   │   ├── login/ & signup/     # Authentication pages
 │   │   ├── globals.css          # Tailwind CSS base and strict light tokens
 │   │   ├── layout.tsx           # Root light layout wrapper
 │   │   └── page.tsx             # Interactive dashboard UI with live API integrations
+│   ├── components/              # Modular UI components
+│   │   ├── common/              # Header, Sidebar, CommandPalette, DiffReviewModal, KpiCard, StatusBadge
+│   │   └── views/               # 13 light-theme view surfaces
 │   ├── core/                    # Core error classes and sensitive secret redaction logger
 │   ├── db/                      # PostgreSQL client repository and migration runner
 │   └── modules/                 # Modular monolith business logic
