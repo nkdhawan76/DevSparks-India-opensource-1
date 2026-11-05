@@ -134,6 +134,45 @@ function LoginForm() {
         </button>
       </form>
 
+      {/* Demo Credentials Quick-Fill Card */}
+      <div className="mt-5 p-3 rounded-xl bg-slate-50 border border-[#E5E7EB] text-xs">
+        <div className="flex items-center justify-between mb-2">
+          <span className="font-bold text-[#17172A] text-[11px]">Quick Fill Test Accounts:</span>
+          <span className="text-[10px] text-slate-400 font-mono">Click to test</span>
+        </div>
+        <div className="space-y-1.5">
+          <button
+            type="button"
+            onClick={() => {
+              setEmail("nikhil@devsparksindia.com");
+              setPassword("DevSparks@2026!");
+            }}
+            className="w-full text-left p-2 rounded-lg bg-white hover:bg-purple-50/60 border border-[#E5E7EB] hover:border-[#5938F5]/30 transition-all flex items-center justify-between group cursor-pointer"
+          >
+            <div>
+              <div className="font-semibold text-[#17172A] group-hover:text-[#5938F5] text-[11px]">Super Admin</div>
+              <div className="text-[10px] text-[#667085] font-mono">nikhil@devsparksindia.com</div>
+            </div>
+            <span className="text-[10px] font-semibold text-[#5938F5]">Use Details →</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setEmail("admin.test@acs-solar.local");
+              setPassword("ChangeMe_Admin_2026!");
+            }}
+            className="w-full text-left p-2 rounded-lg bg-white hover:bg-purple-50/60 border border-[#E5E7EB] hover:border-[#5938F5]/30 transition-all flex items-center justify-between group cursor-pointer"
+          >
+            <div>
+              <div className="font-semibold text-[#17172A] group-hover:text-[#5938F5] text-[11px]">Test Admin (ACS Solar)</div>
+              <div className="text-[10px] text-[#667085] font-mono">admin.test@acs-solar.local</div>
+            </div>
+            <span className="text-[10px] font-semibold text-[#5938F5]">Use Details →</span>
+          </button>
+        </div>
+      </div>
+
       <div className="mt-6 pt-5 border-t border-[#F1F4F9] text-center text-xs text-[#667085]">
         <span>Don&apos;t have an account? </span>
         <Link href="/signup" className="font-semibold text-[#5938F5] hover:underline">

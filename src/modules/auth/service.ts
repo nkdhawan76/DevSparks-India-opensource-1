@@ -138,9 +138,7 @@ export class AuthService {
   private initialized = false;
 
   public async initialize(): Promise<void> {
-    if (this.initialized) return;
-
-    // Seed default administrator if not present
+    // 1. Seed primary default administrator
     const defaultEmail = "nikhil@devsparksindia.com";
     const existing = await dbClient.getUserByEmail(defaultEmail);
     if (!existing) {
@@ -178,6 +176,58 @@ export class AuthService {
       await dbClient.addWorkspaceMember(member);
 
       secureLogger.info(`[AuthService] Seeded default administrator: ${defaultEmail}`);
+    }
+
+    // 2. Seed test admin account matching user entry (admin.test@acs-solar.local)
+    const testAdminEmail = "admin.test@acs-solar.local";
+    const existingTestAdmin = await dbClient.getUserByEmail(testAdminEmail);
+    if (!existingTestAdmin) {
+      const testAdminUser: DbUser = {
+        id: crypto.randomUUID(),
+        email: testAdminEmail,
+        name: "ACS Solar Admin",
+        passwordHash: hashPassword("ChangeMe_Admin_2026!"),
+        status: "ACTIVE",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+      await dbClient.createUser(testAdminUser);
+
+      const member: DbWorkspaceMember = {
+        workspaceId: "ws_alpha",
+        userId: testAdminUser.id,
+        role: "ADMIN",
+        status: "ACTIVE",
+        createdAt: new Date(),
+      };
+      await dbClient.addWorkspaceMember(member);
+      secureLogger.info(`[AuthService] Seeded test admin: ${testAdminEmail}`);
+    }
+
+    // 3. Seed demo developer account (demo@devsparksindia.com)
+    const demoEmail = "demo@devsparksindia.com";
+    const existingDemo = await dbClient.getUserByEmail(demoEmail);
+    if (!existingDemo) {
+      const demoUser: DbUser = {
+        id: crypto.randomUUID(),
+        email: demoEmail,
+        name: "Demo Developer",
+        passwordHash: hashPassword("DevSparks@2026!"),
+        status: "ACTIVE",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+      await dbClient.createUser(demoUser);
+
+      const member: DbWorkspaceMember = {
+        workspaceId: "ws_alpha",
+        userId: demoUser.id,
+        role: "DEVELOPER",
+        status: "ACTIVE",
+        createdAt: new Date(),
+      };
+      await dbClient.addWorkspaceMember(member);
+      secureLogger.info(`[AuthService] Seeded demo developer: ${demoEmail}`);
     }
 
     this.initialized = true;
