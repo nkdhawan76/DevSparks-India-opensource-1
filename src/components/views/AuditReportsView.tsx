@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { StatusBadge } from "../common/StatusBadge";
 import { KpiCard } from "../common/KpiCard";
+import { ShieldCheck, AlertCircle, AlertTriangle, Layers, Sparkles } from "../common/Icons";
 
 interface AuditReportsViewProps {
   onOpenDiffModal: (findingId: string) => void;
@@ -109,7 +110,7 @@ export function AuditReportsView({
           disabled={isLoading}
           className="px-5 py-2.5 bg-[#5938F5] hover:bg-[#4726DB] text-white text-xs font-bold rounded-xl shadow-sm transition-all flex items-center gap-2 self-start md:self-auto disabled:opacity-50"
         >
-          <span className={isLoading ? "animate-spin" : ""}>🛡️</span>
+          <ShieldCheck size={16} className={isLoading ? "animate-spin" : ""} />
           <span>{isLoading ? "Scanning Workspace..." : "Trigger Live Audit"}</span>
         </button>
       </div>
@@ -121,26 +122,26 @@ export function AuditReportsView({
           value={liveAuditResult ? "100%" : "96%"}
           subtitle="Ready for deployment"
           trend={{ value: "+4%", isPositive: true }}
-          icon="🛡️"
+          icon={<ShieldCheck size={16} className="text-[#3988F7]" />}
           badge="PASS"
         />
         <KpiCard
           title="Critical Findings"
           value="0"
           subtitle="Zero high-severity blocks"
-          icon="🚨"
+          icon={<AlertCircle size={16} className="text-[#DC2626]" />}
         />
         <KpiCard
           title="Rule Warnings"
           value={String(filteredFindings.length)}
           subtitle="Advisory items only"
-          icon="⚠️"
+          icon={<AlertTriangle size={16} className="text-[#F59E0B]" />}
         />
         <KpiCard
           title="Files Analyzed"
           value="93"
           subtitle="Node.js / Next.js / TypeScript"
-          icon="📦"
+          icon={<Layers size={16} className="text-[#5938F5]" />}
           badge="Scanned"
         />
       </div>
@@ -202,7 +203,7 @@ export function AuditReportsView({
                 onClick={() => onOpenDiffModal(finding.id)}
                 className="px-4 py-2 bg-purple-50 hover:bg-purple-100 border border-purple-200 text-[#5938F5] text-xs font-bold rounded-xl transition-all flex items-center gap-1.5"
               >
-                <span>✨</span>
+                <Sparkles size={14} className="text-[#5938F5]" />
                 <span>Review AI Patch</span>
               </button>
             </div>

@@ -2,6 +2,24 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import {
+  LayoutDashboard,
+  FolderGit2,
+  ShieldCheck,
+  Sparkles,
+  Server,
+  Rocket,
+  Terminal,
+  Globe,
+  FileText,
+  Users,
+  CreditCard,
+  Settings,
+  Zap,
+  Key,
+  Search,
+  Cpu,
+} from "./Icons";
 
 interface CommandPaletteProps {
   isOpen: boolean;
@@ -15,7 +33,7 @@ interface CommandItem {
   category: "Navigation" | "Action" | "Projects";
   title: string;
   subtitle?: string;
-  icon: string;
+  icon: React.ReactNode;
   action: () => void;
 }
 
@@ -39,18 +57,18 @@ export function CommandPalette({
 
   const commands: CommandItem[] = [
     // Navigation
-    { id: "nav-dash", category: "Navigation", title: "Operations Dashboard", subtitle: "KPIs, health, recent audits", icon: "📊", action: () => navigate("/app/dashboard", "dashboard") },
-    { id: "nav-proj", category: "Navigation", title: "Project Workspace", subtitle: "Connected repos & branch tracking", icon: "📁", action: () => navigate("/app/projects", "projects") },
-    { id: "nav-audit", category: "Navigation", title: "Pre-Deployment Audits", subtitle: "Deterministic static scanning", icon: "🛡️", action: () => navigate("/app/audits", "audits") },
-    { id: "nav-ai", category: "Navigation", title: "AI Coding Assistant", subtitle: "BYOK OpenRouter & Diff Review", icon: "✨", action: () => navigate("/app/ai", "ai") },
-    { id: "nav-servers", category: "Navigation", title: "VPS Server Infrastructure", subtitle: "Linux nodes & diagnostics", icon: "🖥️", action: () => navigate("/app/servers", "servers") },
-    { id: "nav-deploy", category: "Navigation", title: "Production Deployments", subtitle: "Release pipeline & rollback", icon: "🚀", action: () => navigate("/app/deployments", "deployments") },
-    { id: "nav-ssh", category: "Navigation", title: "Policy SSH Web Console", subtitle: "Restricted command terminal", icon: "💻", action: () => navigate("/app/ssh-console", "ssh-console") },
-    { id: "nav-monitor", category: "Navigation", title: "Synthetic Monitoring", subtitle: "HTTP/SSL uptime probes", icon: "📡", action: () => navigate("/app/monitoring", "monitoring") },
-    { id: "nav-logs", category: "Navigation", title: "Structured Logs & SEO", subtitle: "Redacted telemetry & bot crawlers", icon: "📜", action: () => navigate("/app/logs", "logs") },
-    { id: "nav-users", category: "Navigation", title: "Team Members & RBAC", subtitle: "Workspace permission matrix", icon: "👥", action: () => navigate("/app/users", "users") },
-    { id: "nav-plans", category: "Navigation", title: "Plans & Billing", subtitle: "Resource quotas & receipts", icon: "💳", action: () => navigate("/app/plans", "plans") },
-    { id: "nav-settings", category: "Navigation", title: "Global Settings", subtitle: "Custom domains, SSL & BYOK key", icon: "⚙️", action: () => navigate("/app/settings", "settings") },
+    { id: "nav-dash", category: "Navigation", title: "Operations Dashboard", subtitle: "KPIs, health, recent audits", icon: <LayoutDashboard size={15} className="text-[#5938F5]" />, action: () => navigate("/app/dashboard", "dashboard") },
+    { id: "nav-proj", category: "Navigation", title: "Project Workspace", subtitle: "Connected repos & branch tracking", icon: <FolderGit2 size={15} className="text-[#5938F5]" />, action: () => navigate("/app/projects", "projects") },
+    { id: "nav-audit", category: "Navigation", title: "Pre-Deployment Audits", subtitle: "Deterministic static scanning", icon: <ShieldCheck size={15} className="text-[#3988F7]" />, action: () => navigate("/app/audits", "audits") },
+    { id: "nav-ai", category: "Navigation", title: "AI Coding Assistant", subtitle: "BYOK OpenRouter & Diff Review", icon: <Sparkles size={15} className="text-[#5938F5]" />, action: () => navigate("/app/ai", "ai") },
+    { id: "nav-servers", category: "Navigation", title: "VPS Server Infrastructure", subtitle: "Linux nodes & diagnostics", icon: <Server size={15} className="text-[#F59E0B]" />, action: () => navigate("/app/servers", "servers") },
+    { id: "nav-deploy", category: "Navigation", title: "Production Deployments", subtitle: "Release pipeline & rollback", icon: <Rocket size={15} className="text-[#16A34A]" />, action: () => navigate("/app/deployments", "deployments") },
+    { id: "nav-ssh", category: "Navigation", title: "Policy SSH Web Console", subtitle: "Restricted command terminal", icon: <Terminal size={15} className="text-[#17172A]" />, action: () => navigate("/app/ssh-console", "ssh-console") },
+    { id: "nav-monitor", category: "Navigation", title: "Synthetic Monitoring", subtitle: "HTTP/SSL uptime probes", icon: <Globe size={15} className="text-[#2563EB]" />, action: () => navigate("/app/monitoring", "monitoring") },
+    { id: "nav-logs", category: "Navigation", title: "Structured Logs & SEO", subtitle: "Redacted telemetry & bot crawlers", icon: <FileText size={15} className="text-[#64748B]" />, action: () => navigate("/app/logs", "logs") },
+    { id: "nav-users", category: "Navigation", title: "Team Members & RBAC", subtitle: "Workspace permission matrix", icon: <Users size={15} className="text-[#5938F5]" />, action: () => navigate("/app/users", "users") },
+    { id: "nav-plans", category: "Navigation", title: "Plans & Billing", subtitle: "Resource quotas & receipts", icon: <CreditCard size={15} className="text-[#16A34A]" />, action: () => navigate("/app/plans", "plans") },
+    { id: "nav-settings", category: "Navigation", title: "Global Settings", subtitle: "Custom domains, SSL & BYOK key", icon: <Settings size={15} className="text-[#64748B]" />, action: () => navigate("/app/settings", "settings") },
 
     // Quick Actions
     {
@@ -58,7 +76,7 @@ export function CommandPalette({
       category: "Action",
       title: "Trigger Pre-Deployment Audit",
       subtitle: "Execute deterministic 0-vuln static scan",
-      icon: "⚡",
+      icon: <Zap size={15} className="text-[#5938F5]" />,
       action: () => {
         onClose();
         if (onTriggerAudit) onTriggerAudit();
@@ -70,7 +88,7 @@ export function CommandPalette({
       category: "Action",
       title: "Connect Linux VPS Node",
       subtitle: "Establish SHA-256 host-verified session",
-      icon: "🔌",
+      icon: <Cpu size={15} className="text-[#3988F7]" />,
       action: () => navigate("/app/servers", "servers"),
     },
     {
@@ -78,16 +96,16 @@ export function CommandPalette({
       category: "Action",
       title: "Configure OpenRouter BYOK Key",
       subtitle: "Update AES-256 encrypted provider token",
-      icon: "🔑",
+      icon: <Key size={15} className="text-[#F59E0B]" />,
       action: () => navigate("/app/settings", "settings"),
     },
 
     // Projects
-    { id: "proj-thefein", category: "Projects", title: "thefein.in", subtitle: "Next.js 14 • 100/100 Score • VPS-01", icon: "🌐", action: () => navigate("/app/projects", "projects") },
-    { id: "proj-kreeda", category: "Projects", title: "kreedaportal.com", subtitle: "Laravel 11 • 92/100 Score • VPS-02", icon: "🌐", action: () => navigate("/app/projects", "projects") },
-    { id: "proj-silverera", category: "Projects", title: "silvereraheritage.com", subtitle: "Next.js 14 • 88/100 Score • VPS-01", icon: "🌐", action: () => navigate("/app/projects", "projects") },
-    { id: "proj-compikart", category: "Projects", title: "compikart.opm", subtitle: "Node.js • 100/100 Score • VPS-03", icon: "🌐", action: () => navigate("/app/projects", "projects") },
-    { id: "proj-devsparks", category: "Projects", title: "devsparksindia.com", subtitle: "Next.js 14 • 96/100 Score • Production", icon: "🌐", action: () => navigate("/app/projects", "projects") },
+    { id: "proj-thefein", category: "Projects", title: "thefein.in", subtitle: "Next.js 14 • 100/100 Score • VPS-01", icon: <Globe size={15} className="text-slate-400" />, action: () => navigate("/app/projects", "projects") },
+    { id: "proj-kreeda", category: "Projects", title: "kreedaportal.com", subtitle: "Laravel 11 • 92/100 Score • VPS-02", icon: <Globe size={15} className="text-slate-400" />, action: () => navigate("/app/projects", "projects") },
+    { id: "proj-silverera", category: "Projects", title: "silvereraheritage.com", subtitle: "Next.js 14 • 88/100 Score • VPS-01", icon: <Globe size={15} className="text-slate-400" />, action: () => navigate("/app/projects", "projects") },
+    { id: "proj-compikart", category: "Projects", title: "compikart.opm", subtitle: "Node.js • 100/100 Score • VPS-03", icon: <Globe size={15} className="text-slate-400" />, action: () => navigate("/app/projects", "projects") },
+    { id: "proj-devsparks", category: "Projects", title: "devsparksindia.com", subtitle: "Next.js 14 • 96/100 Score • Production", icon: <Globe size={15} className="text-[#5938F5]" />, action: () => navigate("/app/projects", "projects") },
   ];
 
   const filteredCommands = commands.filter(
@@ -118,7 +136,7 @@ export function CommandPalette({
       <div className="bg-white border border-[#E5E7EB] rounded-2xl shadow-2xl w-full max-w-xl overflow-hidden flex flex-col max-h-[70vh]">
         {/* Search Input Bar */}
         <div className="p-4 border-b border-[#E5E7EB] flex items-center gap-3 bg-slate-50/50">
-          <span className="text-slate-400 text-base">🔍</span>
+          <Search size={16} className="text-slate-400 shrink-0" />
           <input
             type="text"
             autoFocus

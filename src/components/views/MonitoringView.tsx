@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { StatusBadge } from "../common/StatusBadge";
 import { KpiCard } from "../common/KpiCard";
+import { Globe, Zap, Lock, ShieldCheck, X, AlertCircle } from "../common/Icons";
 
 export function MonitoringView() {
   const [showAddModal, setShowAddModal] = useState(false);
@@ -76,10 +77,10 @@ export function MonitoringView() {
 
       {/* KPI Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <KpiCard title="Network Uptime" value="99.98%" subtitle="Across 3 target endpoints" trend={{ value: "+0.02%", isPositive: true }} icon="📡" badge="Optimal" />
-        <KpiCard title="Average Latency" value="81ms" subtitle="p95: 124ms" trend={{ value: "-6ms", isPositive: true }} icon="⚡" />
-        <KpiCard title="SSL Certificates" value="3 Valid" subtitle="Auto-renewing before 14 days" icon="🔒" badge="Active" />
-        <KpiCard title="Active Incidents" value="0" subtitle="Clean status ledger" icon="🛡️" />
+        <KpiCard title="Network Uptime" value="99.98%" subtitle="Across 3 target endpoints" trend={{ value: "+0.02%", isPositive: true }} icon={<Globe size={16} className="text-[#5938F5]" />} badge="Optimal" />
+        <KpiCard title="Average Latency" value="81ms" subtitle="p95: 124ms" trend={{ value: "-6ms", isPositive: true }} icon={<Zap size={16} className="text-[#F59E0B]" />} />
+        <KpiCard title="SSL Certificates" value="3 Valid" subtitle="Auto-renewing before 14 days" icon={<Lock size={16} className="text-[#3988F7]" />} badge="Active" />
+        <KpiCard title="Active Incidents" value="0" subtitle="Clean status ledger" icon={<ShieldCheck size={16} className="text-[#16A34A]" />} />
       </div>
 
       {/* Target Probes Table */}
@@ -137,9 +138,9 @@ export function MonitoringView() {
               <h3 className="font-bold text-base text-[#17172A]">Add Synthetic Health Probe Target</h3>
               <button
                 onClick={() => setShowAddModal(false)}
-                className="w-8 h-8 rounded-lg text-slate-400 hover:text-[#17172A] flex items-center justify-center"
+                className="w-8 h-8 rounded-lg text-slate-400 hover:text-[#17172A] flex items-center justify-center transition-colors"
               >
-                ✕
+                <X size={16} />
               </button>
             </div>
 
@@ -181,13 +182,13 @@ export function MonitoringView() {
 
               {errorMessage && (
                 <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl text-rose-800 text-[11px] flex items-center justify-between">
-                  <span>❌ {errorMessage}</span>
-                  <button onClick={() => setErrorMessage(null)} className="text-rose-500 font-bold">✕</button>
+                  <span className="inline-flex items-center gap-1.5"><AlertCircle size={14} className="text-rose-500 shrink-0" /> {errorMessage}</span>
+                  <button onClick={() => setErrorMessage(null)} className="text-rose-500 font-bold"><X size={14} /></button>
                 </div>
               )}
 
               <div className="p-3 bg-blue-50 border border-blue-200 rounded-xl text-blue-900 text-[11px]">
-                🛡️ <strong>SSRF Guard Invariant:</strong> DeployCheck validates all probe destinations against RFC 1918 private ranges, AWS/GCP instance metadata, and loopback IP addresses before socket creation.
+                <ShieldCheck size={14} className="text-blue-700 inline-block mr-1 align-sub" /> <strong>SSRF Guard Invariant:</strong> DeployCheck validates all probe destinations against RFC 1918 private ranges, AWS/GCP instance metadata, and loopback IP addresses before socket creation.
               </div>
             </div>
 

@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { KpiCard } from "../common/KpiCard";
+import { FileText, TrendingUp, Bot, CheckCircle2, Zap, AlertTriangle } from "../common/Icons";
 
 export function LogsSeoView() {
   const [activeSubTab, setActiveSubTab] = useState<"logs" | "seo">("logs");
@@ -49,7 +50,7 @@ export function LogsSeoView() {
               activeSubTab === "logs" ? "bg-white text-[#5938F5] shadow-sm" : "text-[#667085]"
             }`}
           >
-            📜 System Logs
+            <span className="inline-flex items-center gap-1.5"><FileText size={14} /> System Logs</span>
           </button>
           <button
             onClick={() => setActiveSubTab("seo")}
@@ -57,7 +58,7 @@ export function LogsSeoView() {
               activeSubTab === "seo" ? "bg-white text-[#5938F5] shadow-sm" : "text-[#667085]"
             }`}
           >
-            📈 SEO & Crawlers
+            <span className="inline-flex items-center gap-1.5"><TrendingUp size={14} /> SEO & Crawlers</span>
           </button>
         </div>
       </div>
@@ -121,10 +122,10 @@ export function LogsSeoView() {
         <div className="space-y-6">
           {/* SEO KPI Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <KpiCard title="24h Bot Crawls" value="4,820" subtitle="Googlebot & Bingbot" trend={{ value: "+14%", isPositive: true }} icon="🤖" />
-            <KpiCard title="200 OK Rate" value="98.4%" subtitle="Optimal crawl efficiency" icon="✅" badge="Healthy" />
-            <KpiCard title="Avg Server Response" value="112ms" subtitle="Fast TTFB for bots" icon="⚡" />
-            <KpiCard title="4xx Errors Detected" value="6" subtitle="Missing asset requests" icon="⚠️" />
+            <KpiCard title="24h Bot Crawls" value="4,820" subtitle="Googlebot & Bingbot" trend={{ value: "+14%", isPositive: true }} icon={<Bot size={16} className="text-[#5938F5]" />} />
+            <KpiCard title="200 OK Rate" value="98.4%" subtitle="Optimal crawl efficiency" icon={<CheckCircle2 size={16} className="text-[#16A34A]" />} badge="Healthy" />
+            <KpiCard title="Avg Server Response" value="112ms" subtitle="Fast TTFB for bots" icon={<Zap size={16} className="text-[#F59E0B]" />} />
+            <KpiCard title="4xx Errors Detected" value="6" subtitle="Missing asset requests" icon={<AlertTriangle size={16} className="text-[#DC2626]" />} />
           </div>
 
           {/* Crawler Distribution & Status Breakdown */}

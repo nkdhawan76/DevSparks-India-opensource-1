@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { Zap, Check, Eye, EyeOff } from "../common/Icons";
 
 export function AuthView() {
   const [authMode, setAuthMode] = useState<"signin" | "signup">("signin");
@@ -21,7 +22,7 @@ export function AuthView() {
         {/* Brand */}
         <div className="text-center space-y-2">
           <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#5938F5] to-[#3988F7] text-white flex items-center justify-center font-black text-2xl shadow-md mx-auto">
-            ⚡
+            <Zap size={24} className="text-white" />
           </div>
           <h2 className="text-2xl font-black tracking-tight text-[#17172A]">
             {authMode === "signin" ? "Developer Sign In" : "Create Developer Account"}
@@ -53,7 +54,7 @@ export function AuthView() {
 
         {authSuccess && (
           <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-900 flex items-center gap-2">
-            <span>✅</span>
+            <Check size={14} className="text-[#16A34A] shrink-0" />
             <span>Authentication session initialized for {email}.</span>
           </div>
         )}
@@ -91,9 +92,9 @@ export function AuthView() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-2.5 text-slate-400 hover:text-[#17172A] text-xs"
+                className="absolute right-3 top-2.5 text-slate-400 hover:text-[#17172A] transition-colors"
               >
-                {showPassword ? "🙈" : "👁️"}
+                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
             </div>
           </div>

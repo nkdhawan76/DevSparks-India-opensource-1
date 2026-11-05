@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { StatusBadge } from "../common/StatusBadge";
 import { KpiCard } from "../common/KpiCard";
+import { Rocket, TrendingUp, Clock, RotateCcw, Check, RefreshCw } from "../common/Icons";
 
 export function DeploymentsView() {
   const [activeStep, _setActiveStep] = useState(4);
@@ -77,7 +78,7 @@ export function DeploymentsView() {
           onClick={handleTriggerRollback}
           className="px-4 py-2 border border-rose-300 bg-rose-50 hover:bg-rose-100 text-[#DC2626] text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 self-start md:self-auto"
         >
-          <span>⏮️</span>
+          <RotateCcw size={15} />
           <span>Initiate Fast Rollback</span>
         </button>
       </div>
@@ -85,7 +86,7 @@ export function DeploymentsView() {
       {rollbackSuccess && (
         <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-xs text-emerald-900 flex items-center justify-between animate-in fade-in">
           <div className="flex items-center gap-2">
-            <span>✅</span>
+            <Check size={15} className="text-[#16A34A] shrink-0" />
             <span className="font-bold">Rollback Orchestrator:</span> Restored previous stable release container on VPS-01. Traffic rerouted cleanly.
           </div>
           <span className="text-[10px] font-mono">Status: 200 OK</span>
@@ -94,10 +95,10 @@ export function DeploymentsView() {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <KpiCard title="Active Releases" value="14" subtitle="Across 3 target VPS nodes" icon="🚀" />
-        <KpiCard title="Deployment Success Rate" value="98.2%" subtitle="12/14 clean deployments" trend={{ value: "+1.2%", isPositive: true }} icon="📈" />
-        <KpiCard title="Avg Pipeline Duration" value="48s" subtitle="Build + Scan + Deploy" icon="⏱️" />
-        <KpiCard title="Rollback Readiness" value="Instant" subtitle="Retaining last 3 releases" icon="🔄" badge="Active" />
+        <KpiCard title="Active Releases" value="14" subtitle="Across 3 target VPS nodes" icon={<Rocket size={16} className="text-[#16A34A]" />} />
+        <KpiCard title="Deployment Success Rate" value="98.2%" subtitle="12/14 clean deployments" trend={{ value: "+1.2%", isPositive: true }} icon={<TrendingUp size={16} className="text-[#3988F7]" />} />
+        <KpiCard title="Avg Pipeline Duration" value="48s" subtitle="Build + Scan + Deploy" icon={<Clock size={16} className="text-[#F59E0B]" />} />
+        <KpiCard title="Rollback Readiness" value="Instant" subtitle="Retaining last 3 releases" icon={<RotateCcw size={16} className="text-[#5938F5]" />} badge="Active" />
       </div>
 
       {/* Step Tracker for Active Deployment */}
@@ -124,7 +125,7 @@ export function DeploymentsView() {
             >
               <div className="flex items-center justify-between mb-1.5">
                 <span className="font-bold text-[10px] uppercase">Step 0{s.step}</span>
-                <span>{s.done ? "✓" : s.step === activeStep ? "⏳" : "○"}</span>
+                <span>{s.done ? <Check size={13} className="text-[#16A34A]" /> : s.step === activeStep ? <RefreshCw size={13} className="animate-spin text-[#5938F5]" /> : "○"}</span>
               </div>
               <div className="font-extrabold text-xs text-[#17172A]">{s.label}</div>
               <div className="text-[11px] text-[#667085] mt-1 leading-tight">{s.desc}</div>

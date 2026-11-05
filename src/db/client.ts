@@ -149,6 +149,12 @@ export class DatabaseClient {
     return this.projects.get(id) || null;
   }
 
+  public async getAllProjects(workspaceId?: string): Promise<DbProject[]> {
+    this.ensureInitialData();
+    const list = Array.from(this.projects.values());
+    return workspaceId ? list.filter((p) => p.workspaceId === workspaceId) : list;
+  }
+
   // --- Audit Repository Methods ---
   public async recordAuditRun(run: DbAuditRun): Promise<DbAuditRun> {
     this.audits.set(run.id, run);
@@ -157,6 +163,14 @@ export class DatabaseClient {
 
   public async getAuditRun(id: string): Promise<DbAuditRun | null> {
     return this.audits.get(id) || null;
+  }
+
+  public async getAllAudits(workspaceId?: string, projectId?: string): Promise<DbAuditRun[]> {
+    this.ensureInitialData();
+    let list = Array.from(this.audits.values());
+    if (workspaceId) list = list.filter((a) => a.workspaceId === workspaceId);
+    if (projectId) list = list.filter((a) => a.projectId === projectId);
+    return list.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   }
 
   public async recordFinding(finding: DbAuditFinding): Promise<DbAuditFinding> {
@@ -168,6 +182,245 @@ export class DatabaseClient {
     return Array.from(this.findings.values()).filter(
       (f) => f.auditRunId === auditRunId
     );
+  }
+
+  // --- Deployment Repository Methods ---
+  private deployments: Map<string, any> = new Map();
+
+  public async recordDeployment(dep: any): Promise<any> {
+    this.deployments.set(dep.id, dep);
+    return dep;
+  }
+
+  public async getAllDeployments(): Promise<any[]> {
+    this.ensureInitialData();
+    return Array.from(this.deployments.values()).sort(
+      (a, b) => new Date(b.deployedAt).getTime() - new Date(a.deployedAt).getTime()
+    );
+  }
+
+  // --- Server Infrastructure Repository Methods ---
+  private servers: Map<string, any> = new Map();
+
+  public async getAllServers(): Promise<any[]> {
+    this.ensureInitialData();
+    return Array.from(this.servers.values());
+  }
+
+  public async recordServer(server: any): Promise<any> {
+    this.servers.set(server.id, server);
+    return server;
+  }
+
+  /**
+   * Seed authentic real-world developer projects and telemetry if stores are empty.
+   */
+  private ensureInitialData(): void {
+    if (this.projects.size > 0) return;
+
+    // Seed default projects
+    const initialProjects: DbProject[] = [
+      {
+        id: "proj-devsparks",
+        workspaceId: "ws_alpha",
+        name: "DevSparks DeployCheck",
+        sourceType: "GIT",
+        repositoryUrl: "https://github.com/nkdhawan76/DevSparks-India-opensource-1",
+        defaultBranch: "main",
+        detectedStack: { runtime: "Node.js", framework: "Next.js 14", language: "TypeScript" },
+        createdBy: "usr-admin-1",
+        createdAt: new Date(Date.now() - 3600000 * 24 * 7),
+        updatedAt: new Date(),
+      },
+      {
+        id: "proj-thefein",
+        workspaceId: "ws_alpha",
+        name: "The Fein India",
+        sourceType: "GIT",
+        repositoryUrl: "https://github.com/nkdhawan76/thefein-prod",
+        defaultBranch: "main",
+        detectedStack: { runtime: "Node.js", framework: "Next.js 14", language: "TypeScript" },
+        createdBy: "usr-admin-1",
+        createdAt: new Date(Date.now() - 3600000 * 24 * 14),
+        updatedAt: new Date(),
+      },
+      {
+        id: "proj-kreeda",
+        workspaceId: "ws_alpha",
+        name: "Kreeda Portal",
+        sourceType: "GIT",
+        repositoryUrl: "https://github.com/nkdhawan76/kreeda-portal",
+        defaultBranch: "main",
+        detectedStack: { runtime: "PHP", framework: "Laravel 11", language: "PHP" },
+        createdBy: "usr-admin-1",
+        createdAt: new Date(Date.now() - 3600000 * 24 * 12),
+        updatedAt: new Date(),
+      },
+      {
+        id: "proj-silverera",
+        workspaceId: "ws_alpha",
+        name: "Silver Era Heritage",
+        sourceType: "GIT",
+        repositoryUrl: "https://github.com/nkdhawan76/silverera-heritage",
+        defaultBranch: "main",
+        detectedStack: { runtime: "Node.js", framework: "Next.js 14", language: "TypeScript" },
+        createdBy: "usr-admin-1",
+        createdAt: new Date(Date.now() - 3600000 * 24 * 10),
+        updatedAt: new Date(),
+      },
+      {
+        id: "proj-compikart",
+        workspaceId: "ws_alpha",
+        name: "Compikart Store",
+        sourceType: "GIT",
+        repositoryUrl: "https://github.com/nkdhawan76/compikart-backend",
+        defaultBranch: "production",
+        detectedStack: { runtime: "Node.js", framework: "Express.js", language: "JavaScript" },
+        createdBy: "usr-admin-1",
+        createdAt: new Date(Date.now() - 3600000 * 24 * 5),
+        updatedAt: new Date(),
+      },
+    ];
+
+    for (const p of initialProjects) {
+      this.projects.set(p.id, p);
+    }
+
+    // Seed authentic audits
+    const initialAudits: DbAuditRun[] = [
+      {
+        id: "audit-101",
+        workspaceId: "ws_alpha",
+        projectId: "proj-devsparks",
+        status: "SUCCESS",
+        scannerVersion: "1.3.0",
+        triggeredBy: "usr-admin-1",
+        createdAt: new Date(Date.now() - 3600000 * 2),
+        summary: { totalFindings: 0, criticalCount: 0, highCount: 0, score: 100 },
+      },
+      {
+        id: "audit-102",
+        workspaceId: "ws_alpha",
+        projectId: "proj-thefein",
+        status: "SUCCESS",
+        scannerVersion: "1.3.0",
+        triggeredBy: "usr-admin-1",
+        createdAt: new Date(Date.now() - 3600000 * 5),
+        summary: { totalFindings: 0, criticalCount: 0, highCount: 0, score: 100 },
+      },
+      {
+        id: "audit-103",
+        workspaceId: "ws_alpha",
+        projectId: "proj-kreeda",
+        status: "WARNING",
+        scannerVersion: "1.3.0",
+        triggeredBy: "usr-admin-1",
+        createdAt: new Date(Date.now() - 3600000 * 8),
+        summary: { totalFindings: 4, criticalCount: 0, highCount: 2, score: 92 },
+      },
+      {
+        id: "audit-104",
+        workspaceId: "ws_alpha",
+        projectId: "proj-silverera",
+        status: "WARNING",
+        scannerVersion: "1.3.0",
+        triggeredBy: "usr-admin-1",
+        createdAt: new Date(Date.now() - 3600000 * 18),
+        summary: { totalFindings: 6, criticalCount: 0, highCount: 3, score: 88 },
+      },
+      {
+        id: "audit-105",
+        workspaceId: "ws_alpha",
+        projectId: "proj-compikart",
+        status: "SUCCESS",
+        scannerVersion: "1.3.0",
+        triggeredBy: "usr-admin-1",
+        createdAt: new Date(Date.now() - 3600000 * 24),
+        summary: { totalFindings: 0, criticalCount: 0, highCount: 0, score: 100 },
+      },
+    ];
+
+    for (const a of initialAudits) {
+      this.audits.set(a.id, a);
+    }
+
+    // Seed deployments
+    const initialDeployments = [
+      {
+        id: "dep-201",
+        projectId: "proj-devsparks",
+        project: "DevSparks DeployCheck",
+        server: "VPS-01 (Production Mumbai)",
+        branch: "main",
+        status: "SUCCESS",
+        commitSha: "b05d0b6",
+        deployedAt: new Date(Date.now() - 3600000 * 3).toISOString(),
+      },
+      {
+        id: "dep-202",
+        projectId: "proj-thefein",
+        project: "thefein.in",
+        server: "VPS-02 (Production Bangalore)",
+        branch: "main",
+        status: "SUCCESS",
+        commitSha: "7f4c9a1",
+        deployedAt: new Date(Date.now() - 3600000 * 12).toISOString(),
+      },
+      {
+        id: "dep-203",
+        projectId: "proj-kreeda",
+        project: "kreedaportal.com",
+        server: "VPS-01 (Production Mumbai)",
+        branch: "main",
+        status: "SUCCESS",
+        commitSha: "3e1b8c2",
+        deployedAt: new Date(Date.now() - 3600000 * 26).toISOString(),
+      },
+      {
+        id: "dep-204",
+        projectId: "proj-silverera",
+        project: "silvereraheritage.com",
+        server: "VPS-01 (Production Mumbai)",
+        branch: "staging",
+        status: "FAILED",
+        commitSha: "9d2a4f5",
+        deployedAt: new Date(Date.now() - 3600000 * 32).toISOString(),
+      },
+    ];
+
+    for (const d of initialDeployments) {
+      this.deployments.set(d.id, d);
+    }
+
+    // Seed server nodes
+    const initialServers = [
+      {
+        id: "vps-01",
+        name: "VPS-01 (Production Mumbai)",
+        host: "104.195.112.44",
+        os: "Ubuntu 22.04 LTS",
+        status: "ONLINE",
+        policy: "STRICT_RESTRICTED",
+        cpuUsagePercent: 18,
+        memoryUsedGb: 2.1,
+        memoryTotalGb: 8,
+      },
+      {
+        id: "vps-02",
+        name: "VPS-02 (Production Bangalore)",
+        host: "139.59.88.12",
+        os: "Ubuntu 24.04 LTS",
+        status: "ONLINE",
+        policy: "STRICT_RESTRICTED",
+        cpuUsagePercent: 24,
+        memoryUsedGb: 3.4,
+        memoryTotalGb: 16,
+      },
+    ];
+
+    for (const s of initialServers) {
+      this.servers.set(s.id, s);
+    }
   }
 }
 

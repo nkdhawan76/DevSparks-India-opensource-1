@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { AlertTriangle, Check, X } from "./Icons";
 
 interface DiffReviewModalProps {
   isOpen: boolean;
@@ -55,9 +56,9 @@ export const awsConfig = {
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-lg text-slate-400 hover:text-[#17172A] hover:bg-slate-100 flex items-center justify-center"
+            className="w-8 h-8 rounded-lg text-slate-400 hover:text-[#17172A] hover:bg-slate-100 flex items-center justify-center transition-colors"
           >
-            ✕
+            <X size={16} />
           </button>
         </div>
 
@@ -65,7 +66,7 @@ export const awsConfig = {
         <div className="p-6 overflow-y-auto space-y-4">
           {/* Remediation Note */}
           <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-900 flex items-start gap-2.5">
-            <span className="text-base leading-none">⚠️</span>
+            <AlertTriangle size={15} className="text-amber-600 shrink-0 mt-0.5" />
             <div>
               <span className="font-bold">Human Approval Policy Invariant:</span> {remediationAdvice}
             </div>
@@ -110,10 +111,14 @@ export const awsConfig = {
         <div className="p-4 border-t border-[#E5E7EB] bg-slate-50 flex items-center justify-between">
           <div className="text-xs">
             {approvalStatus === "approved" && (
-              <span className="text-[#16A34A] font-bold">✅ Patch Approved & Staged for Deployment</span>
+              <span className="inline-flex items-center gap-1.5 text-[#16A34A] font-bold">
+                <Check size={14} /> Patch Approved & Staged for Deployment
+              </span>
             )}
             {approvalStatus === "rejected" && (
-              <span className="text-[#DC2626] font-bold">❌ Patch Rejected by Maintainer</span>
+              <span className="inline-flex items-center gap-1.5 text-[#DC2626] font-bold">
+                <X size={14} /> Patch Rejected by Maintainer
+              </span>
             )}
             {approvalStatus === "pending" && (
               <span className="text-[#667085]">Awaiting developer decision</span>

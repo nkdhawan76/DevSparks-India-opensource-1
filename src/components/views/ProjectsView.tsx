@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StatusBadge } from "../common/StatusBadge";
+import { Plus, Search, X, Zap, FolderGit2 } from "../common/Icons";
 
 interface Project {
   id: string;
@@ -26,64 +27,27 @@ export function ProjectsView({ onRunAudit, onDeploy }: ProjectsViewProps = {}) {
   const [newProjectName, setNewProjectName] = useState("");
   const [newProjectRepo, setNewProjectRepo] = useState("");
   const [newProjectBranch, setNewProjectBranch] = useState("main");
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const [projects, setProjects] = useState<Project[]>([
-    {
-      id: "proj-1",
-      name: "The Fein India",
-      domain: "thefein.in",
-      framework: "Next.js 14",
-      repo: "nkdhawan76/thefein-prod",
-      branch: "main",
-      score: 100,
-      status: "Healthy",
-      lastAudit: "Today, 11:42 AM",
-    },
-    {
-      id: "proj-2",
-      name: "Kreeda Portal",
-      domain: "kreedaportal.com",
-      framework: "Laravel 11",
-      repo: "nkdhawan76/kreeda-portal",
-      branch: "main",
-      score: 92,
-      status: "Attention",
-      lastAudit: "Today, 10:18 AM",
-    },
-    {
-      id: "proj-3",
-      name: "Silver Era Heritage",
-      domain: "silvereraheritage.com",
-      framework: "Next.js 14",
-      repo: "nkdhawan76/silverera-heritage",
-      branch: "main",
-      score: 88,
-      status: "Attention",
-      lastAudit: "Yesterday, 08:47 PM",
-    },
-    {
-      id: "proj-4",
-      name: "Compikart Store",
-      domain: "compikart.opm",
-      framework: "Node.js Express",
-      repo: "nkdhawan76/compikart-backend",
-      branch: "production",
-      score: 100,
-      status: "Healthy",
-      lastAudit: "Yesterday, 05:22 PM",
-    },
-    {
-      id: "proj-5",
-      name: "DevSparks India",
-      domain: "devsparksindia.com",
-      framework: "Next.js 14",
-      repo: "nkdhawan76/devsparks-website",
-      branch: "main",
-      score: 96,
-      status: "Healthy",
-      lastAudit: "Yesterday, 02:11 PM",
-    },
-  ]);
+  useEffect(() => {
+    async function loadProjects() {
+      try {
+        const res = await fetch("/api/v1/projects");
+        if (res.ok) {
+          const json = await res.json();
+          if (Array.isArray(json.data)) {
+            setProjects(json.data);
+          }
+        }
+      } catch {
+        // Fallback
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadProjects();
+  }, []);
 
   const filteredProjects = projects.filter(
     (p) =>
@@ -92,20 +56,27 @@ export function ProjectsView({ onRunAudit, onDeploy }: ProjectsViewProps = {}) {
       p.framework.toLowerCase().includes(search.toLowerCase())
   );
 
-  const handleCreateProject = () => {
+  const handleCreateProject = async () => {
     if (!newProjectName.trim()) return;
-    const newProj: Project = {
-      id: `proj-${Date.now()}`,
-      name: newProjectName,
-      domain: `${newProjectName.toLowerCase().replace(/\s+/g, "")}.com`,
-      framework: "Next.js 14 (Auto-detected)",
-      repo: newProjectRepo || `nkdhawan76/${newProjectName.toLowerCase().replace(/\s+/g, "-")}`,
-      branch: newProjectBranch,
-      score: 100,
-      status: "Healthy",
-      lastAudit: "Just now",
-    };
-    setProjects([newProj, ...projects]);
+    try {
+      const res = await fetch("/api/v1/projects", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: newProjectName.trim(),
+          repositoryUrl: newProjectRepo.trim() ? `https://github.com/${newProjectRepo.trim()}` : undefined,
+          defaultBranch: newProjectBranch,
+        }),
+      });
+      if (res.ok) {
+        const fresh = await fetch("/api/v1/projects").then((r) => r.json());
+        if (Array.isArray(fresh.data)) {
+          setProjects(fresh.data);
+        }
+      }
+    } catch {
+      // Fallback
+    }
     setNewProjectName("");
     setNewProjectRepo("");
     setShowAddModal(false);
@@ -125,7 +96,7 @@ export function ProjectsView({ onRunAudit, onDeploy }: ProjectsViewProps = {}) {
           onClick={() => setShowAddModal(true)}
           className="px-4 py-2 bg-[#5938F5] hover:bg-[#4726DB] text-white text-xs font-bold rounded-xl shadow-sm transition-all flex items-center gap-1.5 self-start sm:self-auto"
         >
-          <span>＋</span>
+          <Plus size={14} />
           <span>Add New Project</span>
         </button>
       </div>
@@ -133,7 +104,7 @@ export function ProjectsView({ onRunAudit, onDeploy }: ProjectsViewProps = {}) {
       {/* Filter Bar */}
       <div className="bg-white border border-[#E5E7EB] rounded-2xl p-4 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="relative flex-1 max-w-md">
-          <span className="absolute left-3 top-2.5 text-slate-400 text-xs">🔍</span>
+          <Search size={14} className="absolute left-3 top-2.5 text-slate-400" />
           <input
             type="text"
             value={search}
@@ -227,9 +198,9 @@ export function ProjectsView({ onRunAudit, onDeploy }: ProjectsViewProps = {}) {
               <h3 className="font-bold text-base text-[#17172A]">Connect New Project</h3>
               <button
                 onClick={() => setShowAddModal(false)}
-                className="w-8 h-8 rounded-lg text-slate-400 hover:text-[#17172A]"
+                className="w-8 h-8 rounded-lg text-slate-400 hover:text-[#17172A] flex items-center justify-center transition-colors"
               >
-                ✕
+                <X size={16} />
               </button>
             </div>
 
@@ -269,8 +240,11 @@ export function ProjectsView({ onRunAudit, onDeploy }: ProjectsViewProps = {}) {
                 </select>
               </div>
 
-              <div className="p-3 bg-purple-50 border border-purple-200 rounded-xl text-purple-900 text-[11px]">
-                ⚡ <strong>Stack Auto-Detection:</strong> DeployCheck will inspect package.json, Dockerfile, and .env.example upon connection to initialize rule scanning.
+              <div className="p-3 bg-purple-50 border border-purple-200 rounded-xl text-purple-900 text-[11px] flex items-start gap-2">
+                <Zap size={14} className="text-[#5938F5] shrink-0 mt-0.5" />
+                <div>
+                  <strong>Stack Auto-Detection:</strong> DeployCheck will inspect package.json, Dockerfile, and .env.example upon connection to initialize rule scanning.
+                </div>
               </div>
             </div>
 

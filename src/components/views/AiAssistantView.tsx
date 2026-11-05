@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { StatusBadge } from "../common/StatusBadge";
+import { Scale, Zap } from "../common/Icons";
 
 interface AiAssistantViewProps {
   onOpenDiffModal: () => void;
@@ -44,7 +45,7 @@ export function AiAssistantView({
           onClick={onOpenDiffModal}
           className="px-5 py-2.5 bg-[#5938F5] hover:bg-[#4726DB] text-white text-xs font-bold rounded-xl shadow-sm transition-all flex items-center gap-2 self-start md:self-auto"
         >
-          <span>⚖️</span>
+          <Scale size={15} />
           <span>Open Visual Diff Modal</span>
         </button>
       </div>
@@ -99,7 +100,7 @@ export function AiAssistantView({
               disabled={isStreaming}
               className="px-5 py-2 bg-[#5938F5] hover:bg-[#4726DB] text-white text-xs font-bold rounded-xl shadow-sm transition-all flex flex-col items-center justify-center gap-1 disabled:opacity-50 shrink-0"
             >
-              <span className={`text-base ${isStreaming ? "animate-spin" : ""}`}>⚡</span>
+              <Zap size={16} className={isStreaming ? "animate-spin" : ""} />
               <span>{isStreaming ? "Streaming..." : "Send Request"}</span>
             </button>
           </div>

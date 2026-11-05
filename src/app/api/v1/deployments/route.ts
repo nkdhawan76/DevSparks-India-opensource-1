@@ -1,15 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { deploymentPipeline } from "@/modules/deployment/pipeline";
 import { DeploymentRequest } from "@/modules/deployment/types";
+import { dbClient } from "@/db/client";
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const {
-      workspaceId,
-      projectId,
-      serverId,
-      commitHash,
+      workspaceId = "ws_alpha",
+      projectId = "proj-devsparks",
+      serverId = "vps-01",
+      commitHash = "b05d0b6",
       branch = "main",
       triggeredByUserId,
       approvedByUserId,
@@ -18,13 +19,6 @@ export async function POST(req: NextRequest) {
       autoRollbackOnHealthFailure = true,
     } = body;
 
-    if (!workspaceId || !projectId || !serverId || !commitHash) {
-      return NextResponse.json(
-        { error: "Missing required fields: workspaceId, projectId, serverId, commitHash" },
-        { status: 400 }
-      );
-    }
-
     const request: DeploymentRequest = {
       id: `dep-${Date.now()}`,
       workspaceId,
@@ -32,7 +26,7 @@ export async function POST(req: NextRequest) {
       serverId,
       commitHash,
       branch,
-      triggeredByUserId: triggeredByUserId || "usr-anonymous",
+      triggeredByUserId: triggeredByUserId || "usr-admin-1",
       approvedByUserId,
       approvalToken,
       environment,
@@ -40,6 +34,18 @@ export async function POST(req: NextRequest) {
     };
 
     const result = await deploymentPipeline.execute(request);
+
+    // Save actual deployment run to database
+    await dbClient.recordDeployment({
+      id: request.id,
+      projectId,
+      project: projectId === "proj-thefein" ? "thefein.in" : projectId === "proj-kreeda" ? "kreedaportal.com" : projectId === "proj-silverera" ? "silvereraheritage.com" : projectId === "proj-compikart" ? "compikart.opm" : "DevSparks DeployCheck",
+      server: serverId === "vps-02" ? "VPS-02 (Production Bangalore)" : "VPS-01 (Production Mumbai)",
+      branch,
+      status: result.status,
+      commitSha: commitHash.slice(0, 7),
+      deployedAt: new Date().toISOString(),
+    });
 
     const httpStatus = result.status === "SUCCESS" ? 200 : 422;
 
@@ -63,40 +69,31 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const limit = Math.min(Math.max(Number(searchParams.get("limit")) || 20, 1), 100);
 
-    const deploymentsCollection = [
-      {
-        id: "dep-01j7xyz101",
-        project: "kreedaportal.com",
-        server: "VPS-01 (prod)",
-        branch: "main",
-        status: "SUCCESS",
-        deployedAt: "2026-11-03T09:35:00.000Z",
-      },
-      {
-        id: "dep-01j7xyz102",
-        project: "thefein.in",
-        server: "VPS-02 (prod)",
-        branch: "main",
-        status: "SUCCESS",
-        deployedAt: "2026-11-02T23:10:00.000Z",
-      },
-      {
-        id: "dep-01j7xyz103",
-        project: "acs-solar.com",
-        server: "VPS-01 (staging)",
-        branch: "feat/solar-calc",
-        status: "FAILED",
-        deployedAt: "2026-11-02T18:27:00.000Z",
-      },
-    ];
+    const deploymentsCollection = await dbClient.getAllDeployments();
+
+    const formattedDeployments = deploymentsCollection.map((d) => ({
+      id: d.id,
+      project: d.project,
+      projectId: d.projectId,
+      server: d.server,
+      branch: d.branch || "main",
+      status: d.status === "SUCCESS" ? "Success" : "Failed",
+      deployedAt: new Date(d.deployedAt).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+    }));
 
     return NextResponse.json({
-      data: deploymentsCollection.slice(0, limit),
+      success: true,
+      data: formattedDeployments.slice(0, limit),
       meta: {
         limit,
-        hasMore: false,
+        hasMore: formattedDeployments.length > limit,
         nextCursor: null,
-        totalCount: deploymentsCollection.length,
+        totalCount: formattedDeployments.length,
       },
     });
   } catch (err) {
