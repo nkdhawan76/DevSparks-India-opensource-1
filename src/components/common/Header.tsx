@@ -3,6 +3,18 @@
 import React, { useState, useEffect } from "react";
 import { StatusBadge } from "./StatusBadge";
 import { CommandPalette } from "./CommandPalette";
+import {
+  Menu,
+  Search,
+  Bell,
+  HelpCircle,
+  Plus,
+  ChevronDown,
+  RefreshCw,
+  Users,
+  Settings,
+  ShieldCheck,
+} from "./Icons";
 
 interface HeaderProps {
   currentSection: string;
@@ -45,62 +57,68 @@ export function Header({
   }, []);
 
   return (
-    <header className="h-16 bg-white border-b border-[#E5E7EB] px-6 flex items-center justify-between sticky top-0 z-30 shrink-0">
-      {/* Left: Mobile Toggle & Breadcrumbs */}
-      <div className="flex items-center gap-4">
+    <header className="h-16 bg-white border-b border-[#E5E7EB] px-4 md:px-6 flex items-center justify-between sticky top-0 z-30 shrink-0">
+      {/* Left: Sidebar Toggle & Search */}
+      <div className="flex items-center gap-3 md:gap-4 flex-1 max-w-2xl">
         {onToggleSidebar && (
           <button
             onClick={onToggleSidebar}
-            className="p-2 rounded-lg text-[#667085] hover:text-[#17172A] hover:bg-slate-50 transition-colors"
+            className="p-2 rounded-xl text-slate-500 hover:text-[#17172A] hover:bg-slate-50 transition-colors border border-transparent hover:border-[#E5E7EB]"
             title="Toggle Sidebar"
+            aria-label="Toggle Sidebar"
           >
-            <span className="text-lg">☰</span>
+            <Menu size={18} />
           </button>
         )}
-        <div className="flex items-center gap-2 text-xs font-medium text-[#667085]">
-          <span>DeployCheck</span>
-          <span>/</span>
-          <span className="text-[#17172A] font-bold">{currentSection}</span>
+
+        {/* Breadcrumb Navigation */}
+        {currentSection && (
+          <div className="hidden xl:flex items-center gap-1.5 text-xs text-[#667085] shrink-0 font-medium mr-1">
+            <span>DeployCheck</span>
+            <span className="text-slate-300">/</span>
+            <span className="text-[#17172A] font-semibold">{currentSection}</span>
+          </div>
+        )}
+
+        {/* Global Search Bar */}
+        <div
+          onClick={() => setPaletteOpen(true)}
+          className="flex-1 max-w-md flex items-center relative cursor-pointer group"
+        >
+          <Search size={16} className="absolute left-3.5 text-slate-400 group-hover:text-slate-600 transition-colors" />
+          <div className="w-full bg-[#F7F8FC] group-hover:bg-slate-100/70 border border-[#E5E7EB] rounded-xl pl-10 pr-16 py-2 text-xs text-slate-400 select-none transition-all flex items-center justify-between shadow-2xs">
+            <span className="truncate">Search projects, servers, audits...</span>
+          </div>
+          <kbd className="absolute right-3 px-2 py-0.5 text-[10px] bg-white border border-[#E5E7EB] rounded-md text-slate-500 font-mono shadow-2xs">
+            Ctrl + K
+          </kbd>
         </div>
       </div>
 
-      {/* Center: Global Search */}
-      <div
-        onClick={() => setPaletteOpen(true)}
-        className="hidden md:flex items-center relative w-72 lg:w-96 cursor-pointer"
-      >
-        <span className="absolute left-3 text-slate-400 text-sm">🔍</span>
-        <div className="w-full bg-[#F7F8FC] hover:bg-slate-100/80 border border-[#E5E7EB] rounded-xl pl-9 pr-12 py-1.5 text-xs text-slate-400 select-none transition-all flex items-center justify-between">
-          <span>Search projects, audits, servers...</span>
-        </div>
-        <kbd className="absolute right-3 px-1.5 py-0.5 text-[10px] bg-white border border-[#E5E7EB] rounded text-slate-400 font-mono shadow-2xs">
-          ⌘K
-        </kbd>
-      </div>
+      {/* Right Controls: New Project, System Health, Notifications, Help, Profile */}
+      <div className="flex items-center gap-2 sm:gap-3">
+        {/* New Project Primary Action */}
+        <button
+          onClick={() => onNavigateView?.("projects")}
+          className="hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#5938F5] hover:bg-[#4726DB] text-white text-xs font-semibold shadow-xs transition-all active:scale-[0.98]"
+        >
+          <Plus size={15} />
+          <span>New Project</span>
+          <ChevronDown size={14} className="opacity-70 ml-0.5" />
+        </button>
 
-      {/* Right: Status, Actions, Notifications & Profile */}
-      <div className="flex items-center gap-3">
-        {/* Health status pill */}
+        {/* Health status badge */}
         <button
           onClick={onRefreshHealth}
           disabled={isRefreshing}
-          className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#E5E7EB] bg-slate-50 hover:bg-white text-xs text-[#17172A] transition-all"
-          title="Click to refresh system health"
+          className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-[#E5E7EB] bg-slate-50 hover:bg-white text-xs text-[#17172A] transition-all"
+          title="System health status (click to refresh)"
         >
           <StatusBadge
             label={systemHealth === "healthy" ? "Healthy" : "Degraded"}
             variant={systemHealth === "healthy" ? "success" : "warning"}
           />
-          <span className={`text-[10px] ${isRefreshing ? "animate-spin" : ""}`}>🔄</span>
-        </button>
-
-        {/* Quick Action: Run Pre-Deployment Audit */}
-        <button
-          onClick={onRunAudit}
-          className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#5938F5] hover:bg-[#4726DB] text-white text-xs font-semibold shadow-sm transition-all"
-        >
-          <span>🛡️</span>
-          <span>Run Audit</span>
+          <RefreshCw size={13} className={`text-slate-400 ${isRefreshing ? "animate-spin text-[#5938F5]" : ""}`} />
         </button>
 
         {/* Notification Bell */}
@@ -110,11 +128,12 @@ export function Header({
               setShowNotificationPopup(!showNotificationPopup);
               if (onOpenNotifications) onOpenNotifications();
             }}
-            className="w-9 h-9 rounded-xl border border-[#E5E7EB] flex items-center justify-center text-[#667085] hover:text-[#17172A] hover:bg-slate-50 transition-colors relative"
+            className="w-9 h-9 rounded-xl border border-[#E5E7EB] flex items-center justify-center text-slate-500 hover:text-[#17172A] hover:bg-slate-50 transition-colors relative"
             title="Notifications"
+            aria-label="View notifications"
           >
-            <span>🔔</span>
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#5938F5]" />
+            <Bell size={17} />
+            <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#5938F5] ring-2 ring-white" />
           </button>
 
           {/* Quick Notifications Dropdown Preview */}
@@ -127,20 +146,12 @@ export function Header({
                 </span>
               </div>
               <div className="space-y-2.5">
-                <div className="p-2.5 rounded-xl bg-blue-50/50 border border-blue-100 flex gap-2.5">
-                  <span className="text-base shrink-0">🛡️</span>
+                <div className="p-2.5 rounded-xl bg-purple-50/50 border border-purple-100 flex gap-2.5">
+                  <ShieldCheck size={18} className="text-[#5938F5] shrink-0 mt-0.5" />
                   <div>
                     <div className="font-semibold text-[#17172A]">Audit Completed</div>
-                    <div className="text-[11px] text-[#667085]">93 files scanned, 0 high vulnerabilities found.</div>
+                    <div className="text-[11px] text-[#667085]">93 files scanned, zero high vulnerabilities found.</div>
                     <div className="text-[10px] text-slate-400 mt-1">2 mins ago</div>
-                  </div>
-                </div>
-                <div className="p-2.5 rounded-xl bg-slate-50 border border-[#E5E7EB] flex gap-2.5">
-                  <span className="text-base shrink-0">🚀</span>
-                  <div>
-                    <div className="font-semibold text-[#17172A]">Deployment Ready</div>
-                    <div className="text-[11px] text-[#667085]">Release v0.1.0 ready for staging VPS.</div>
-                    <div className="text-[10px] text-slate-400 mt-1">15 mins ago</div>
                   </div>
                 </div>
               </div>
@@ -148,46 +159,67 @@ export function Header({
           )}
         </div>
 
-        {/* User Profile Avatar & Menu */}
+        {/* Help Button */}
+        <button
+          onClick={() => onNavigateView?.("settings")}
+          className="w-9 h-9 rounded-xl border border-[#E5E7EB] flex items-center justify-center text-slate-500 hover:text-[#17172A] hover:bg-slate-50 transition-colors hidden sm:flex"
+          title="Help & Documentation"
+          aria-label="Help & Documentation"
+        >
+          <HelpCircle size={17} />
+        </button>
+
+        {/* User Profile Avatar & Dropdown */}
         <div className="relative">
           <button
             onClick={() => setShowProfileMenu(!showProfileMenu)}
-            className="flex items-center gap-2 pl-2 pr-1 py-1 rounded-xl hover:bg-slate-50 transition-colors"
+            className="flex items-center gap-2 pl-1.5 pr-2 py-1 rounded-xl hover:bg-slate-50 transition-colors border border-transparent hover:border-[#E5E7EB]"
           >
-            <div className="w-8 h-8 rounded-full bg-[#5938F5] text-white flex items-center justify-center font-bold text-xs shadow-sm">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#5938F5] to-[#3988F7] text-white flex items-center justify-center font-bold text-xs shadow-xs">
               {userFullName.charAt(0)}
             </div>
             <div className="hidden xl:block text-left">
               <div className="text-xs font-bold text-[#17172A] leading-none">{userFullName}</div>
               <div className="text-[10px] text-[#667085] leading-tight mt-0.5">{userRole}</div>
             </div>
-            <span className="text-xs text-slate-400">▾</span>
+            <ChevronDown size={14} className="text-slate-400 hidden xl:block" />
           </button>
 
           {showProfileMenu && (
-            <div className="absolute right-0 mt-2 w-48 bg-white border border-[#E5E7EB] rounded-2xl shadow-xl p-2 z-50 text-xs">
+            <div className="absolute right-0 mt-2 w-52 bg-white border border-[#E5E7EB] rounded-2xl shadow-xl p-2 z-50 text-xs">
               <div className="px-3 py-2 border-b border-[#F1F4F9] mb-1">
                 <div className="font-bold text-[#17172A]">{userFullName}</div>
                 <div className="text-[10px] text-[#667085]">DevSparks India</div>
               </div>
               <button
-                onClick={() => setShowProfileMenu(false)}
-                className="w-full text-left px-3 py-2 rounded-lg text-[#667085] hover:text-[#17172A] hover:bg-slate-50 font-medium"
+                onClick={() => {
+                  setShowProfileMenu(false);
+                  onNavigateView?.("profile");
+                }}
+                className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-[#334155] hover:text-[#17172A] hover:bg-slate-50 font-medium transition-colors"
               >
-                👤 Profile Settings
+                <Users size={15} />
+                <span>Profile Settings</span>
               </button>
               <button
-                onClick={() => setShowProfileMenu(false)}
-                className="w-full text-left px-3 py-2 rounded-lg text-[#667085] hover:text-[#17172A] hover:bg-slate-50 font-medium"
+                onClick={() => {
+                  setShowProfileMenu(false);
+                  onNavigateView?.("settings");
+                }}
+                className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-[#334155] hover:text-[#17172A] hover:bg-slate-50 font-medium transition-colors"
               >
-                ⚙️ Workspace Settings
+                <Settings size={15} />
+                <span>Global Settings</span>
               </button>
               <div className="border-t border-[#F1F4F9] my-1" />
               <button
-                onClick={() => setShowProfileMenu(false)}
-                className="w-full text-left px-3 py-2 rounded-lg text-[#DC2626] hover:bg-rose-50 font-medium"
+                onClick={() => {
+                  setShowProfileMenu(false);
+                  onNavigateView?.("auth");
+                }}
+                className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-[#DC2626] hover:bg-rose-50 font-medium transition-colors"
               >
-                🚪 Sign Out
+                <span>Sign Out</span>
               </button>
             </div>
           )}

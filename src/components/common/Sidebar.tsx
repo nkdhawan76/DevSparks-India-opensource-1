@@ -1,6 +1,27 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
+import {
+  LayoutDashboard,
+  FolderGit2,
+  ShieldCheck,
+  Sparkles,
+  Server,
+  Rocket,
+  Terminal,
+  Globe,
+  Activity,
+  FileText,
+  Users,
+  Key,
+  CreditCard,
+  Layers,
+  Settings,
+  Bell,
+  ChevronDown,
+  ChevronUp,
+  Zap,
+} from "./Icons";
 
 export type NavView =
   | "dashboard"
@@ -30,55 +51,83 @@ interface SidebarProps {
   onToggleCollapse: () => void;
 }
 
+interface NavItem {
+  id: NavView;
+  label: string;
+  icon: React.ComponentType<{ size?: number | string; className?: string }>;
+}
+
+interface NavGroup {
+  group: string;
+  items: NavItem[];
+}
+
 export function Sidebar({ activeView, onSelectView, collapsed, onToggleCollapse }: SidebarProps) {
-  const navSections = [
+  // Accordion state for expandable sections
+  const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({
+    Settings: true,
+  });
+
+  const toggleGroup = (groupName: string) => {
+    setCollapsedGroups((prev) => ({
+      ...prev,
+      [groupName]: !prev[groupName],
+    }));
+  };
+
+  const navSections: NavGroup[] = [
     {
       group: "Overview",
       items: [
-        { id: "dashboard", label: "Dashboard", icon: "📊" },
+        { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
       ],
     },
     {
-      group: "Projects & Audits",
+      group: "Projects",
       items: [
-        { id: "projects", label: "All Projects", icon: "📁" },
-        { id: "audits", label: "Audit Reports", icon: "🛡️" },
-        { id: "ai", label: "AI Assistant", icon: "✨" },
+        { id: "projects", label: "All Projects", icon: FolderGit2 },
+        { id: "audits", label: "Audit Reports", icon: ShieldCheck },
+        { id: "ai", label: "AI Assistant", icon: Sparkles },
       ],
     },
     {
-      group: "Deploy & Servers",
+      group: "Deploy",
       items: [
-        { id: "servers", label: "VPS Servers", icon: "🖥️" },
-        { id: "deployments", label: "Deployments", icon: "🚀" },
-        { id: "ssh-console", label: "SSH Console", icon: "💻" },
+        { id: "servers", label: "VPS Servers", icon: Server },
+        { id: "deployments", label: "Deployments", icon: Rocket },
+        { id: "ssh-console", label: "SSH Console", icon: Terminal },
       ],
     },
     {
-      group: "Monitoring & SEO",
+      group: "Monitor",
       items: [
-        { id: "monitoring", label: "Website Health", icon: "📡" },
-        { id: "logs", label: "System Logs", icon: "📜" },
-        { id: "seo", label: "Logs & SEO", icon: "📈" },
+        { id: "monitoring", label: "Websites & Apps", icon: Globe },
+        { id: "logs", label: "Uptime & Status", icon: Activity },
+        { id: "seo", label: "Logs & SEO", icon: FileText },
       ],
     },
     {
-      group: "Team & Billing",
+      group: "Teams & Access",
       items: [
-        { id: "users", label: "Team Members", icon: "👥" },
-        { id: "roles", label: "Roles & RBAC", icon: "🔑" },
-        { id: "plans", label: "Plans & Billing", icon: "💳" },
-        { id: "subscriptions", label: "Subscriptions", icon: "📑" },
+        { id: "users", label: "Users", icon: Users },
+        { id: "roles", label: "Roles & Permissions", icon: Key },
       ],
     },
     {
-      group: "Preferences",
+      group: "Plans & Billing",
       items: [
-        { id: "notifications", label: "Notifications", icon: "🔔" },
-        { id: "website-settings", label: "Website Settings", icon: "🌐" },
-        { id: "settings", label: "Global Settings", icon: "⚙️" },
-        { id: "profile", label: "Profile", icon: "👤" },
-        { id: "auth", label: "Sign In / Sign Up", icon: "🔒" },
+        { id: "plans", label: "Plans", icon: CreditCard },
+        { id: "subscriptions", label: "Subscriptions", icon: Layers },
+      ],
+    },
+    {
+      group: "Settings",
+      items: [
+        { id: "settings", label: "Global Settings", icon: Settings },
+        { id: "website-settings", label: "Website Settings", icon: Globe },
+        { id: "notifications", label: "Notifications", icon: Bell },
+        { id: "profile", label: "Profile", icon: Users },
+        { id: "auth", label: "Sign In / Sign Up", icon: Key },
       ],
     },
   ];
@@ -86,79 +135,113 @@ export function Sidebar({ activeView, onSelectView, collapsed, onToggleCollapse 
   return (
     <aside
       className={`${
-        collapsed ? "w-20" : "w-64"
-      } bg-white border-r border-[#E5E7EB] flex flex-col justify-between transition-all duration-200 shrink-0 z-20 h-screen sticky top-0`}
+        collapsed ? "w-[72px]" : "w-64"
+      } bg-white border-r border-[#E5E7EB] flex flex-col justify-between transition-all duration-200 shrink-0 z-20 h-screen sticky top-0 select-none`}
     >
-      {/* Top: Brand Header & Nav List */}
+      {/* Top: Brand Logo & Navigation */}
       <div className="flex-1 overflow-y-auto custom-scrollbar p-3">
-        {/* Brand Logo */}
-        <div className="flex items-center justify-between px-2 py-3 mb-4">
-          <div className="flex items-center gap-3 overflow-hidden">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#5938F5] to-[#3988F7] text-white flex items-center justify-center font-black text-lg shadow-sm shrink-0">
-              ⚡
+        {/* Brand Header */}
+        <div className="flex items-center justify-between px-2 py-2.5 mb-3">
+          <div
+            onClick={() => onSelectView("dashboard")}
+            className="flex items-center gap-3 overflow-hidden cursor-pointer group"
+          >
+            <div className="w-9 h-9 rounded-xl bg-[#5938F5] text-white flex items-center justify-center font-bold shadow-xs shrink-0 group-hover:bg-[#4726DB] transition-colors">
+              <Zap size={20} className="text-white fill-white" />
             </div>
             {!collapsed && (
               <div className="truncate">
-                <div className="font-extrabold text-sm tracking-tight text-[#17172A] leading-none">
-                  DevSparks
+                <div className="flex items-center gap-1.5 leading-none">
+                  <span className="font-extrabold text-[15px] text-[#17172A] tracking-tight">DevSparks</span>
+                  <span className="font-medium text-[15px] text-[#17172A]">DeployCheck</span>
                 </div>
-                <div className="text-[10px] text-[#667085] font-semibold mt-0.5">DeployCheck</div>
+                <div className="text-[11px] text-[#667085] font-medium mt-1">By DevSparks India</div>
               </div>
             )}
           </div>
           <button
             onClick={onToggleCollapse}
-            className="p-1.5 text-slate-400 hover:text-[#17172A] hover:bg-slate-50 rounded-lg text-xs"
-            title={collapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+            className="p-1.5 text-slate-400 hover:text-[#17172A] hover:bg-slate-50 rounded-lg transition-colors shrink-0"
+            title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            aria-label="Toggle sidebar collapse"
           >
-            {collapsed ? "»" : "«"}
+            <div className="w-5 h-5 flex items-center justify-center font-mono text-xs font-bold text-slate-400">
+              {collapsed ? "»" : "«"}
+            </div>
           </button>
         </div>
 
         {/* Navigation Sections */}
-        <div className="space-y-5">
-          {navSections.map((section, idx) => (
-            <div key={idx}>
-              {!collapsed && (
-                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-1.5">
-                  {section.group}
-                </div>
-              )}
-              <div className="space-y-0.5">
-                {section.items.map((item) => {
-                  const isActive = activeView === item.id;
-                  return (
-                    <button
-                      key={item.id}
-                      onClick={() => onSelectView(item.id as NavView)}
-                      className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
-                        isActive
-                          ? "bg-[#5938F5] text-white shadow-sm"
-                          : "text-[#667085] hover:bg-slate-50 hover:text-[#17172A]"
-                      }`}
-                      title={collapsed ? item.label : undefined}
-                    >
-                      <span className="text-sm shrink-0">{item.icon}</span>
-                      {!collapsed && <span className="truncate">{item.label}</span>}
-                    </button>
-                  );
-                })}
+        <div className="space-y-4">
+          {navSections.map((section) => {
+            const isGroupCollapsed = !!collapsedGroups[section.group];
+            const isOverview = section.group === "Overview";
+
+            return (
+              <div key={section.group} className="space-y-1">
+                {/* Section Header */}
+                {!collapsed && !isOverview && (
+                  <button
+                    onClick={() => toggleGroup(section.group)}
+                    className="w-full flex items-center justify-between px-3 py-1 text-[11px] font-semibold text-[#667085] hover:text-[#17172A] tracking-normal transition-colors"
+                  >
+                    <span>{section.group}</span>
+                    <span className="text-slate-400">
+                      {isGroupCollapsed ? <ChevronDown size={14} /> : <ChevronUp size={14} />}
+                    </span>
+                  </button>
+                )}
+
+                {/* Items */}
+                {(!isGroupCollapsed || collapsed || isOverview) && (
+                  <div className="space-y-0.5">
+                    {section.items.map((item) => {
+                      const isActive = activeView === item.id;
+                      const Icon = item.icon;
+
+                      return (
+                        <button
+                          key={item.id}
+                          onClick={() => onSelectView(item.id)}
+                          className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs transition-all relative ${
+                            isActive
+                              ? "bg-[#5938F5] text-white shadow-xs font-semibold"
+                              : "text-[#334155] hover:bg-slate-50 hover:text-[#17172A] font-medium"
+                          } ${collapsed ? "justify-center px-0" : ""}`}
+                          title={collapsed ? item.label : undefined}
+                        >
+                          <Icon
+                            size={18}
+                            className={`shrink-0 ${
+                              isActive ? "text-white" : "text-slate-500 group-hover:text-[#17172A]"
+                            }`}
+                          />
+                          {!collapsed && <span className="truncate">{item.label}</span>}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
-      {/* Bottom Footer Info */}
-      {!collapsed && (
-        <div className="p-3 border-t border-[#F1F4F9] text-[11px] text-[#667085]">
-          <div className="px-2 py-1.5 rounded-xl bg-slate-50 border border-[#E5E7EB] flex items-center justify-between">
+      {/* Footer Info */}
+      {!collapsed ? (
+        <div className="p-3 border-t border-[#F1F4F9] text-xs text-[#667085]">
+          <div className="px-3 py-2 rounded-xl bg-slate-50 border border-[#E5E7EB] flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#16A34A]" />
-              <span className="font-semibold text-[#17172A]">Core Engine</span>
+              <span className="w-2 h-2 rounded-full bg-[#16A34A] animate-pulse" />
+              <span className="font-semibold text-xs text-[#17172A]">Core Engine</span>
             </div>
             <span className="font-mono text-[10px] text-slate-400">v0.1.0</span>
           </div>
+        </div>
+      ) : (
+        <div className="p-3 border-t border-[#F1F4F9] flex justify-center">
+          <span className="w-2 h-2 rounded-full bg-[#16A34A]" title="Core Engine Online" />
         </div>
       )}
     </aside>
