@@ -37,6 +37,60 @@ export default function DeployCheckApp() {
   // AI Diff Review Modal State (Human Approval Gate)
   const [diffModalOpen, setDiffModalOpen] = useState(false);
   const [diffApprovalStatus, setDiffApprovalStatus] = useState<"pending" | "approved" | "rejected">("pending");
+  const [activeDiffPatch, setActiveDiffPatch] = useState<{
+    title?: string;
+    filePath?: string;
+    beforeCode?: string;
+    afterCode?: string;
+    remediationAdvice?: string;
+  } | null>(null);
+
+  const findingPatches: Record<string, {
+    title: string;
+    filePath: string;
+    beforeCode: string;
+    afterCode: string;
+    remediationAdvice: string;
+  }> = {
+    "find-1": {
+      title: "Remediate Hardcoded AWS Credentials",
+      filePath: "src/config/aws.ts",
+      beforeCode: `export const awsConfig = {\n  region: "ap-south-1",\n  accessKeyId: "AKIA_EXPOSED_AWS_ACCESS_KEY_SAMPLE",\n  secretAccessKey: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"\n};`,
+      afterCode: `export const awsConfig = {\n  region: process.env.AWS_REGION || "ap-south-1",\n  accessKeyId: process.env.AWS_ACCESS_KEY_ID,\n  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY\n};`,
+      remediationAdvice: "Replace hardcoded API credentials with environment variables loaded from the secure encrypted vault. Never commit plaintext keys.",
+    },
+    "find-2": {
+      title: "Pin Dockerfile Base Image to Immutable Digest",
+      filePath: "Dockerfile",
+      beforeCode: `FROM node:latest\nWORKDIR /app\nCOPY package*.json ./`,
+      afterCode: `FROM node:20.17.0-alpine3.20@sha256:7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a\nWORKDIR /app\nCOPY package*.json ./`,
+      remediationAdvice: "Pin Docker base images to explicit version tags or immutable SHA-256 digests to prevent supply-chain drift.",
+    },
+    "find-3": {
+      title: "Replace Deprecated Dependencies",
+      filePath: "package.json",
+      beforeCode: `  "dependencies": {\n    "rimraf": "^3.0.2",\n    "glob": "^7.2.3"\n  }`,
+      afterCode: `  "dependencies": {\n    "rimraf": "^5.0.5",\n    "glob": "^10.3.10"\n  }`,
+      remediationAdvice: "Upgrade to current major versions or use Node.js 20+ native fs.rm({ recursive: true, force: true }).",
+    },
+    "find-4": {
+      title: "Document Missing Environment Variable in .env.example",
+      filePath: ".env.example",
+      beforeCode: `DATABASE_URL=postgres://user:pass@localhost:5432/db`,
+      afterCode: `PORT=3000\nDATABASE_URL=postgres://user:pass@localhost:5432/db`,
+      remediationAdvice: "Ensure all runtime configuration variables have documented fallbacks and descriptive entries in .env.example.",
+    },
+  };
+
+  const handleOpenDiffModal = (findingId?: string) => {
+    if (findingId && findingPatches[findingId]) {
+      setActiveDiffPatch(findingPatches[findingId]);
+    } else if (!activeDiffPatch) {
+      setActiveDiffPatch(findingPatches["find-1"]);
+    }
+    setDiffApprovalStatus("pending");
+    setDiffModalOpen(true);
+  };
 
   // Live SSE AI Streaming State
   const [isStreamingAi, setIsStreamingAi] = useState(false);
@@ -93,26 +147,58 @@ export default function DeployCheckApp() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          workspaceId: "ws_alpha",
           findingId: "sec-aws-001",
-          ruleId: "secret-scanner",
-          title: "Hardcoded AWS Access Key in src/config/aws.ts",
-          codeSnippet: "const awsKey = 'AKIA_EXPOSED_AWS_ACCESS_KEY';",
+          findingTitle: "Hardcoded AWS Access Key in src/config/aws.ts",
+          affectedFile: "src/config/aws.ts",
+          affectedCodeSnippet: "const awsKey = 'AKIA_EXPOSED_AWS_ACCESS_KEY';",
+          remediationAdvice: "Load credentials securely via environment variables and AES-256 vault.",
           stream: true,
         }),
       });
       if (res.body) {
         const reader = res.body.getReader();
         const decoder = new TextDecoder();
-        let accumulated = "";
         let streamFinished = false;
+        let displayedText = "";
         while (!streamFinished) {
           const result = await reader.read();
           if (result.done) {
             streamFinished = true;
           } else if (result.value) {
-            const chunk = decoder.decode(result.value);
-            accumulated += chunk;
-            setStreamedAiText(accumulated);
+            const rawChunk = decoder.decode(result.value);
+            const lines = rawChunk.split("\n");
+            for (const line of lines) {
+              if (line.startsWith("data: ")) {
+                const jsonStr = line.slice(6).trim();
+                if (jsonStr === "[DONE]") {
+                  displayedText += "\n\n✓ Token stream complete. Structured patch proposal generated.";
+                } else {
+                  try {
+                    const parsed = JSON.parse(jsonStr);
+                    if (parsed.type === "chunk") {
+                      displayedText += parsed.text;
+                    } else if (parsed.type === "explanation") {
+                      displayedText += `\n${parsed.explanation}`;
+                    } else if (parsed.type === "patch" && parsed.patch) {
+                      const p = parsed.patch.patches?.[0];
+                      if (p) {
+                        setActiveDiffPatch({
+                          title: parsed.patch.summary,
+                          filePath: p.filePath,
+                          beforeCode: p.originalSnippet,
+                          afterCode: p.suggestedSnippet,
+                          remediationAdvice: p.explanation,
+                        });
+                      }
+                    }
+                  } catch {
+                    displayedText += jsonStr;
+                  }
+                }
+                setStreamedAiText(displayedText);
+              }
+            }
           }
         }
       }
@@ -207,7 +293,7 @@ export default function DeployCheckApp() {
 
           {activeView === "audits" && (
             <AuditReportsView
-              onOpenDiffModal={() => setDiffModalOpen(true)}
+              onOpenDiffModal={(findingId) => handleOpenDiffModal(findingId)}
               onRunAudit={runLiveAudit}
               isLoading={liveAuditLoading}
               liveAuditResult={liveAuditResult}
@@ -216,7 +302,7 @@ export default function DeployCheckApp() {
 
           {activeView === "ai" && (
             <AiAssistantView
-              onOpenDiffModal={() => setDiffModalOpen(true)}
+              onOpenDiffModal={() => handleOpenDiffModal()}
               streamedText={streamedAiText}
               isStreaming={isStreamingAi}
               onStreamPrompt={streamAiExplanation}
@@ -262,6 +348,11 @@ export default function DeployCheckApp() {
         onApprove={() => setDiffApprovalStatus("approved")}
         onReject={() => setDiffApprovalStatus("rejected")}
         approvalStatus={diffApprovalStatus}
+        title={activeDiffPatch?.title}
+        filePath={activeDiffPatch?.filePath}
+        beforeCode={activeDiffPatch?.beforeCode}
+        afterCode={activeDiffPatch?.afterCode}
+        remediationAdvice={activeDiffPatch?.remediationAdvice}
       />
     </div>
   );

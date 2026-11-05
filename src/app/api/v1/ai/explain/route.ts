@@ -6,11 +6,17 @@ import { redactSecrets } from "@/core/logger";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { workspaceId, findingId, findingTitle, findingDescription, affectedFile, affectedCodeSnippet, remediationAdvice } = body;
+    const workspaceId = body.workspaceId || "ws_default";
+    const findingTitle = body.findingTitle || body.title;
+    const findingId = body.findingId || "finding-unknown";
+    const findingDescription = body.findingDescription || body.description || "";
+    const affectedFile = body.affectedFile || body.filePath || "src/config/aws.ts";
+    const affectedCodeSnippet = body.affectedCodeSnippet || body.codeSnippet || "";
+    const remediationAdvice = body.remediationAdvice || body.remediation || "";
 
-    if (!workspaceId || !findingTitle) {
+    if (!findingTitle) {
       return NextResponse.json(
-        { error: "Missing required fields: workspaceId, findingTitle" },
+        { error: "Missing required field: findingTitle or title" },
         { status: 400 }
       );
     }
