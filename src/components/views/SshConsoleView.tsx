@@ -37,7 +37,7 @@ export function SshConsoleView() {
         ...prev,
         {
           cmd,
-          output: `❌ SECURITY POLICY VIOLATION: Command blocked by Policy Gateway (Rule Invariant: No destructive arbitrary shell operations). Audit incident logged.`,
+          output: `[POLICY GATEWAY VIOLATION] Command blocked by Security Policy (Rule Invariant: No destructive arbitrary shell operations). Audit incident logged.`,
           status: "blocked",
         },
       ]);

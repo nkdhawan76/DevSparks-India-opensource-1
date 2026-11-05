@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { StatusBadge } from "../common/StatusBadge";
-import { Zap, Check, FileText, X } from "../common/Icons";
+import { Zap, Check, FileText, X, CreditCard } from "../common/Icons";
 
 export function PlansBillingView() {
   const [activePlanTab, setActivePlanTab] = useState<"tiers" | "invoices">("tiers");
@@ -80,34 +80,36 @@ export function PlansBillingView() {
         <div className="flex items-center gap-2 bg-[#F7F8FC] p-1.5 rounded-xl border border-[#E5E7EB]">
           <button
             onClick={() => setActivePlanTab("tiers")}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
               activePlanTab === "tiers" ? "bg-white text-[#5938F5] shadow-sm" : "text-[#667085]"
             }`}
           >
-            💳 Plan Tiers
+            <CreditCard size={14} />
+            <span>Plan Tiers</span>
           </button>
           <button
             onClick={() => setActivePlanTab("invoices")}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
               activePlanTab === "invoices" ? "bg-white text-[#5938F5] shadow-sm" : "text-[#667085]"
             }`}
           >
-            📑 Invoices & Receipts
+            <FileText size={14} />
+            <span>Invoices & Receipts</span>
           </button>
         </div>
       </div>
 
       {planFeedback && (
         <div className="p-4 bg-purple-50 border border-purple-200 rounded-2xl text-xs text-purple-900 flex items-center justify-between animate-in fade-in">
-          <span>⚡ {planFeedback}</span>
-          <button onClick={() => setPlanFeedback(null)} className="text-purple-400 hover:text-purple-700 font-bold">✕</button>
+          <span className="inline-flex items-center gap-1.5"><Zap size={14} className="text-[#5938F5]" /> {planFeedback}</span>
+          <button onClick={() => setPlanFeedback(null)} className="text-purple-400 hover:text-purple-700 font-bold transition-colors"><X size={14} /></button>
         </div>
       )}
 
       {downloadFeedback && (
         <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-xs text-emerald-900 flex items-center justify-between animate-in fade-in">
-          <span>📄 {downloadFeedback}</span>
-          <button onClick={() => setDownloadFeedback(null)} className="text-emerald-400 hover:text-emerald-700 font-bold">✕</button>
+          <span className="inline-flex items-center gap-1.5"><FileText size={14} className="text-[#16A34A]" /> {downloadFeedback}</span>
+          <button onClick={() => setDownloadFeedback(null)} className="text-emerald-400 hover:text-emerald-700 font-bold transition-colors"><X size={14} /></button>
         </div>
       )}
 

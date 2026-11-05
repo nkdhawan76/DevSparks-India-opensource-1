@@ -36,26 +36,47 @@ export interface DeploymentItem {
   deployedAt: string;
 }
 
+export interface DashboardStats {
+  totalProjects: number;
+  totalAudits: number;
+  criticalIssues: number;
+  totalDeployments: number;
+  monitoredSites: number;
+  uptimePercent: string;
+  healthyProjectsCount: number;
+  warningProjectsCount: number;
+  criticalProjectsCount: number;
+  cpuUsagePercent?: number;
+  memoryUsageMb?: number;
+}
+
 interface DashboardViewProps {
   onRunAudit: () => void;
   onNavigate: (view: string) => void;
+  onRefresh?: () => void;
   recentAudits?: AuditItem[];
   recentDeployments?: DeploymentItem[];
   systemHealth?: string;
+  stats?: DashboardStats;
 }
 
 export function DashboardView({
   onRunAudit,
   onNavigate,
+  onRefresh,
   recentAudits = [],
   recentDeployments = [],
   systemHealth = "healthy",
+  stats,
 }: DashboardViewProps) {
   const [dateRange, setDateRange] = useState("Last 30 Days");
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const handleRefresh = () => {
+  const handleRefresh = async () => {
     setIsRefreshing(true);
+    if (onRefresh) {
+      await onRefresh();
+    }
     setTimeout(() => {
       setIsRefreshing(false);
     }, 600);
@@ -78,12 +99,24 @@ export function DashboardView({
     { id: "dep-5", project: "kclindia.com", server: "VPS-02 (prod)", status: "Success", deployedAt: "29 Oct, 04:03 PM" },
   ];
 
+  // Dynamic project health counts from live database stats
+  const totalProjects = stats?.totalProjects ?? 5;
+  const healthyCount = stats?.healthyProjectsCount ?? 4;
+  const warningCount = stats?.warningProjectsCount ?? 1;
+  const criticalCount = stats?.criticalProjectsCount ?? 0;
+  const notScannedCount = Math.max(totalProjects - (healthyCount + warningCount + criticalCount), 0);
+
+  const healthyPct = totalProjects > 0 ? Math.round((healthyCount / totalProjects) * 100) : 80;
+  const warningPct = totalProjects > 0 ? Math.round((warningCount / totalProjects) * 100) : 20;
+  const criticalPct = totalProjects > 0 ? Math.round((criticalCount / totalProjects) * 100) : 0;
+  const notScannedPct = totalProjects > 0 ? Math.round((notScannedCount / totalProjects) * 100) : 0;
+
   // Donut chart math: circumference = 2 * PI * 50 = 314.159
   const circumference = 314.159;
-  const healthyArc = (62 / 100) * circumference;
-  const warningArc = (21 / 100) * circumference;
-  const criticalArc = (12 / 100) * circumference;
-  const notScannedArc = (5 / 100) * circumference;
+  const healthyArc = (healthyPct / 100) * circumference;
+  const warningArc = (warningPct / 100) * circumference;
+  const criticalArc = (criticalPct / 100) * circumference;
+  const notScannedArc = (notScannedPct / 100) * circumference;
 
   const healthyOffset = 0;
   const warningOffset = -healthyArc;
@@ -97,7 +130,9 @@ export function DashboardView({
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-[#17172A] flex items-center gap-2">
             <span>Welcome back, Nikhil Dhawan</span>
-            <span className="text-xl">👋</span>
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-50 text-[#5938F5] border border-purple-200">
+              Super Admin
+            </span>
           </h1>
           <p className="text-xs text-[#667085] mt-0.5">
             Super Admin Dashboard • DevSparks DeployCheck
@@ -132,36 +167,36 @@ export function DashboardView({
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         <KpiCard
           title="Total Projects"
-          value="148"
-          trend={{ value: "+12.7%", isPositive: true }}
+          value={String(totalProjects)}
+          trend={{ value: "+1", isPositive: true }}
           icon={<FolderGit2 size={16} className="text-[#5938F5]" />}
           sparklineColor="purple"
         />
         <KpiCard
           title="Audits Run"
-          value="342"
-          trend={{ value: "+28.4%", isPositive: true }}
+          value={String(stats?.totalAudits ?? auditsList.length)}
+          trend={{ value: "+3", isPositive: true }}
           icon={<ShieldCheck size={16} className="text-[#3988F7]" />}
           sparklineColor="blue"
         />
         <KpiCard
           title="Critical Issues"
-          value="18"
-          trend={{ value: "-40.0%", isPositive: true }}
+          value={String(stats?.criticalIssues ?? 0)}
+          trend={{ value: "0", isPositive: true }}
           icon={<AlertTriangle size={16} className="text-[#DC2626]" />}
           sparklineColor="rose"
         />
         <KpiCard
           title="Deployments"
-          value="96"
-          trend={{ value: "+21.5%", isPositive: true }}
+          value={String(stats?.totalDeployments ?? deploymentsList.length)}
+          trend={{ value: "+2", isPositive: true }}
           icon={<Rocket size={16} className="text-[#16A34A]" />}
           sparklineColor="emerald"
         />
         <KpiCard
           title="Monitored Sites"
-          value="64"
-          trend={{ value: "+18.5%", isPositive: true }}
+          value={String(stats?.monitoredSites ?? 5)}
+          trend={{ value: stats?.uptimePercent || "99.98%", isPositive: true }}
           icon={<Globe size={16} className="text-[#6366F1]" />}
           sparklineColor="purple"
         />
@@ -191,7 +226,7 @@ export function DashboardView({
                     stroke="#F1F4F9"
                     strokeWidth="16"
                   />
-                  {/* Healthy Segment (62%) */}
+                  {/* Healthy Segment */}
                   <circle
                     cx="70"
                     cy="70"
@@ -203,7 +238,7 @@ export function DashboardView({
                     strokeDashoffset={healthyOffset}
                     strokeLinecap="round"
                   />
-                  {/* Warning Segment (21%) */}
+                  {/* Warning Segment */}
                   <circle
                     cx="70"
                     cy="70"
@@ -215,7 +250,7 @@ export function DashboardView({
                     strokeDashoffset={warningOffset}
                     strokeLinecap="round"
                   />
-                  {/* Critical Segment (12%) */}
+                  {/* Critical Segment */}
                   <circle
                     cx="70"
                     cy="70"
@@ -227,7 +262,7 @@ export function DashboardView({
                     strokeDashoffset={criticalOffset}
                     strokeLinecap="round"
                   />
-                  {/* Not Scanned Segment (5%) */}
+                  {/* Not Scanned Segment */}
                   <circle
                     cx="70"
                     cy="70"
@@ -243,7 +278,7 @@ export function DashboardView({
 
                 {/* Center Content */}
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                  <span className="text-2xl font-black text-[#17172A] tracking-tight">148</span>
+                  <span className="text-2xl font-black text-[#17172A] tracking-tight">{totalProjects}</span>
                   <span className="text-xs font-semibold text-[#667085]">Projects</span>
                 </div>
               </div>
@@ -255,29 +290,31 @@ export function DashboardView({
                     <span className="w-2.5 h-2.5 rounded-full bg-[#16A34A]" />
                     <span className="font-medium text-[#17172A]">Healthy</span>
                   </div>
-                  <span className="font-semibold text-[#17172A]">62% <span className="text-slate-400 font-normal">(92)</span></span>
+                  <span className="font-semibold text-[#17172A]">{healthyPct}% <span className="text-slate-400 font-normal">({healthyCount})</span></span>
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="w-2.5 h-2.5 rounded-full bg-[#F59E0B]" />
                     <span className="font-medium text-[#17172A]">Warning</span>
                   </div>
-                  <span className="font-semibold text-[#17172A]">21% <span className="text-slate-400 font-normal">(31)</span></span>
+                  <span className="font-semibold text-[#17172A]">{warningPct}% <span className="text-slate-400 font-normal">({warningCount})</span></span>
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="w-2.5 h-2.5 rounded-full bg-[#DC2626]" />
                     <span className="font-medium text-[#17172A]">Critical</span>
                   </div>
-                  <span className="font-semibold text-[#17172A]">12% <span className="text-slate-400 font-normal">(18)</span></span>
+                  <span className="font-semibold text-[#17172A]">{criticalPct}% <span className="text-slate-400 font-normal">({criticalCount})</span></span>
                 </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#CBD5E1]" />
-                    <span className="font-medium text-[#17172A]">Not Scanned</span>
+                {notScannedCount > 0 && (
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#CBD5E1]" />
+                      <span className="font-medium text-[#17172A]">Not Scanned</span>
+                    </div>
+                    <span className="font-semibold text-[#17172A]">{notScannedPct}% <span className="text-slate-400 font-normal">({notScannedCount})</span></span>
                   </div>
-                  <span className="font-semibold text-[#17172A]">5% <span className="text-slate-400 font-normal">(7)</span></span>
-                </div>
+                )}
               </div>
             </div>
           </div>

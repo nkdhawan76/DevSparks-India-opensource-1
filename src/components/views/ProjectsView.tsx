@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { StatusBadge } from "../common/StatusBadge";
-import { Plus, Search, X, Zap, FolderGit2 } from "../common/Icons";
+import { Plus, Search, X, Zap } from "../common/Icons";
 
 interface Project {
   id: string;
@@ -28,7 +28,7 @@ export function ProjectsView({ onRunAudit, onDeploy }: ProjectsViewProps = {}) {
   const [newProjectRepo, setNewProjectRepo] = useState("");
   const [newProjectBranch, setNewProjectBranch] = useState("main");
   const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [_loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadProjects() {

@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { StatusBadge } from "../common/StatusBadge";
 import { KpiCard } from "../common/KpiCard";
+import { Users, Key, Crown, Laptop, Search, Check, X } from "../common/Icons";
 
 export function UsersRolesView() {
   const [activeSubTab, setActiveSubTab] = useState<"users" | "roles">("users");
@@ -69,19 +70,21 @@ export function UsersRolesView() {
           <div className="flex items-center gap-2 bg-[#F7F8FC] p-1.5 rounded-xl border border-[#E5E7EB]">
             <button
               onClick={() => setActiveSubTab("users")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
                 activeSubTab === "users" ? "bg-white text-[#5938F5] shadow-sm" : "text-[#667085]"
               }`}
             >
-              👥 Team Members
+              <Users size={14} />
+              <span>Team Members</span>
             </button>
             <button
               onClick={() => setActiveSubTab("roles")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
                 activeSubTab === "roles" ? "bg-white text-[#5938F5] shadow-sm" : "text-[#667085]"
               }`}
             >
-              🔑 RBAC Matrix
+              <Key size={14} />
+              <span>RBAC Matrix</span>
             </button>
           </div>
 
@@ -98,10 +101,10 @@ export function UsersRolesView() {
         <div className="space-y-6">
           {/* KPI Row */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <KpiCard title="Total Members" value={String(members.length)} subtitle="5 active seats occupied" icon="👥" />
-            <KpiCard title="Super Admins" value="1" subtitle="Full workspace authority" icon="👑" badge="Owner" />
-            <KpiCard title="DevOps & Developers" value="3" subtitle="Deployment & audit capabilities" icon="💻" />
-            <KpiCard title="Security & Viewers" value="1" subtitle="Read-only audit reports" icon="🔍" />
+            <KpiCard title="Total Members" value={String(members.length)} subtitle="5 active seats occupied" icon={<Users size={16} className="text-[#5938F5]" />} />
+            <KpiCard title="Super Admins" value="1" subtitle="Full workspace authority" icon={<Crown size={16} className="text-[#F59E0B]" />} badge="Owner" />
+            <KpiCard title="DevOps & Developers" value="3" subtitle="Deployment & audit capabilities" icon={<Laptop size={16} className="text-[#3988F7]" />} />
+            <KpiCard title="Security & Viewers" value="1" subtitle="Read-only audit reports" icon={<Search size={16} className="text-[#16A34A]" />} />
           </div>
 
           {/* Members Table */}
@@ -176,11 +179,11 @@ export function UsersRolesView() {
                 {permissionMatrix.map((row, idx) => (
                   <tr key={idx} className="hover:bg-slate-50 transition-colors">
                     <td className="py-3 font-semibold text-[#17172A]">{row.capability}</td>
-                    <td className="py-3 text-center">{row.superAdmin ? "✅" : "❌"}</td>
-                    <td className="py-3 text-center">{row.admin ? "✅" : "❌"}</td>
-                    <td className="py-3 text-center">{row.dev ? "✅" : "❌"}</td>
-                    <td className="py-3 text-center">{row.devops ? "✅" : "❌"}</td>
-                    <td className="py-3 text-center">{row.viewer ? "✅" : "❌"}</td>
+                    <td className="py-3 text-center">{row.superAdmin ? <Check size={14} className="text-[#16A34A] mx-auto" /> : <X size={14} className="text-slate-300 mx-auto" />}</td>
+                    <td className="py-3 text-center">{row.admin ? <Check size={14} className="text-[#16A34A] mx-auto" /> : <X size={14} className="text-slate-300 mx-auto" />}</td>
+                    <td className="py-3 text-center">{row.dev ? <Check size={14} className="text-[#16A34A] mx-auto" /> : <X size={14} className="text-slate-300 mx-auto" />}</td>
+                    <td className="py-3 text-center">{row.devops ? <Check size={14} className="text-[#16A34A] mx-auto" /> : <X size={14} className="text-slate-300 mx-auto" />}</td>
+                    <td className="py-3 text-center">{row.viewer ? <Check size={14} className="text-[#16A34A] mx-auto" /> : <X size={14} className="text-slate-300 mx-auto" />}</td>
                   </tr>
                 ))}
               </tbody>
@@ -195,7 +198,7 @@ export function UsersRolesView() {
           <div className="bg-white border border-[#E5E7EB] rounded-2xl shadow-2xl w-full max-w-md p-6 space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-[#E5E7EB]">
               <h3 className="font-bold text-base text-[#17172A]">Invite Team Member</h3>
-              <button onClick={() => setShowInviteModal(false)} className="text-slate-400 hover:text-[#17172A]">✕</button>
+              <button onClick={() => setShowInviteModal(false)} className="text-slate-400 hover:text-[#17172A] transition-colors"><X size={16} /></button>
             </div>
             <div className="space-y-3 text-xs">
               <div>

@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { StatusBadge } from "../common/StatusBadge";
+import { Users, Globe, Sparkles, Bell, Check, Lock, RefreshCw } from "../common/Icons";
 
 interface SettingsViewProps {
   initialTab?: "profile" | "website" | "providers" | "notifications";
@@ -81,42 +82,46 @@ export function SettingsView({ initialTab = "profile" }: SettingsViewProps) {
         <div className="flex items-center gap-2 bg-[#F7F8FC] p-1.5 rounded-xl border border-[#E5E7EB] flex-wrap">
           <button
             onClick={() => setSubTab("profile")}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
               subTab === "profile" ? "bg-white text-[#5938F5] shadow-sm" : "text-[#667085]"
             }`}
           >
-            👤 Profile
+            <Users size={14} />
+            <span>Profile</span>
           </button>
           <button
             onClick={() => setSubTab("website")}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
               subTab === "website" ? "bg-white text-[#5938F5] shadow-sm" : "text-[#667085]"
             }`}
           >
-            🌐 Website & Domains
+            <Globe size={14} />
+            <span>Website & Domains</span>
           </button>
           <button
             onClick={() => setSubTab("providers")}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
               subTab === "providers" ? "bg-white text-[#5938F5] shadow-sm" : "text-[#667085]"
             }`}
           >
-            ✨ BYOK AI Key
+            <Sparkles size={14} />
+            <span>BYOK AI Key</span>
           </button>
           <button
             onClick={() => setSubTab("notifications")}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
               subTab === "notifications" ? "bg-white text-[#5938F5] shadow-sm" : "text-[#667085]"
             }`}
           >
-            🔔 Alert Webhooks
+            <Bell size={14} />
+            <span>Alert Webhooks</span>
           </button>
         </div>
       </div>
 
       {saveSuccess && (
         <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-xs text-emerald-900 flex items-center justify-between animate-in fade-in">
-          <span>✅ {saveSuccess}</span>
+          <span className="inline-flex items-center gap-1.5"><Check size={14} className="text-[#16A34A]" /> {saveSuccess}</span>
           <span className="font-mono text-[10px]">Saved</span>
         </div>
       )}
@@ -237,8 +242,11 @@ export function SettingsView({ initialTab = "profile" }: SettingsViewProps) {
               BYOK OpenRouter API Key Credentials
             </h3>
 
-            <div className="p-3.5 bg-purple-50 border border-purple-200 rounded-xl text-purple-900 text-xs">
-              🔒 <strong>Security Policy Invariant:</strong> API Keys are encrypted at rest with AES-256-GCM. Plaintext keys are never logged or returned over client APIs.
+            <div className="p-3.5 bg-purple-50 border border-purple-200 rounded-xl text-purple-900 text-xs flex items-start gap-2">
+              <Lock size={15} className="text-[#5938F5] shrink-0 mt-0.5" />
+              <div>
+                <strong>Security Policy Invariant:</strong> API Keys are encrypted at rest with AES-256-GCM. Plaintext keys are never logged or returned over client APIs.
+              </div>
             </div>
 
             <div>
@@ -261,7 +269,7 @@ export function SettingsView({ initialTab = "profile" }: SettingsViewProps) {
                 disabled={isEncrypting}
                 className="px-5 py-2.5 bg-[#5938F5] hover:bg-[#4726DB] text-white font-bold rounded-xl text-xs shadow-sm transition-all disabled:opacity-50 flex items-center gap-2"
               >
-                <span>{isEncrypting ? "⏳" : "🔒"}</span>
+                {isEncrypting ? <RefreshCw size={14} className="animate-spin text-white" /> : <Lock size={14} />}
                 <span>{isEncrypting ? "Encrypting & Storing..." : "Encrypt & Update Key"}</span>
               </button>
             </div>
