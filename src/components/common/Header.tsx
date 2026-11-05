@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StatusBadge } from "./StatusBadge";
+import { CommandPalette } from "./CommandPalette";
 
 interface HeaderProps {
   currentSection: string;
@@ -11,6 +12,7 @@ interface HeaderProps {
   onRunAudit: () => void;
   onOpenNotifications?: () => void;
   onToggleSidebar?: () => void;
+  onNavigateView?: (view: string) => void;
   userFullName?: string;
   userRole?: string;
 }
@@ -23,12 +25,24 @@ export function Header({
   onRunAudit,
   onOpenNotifications,
   onToggleSidebar,
+  onNavigateView,
   userFullName = "Nikhil Dhawan",
   userRole = "Super Admin",
 }: HeaderProps) {
-  const [searchQuery, setSearchQuery] = useState("");
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showNotificationPopup, setShowNotificationPopup] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setPaletteOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   return (
     <header className="h-16 bg-white border-b border-[#E5E7EB] px-6 flex items-center justify-between sticky top-0 z-30 shrink-0">
@@ -51,16 +65,15 @@ export function Header({
       </div>
 
       {/* Center: Global Search */}
-      <div className="hidden md:flex items-center relative w-72 lg:w-96">
+      <div
+        onClick={() => setPaletteOpen(true)}
+        className="hidden md:flex items-center relative w-72 lg:w-96 cursor-pointer"
+      >
         <span className="absolute left-3 text-slate-400 text-sm">🔍</span>
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search projects, audits, servers... (Ctrl+K)"
-          className="w-full bg-[#F7F8FC] border border-[#E5E7EB] rounded-xl pl-9 pr-12 py-1.5 text-xs text-[#17172A] focus:outline-none focus:border-[#5938F5] focus:bg-white transition-all placeholder:text-slate-400"
-        />
-        <kbd className="absolute right-3 px-1.5 py-0.5 text-[10px] bg-white border border-[#E5E7EB] rounded text-slate-400 font-mono">
+        <div className="w-full bg-[#F7F8FC] hover:bg-slate-100/80 border border-[#E5E7EB] rounded-xl pl-9 pr-12 py-1.5 text-xs text-slate-400 select-none transition-all flex items-center justify-between">
+          <span>Search projects, audits, servers...</span>
+        </div>
+        <kbd className="absolute right-3 px-1.5 py-0.5 text-[10px] bg-white border border-[#E5E7EB] rounded text-slate-400 font-mono shadow-2xs">
           ⌘K
         </kbd>
       </div>
@@ -180,6 +193,14 @@ export function Header({
           )}
         </div>
       </div>
+
+      {/* Global Interactive Command Palette (Ctrl+K) */}
+      <CommandPalette
+        isOpen={paletteOpen}
+        onClose={() => setPaletteOpen(false)}
+        onNavigateView={onNavigateView}
+        onTriggerAudit={onRunAudit}
+      />
     </header>
   );
 }

@@ -185,6 +185,7 @@ export default function DeployCheckApp() {
           }}
           onOpenNotifications={() => setActiveView("notifications")}
           onToggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)}
+          onNavigateView={(view) => setActiveView(view as NavView)}
         />
 
         {/* View Surface */}

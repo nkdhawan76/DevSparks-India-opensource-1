@@ -106,6 +106,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           onRunAudit={() => router.push("/app/audits")}
           onOpenNotifications={() => router.push("/app/notifications")}
           onToggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)}
+          onNavigateView={(view) => handleSelectView(view as NavView)}
         />
 
         <main className="flex-1 p-6 lg:p-8 overflow-y-auto">
