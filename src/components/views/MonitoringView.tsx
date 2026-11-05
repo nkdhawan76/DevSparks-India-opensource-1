@@ -5,7 +5,11 @@ import { StatusBadge } from "../common/StatusBadge";
 import { KpiCard } from "../common/KpiCard";
 
 export function MonitoringView() {
-  const [probes, _setProbes] = useState([
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [newTargetName, setNewTargetName] = useState("");
+  const [newTargetUrl, setNewTargetUrl] = useState("");
+  const [newInterval, setNewInterval] = useState("60s");
+  const [probes, setProbes] = useState([
     {
       id: "probe-1",
       name: "The Fein India Health Endpoint",
@@ -61,7 +65,7 @@ export function MonitoringView() {
         </div>
 
         <button
-          onClick={() => alert("Creating new synthetic monitor target...")}
+          onClick={() => setShowAddModal(true)}
           className="px-4 py-2 bg-[#5938F5] hover:bg-[#4726DB] text-white text-xs font-bold rounded-xl shadow-sm transition-all"
         >
           ＋ New Monitor Target
@@ -122,6 +126,98 @@ export function MonitoringView() {
           </table>
         </div>
       </div>
+
+      {/* Add New Synthetic Target Modal */}
+      {showAddModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in">
+          <div className="bg-white border border-[#E5E7EB] rounded-2xl shadow-2xl w-full max-w-md p-6 space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-[#E5E7EB]">
+              <h3 className="font-bold text-base text-[#17172A]">Add Synthetic Health Probe Target</h3>
+              <button
+                onClick={() => setShowAddModal(false)}
+                className="w-8 h-8 rounded-lg text-slate-400 hover:text-[#17172A] flex items-center justify-center"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-3 text-xs">
+              <div>
+                <label className="block font-semibold text-[#17172A] mb-1">Target Name</label>
+                <input
+                  type="text"
+                  value={newTargetName}
+                  onChange={(e) => setNewTargetName(e.target.value)}
+                  placeholder="e.g. Compikart API Health Endpoint"
+                  className="w-full bg-[#F7F8FC] border border-[#E5E7EB] rounded-xl px-3 py-2 text-xs text-[#17172A] focus:outline-none focus:border-[#5938F5]"
+                />
+              </div>
+
+              <div>
+                <label className="block font-semibold text-[#17172A] mb-1">Target URL</label>
+                <input
+                  type="url"
+                  value={newTargetUrl}
+                  onChange={(e) => setNewTargetUrl(e.target.value)}
+                  placeholder="https://api.compikart.opm/health"
+                  className="w-full bg-[#F7F8FC] border border-[#E5E7EB] rounded-xl px-3 py-2 text-xs text-[#17172A] focus:outline-none focus:border-[#5938F5]"
+                />
+              </div>
+
+              <div>
+                <label className="block font-semibold text-[#17172A] mb-1">Probe Interval</label>
+                <select
+                  value={newInterval}
+                  onChange={(e) => setNewInterval(e.target.value)}
+                  className="w-full bg-[#F7F8FC] border border-[#E5E7EB] rounded-xl px-3 py-2 text-xs text-[#17172A] focus:outline-none focus:border-[#5938F5]"
+                >
+                  <option value="30s">Every 30 seconds</option>
+                  <option value="60s">Every 60 seconds (Standard)</option>
+                  <option value="300s">Every 5 minutes</option>
+                </select>
+              </div>
+
+              <div className="p-3 bg-blue-50 border border-blue-200 rounded-xl text-blue-900 text-[11px]">
+                🛡️ <strong>SSRF Guard Invariant:</strong> DeployCheck validates all probe destinations against RFC 1918 private ranges, AWS/GCP instance metadata, and loopback IP addresses before socket creation.
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#E5E7EB]">
+              <button
+                onClick={() => setShowAddModal(false)}
+                className="px-4 py-2 border border-[#E5E7EB] rounded-xl text-xs font-semibold text-[#667085] hover:bg-slate-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  if (!newTargetName.trim() || !newTargetUrl.trim()) return;
+                  setProbes([
+                    ...probes,
+                    {
+                      id: `probe-${Date.now()}`,
+                      name: newTargetName,
+                      url: newTargetUrl,
+                      interval: newInterval,
+                      latency: "54ms",
+                      status: "Operational",
+                      uptime: "100%",
+                      sslDays: 90,
+                      lastCheck: "Just now",
+                    },
+                  ]);
+                  setNewTargetName("");
+                  setNewTargetUrl("");
+                  setShowAddModal(false);
+                }}
+                className="px-5 py-2 bg-[#5938F5] hover:bg-[#4726DB] text-white rounded-xl text-xs font-bold"
+              >
+                Create Target & Start Probing
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

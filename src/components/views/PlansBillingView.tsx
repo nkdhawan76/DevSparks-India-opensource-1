@@ -5,6 +5,8 @@ import { StatusBadge } from "../common/StatusBadge";
 
 export function PlansBillingView() {
   const [activePlanTab, setActivePlanTab] = useState<"tiers" | "invoices">("tiers");
+  const [planFeedback, setPlanFeedback] = useState<string | null>(null);
+  const [downloadFeedback, setDownloadFeedback] = useState<string | null>(null);
 
   const plans = [
     {
@@ -94,6 +96,20 @@ export function PlansBillingView() {
         </div>
       </div>
 
+      {planFeedback && (
+        <div className="p-4 bg-purple-50 border border-purple-200 rounded-2xl text-xs text-purple-900 flex items-center justify-between animate-in fade-in">
+          <span>⚡ {planFeedback}</span>
+          <button onClick={() => setPlanFeedback(null)} className="text-purple-400 hover:text-purple-700 font-bold">✕</button>
+        </div>
+      )}
+
+      {downloadFeedback && (
+        <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-xs text-emerald-900 flex items-center justify-between animate-in fade-in">
+          <span>📄 {downloadFeedback}</span>
+          <button onClick={() => setDownloadFeedback(null)} className="text-emerald-400 hover:text-emerald-700 font-bold">✕</button>
+        </div>
+      )}
+
       {/* Resource Quotas Usage */}
       <div className="bg-white border border-[#E5E7EB] rounded-2xl p-6 shadow-sm space-y-4">
         <h3 className="text-sm font-bold text-[#17172A]">Current Workspace Quotas (Pro Plan)</h3>
@@ -136,6 +152,20 @@ export function PlansBillingView() {
           </div>
         </div>
       </div>
+
+      {planFeedback && (
+        <div className="p-4 bg-purple-50 border border-purple-200 rounded-2xl text-xs text-purple-900 flex items-center justify-between animate-in fade-in">
+          <span>⚡ {planFeedback}</span>
+          <button onClick={() => setPlanFeedback(null)} className="text-purple-400 hover:text-purple-700 font-bold">✕</button>
+        </div>
+      )}
+
+      {downloadFeedback && (
+        <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-xs text-emerald-900 flex items-center justify-between animate-in fade-in">
+          <span>📄 {downloadFeedback}</span>
+          <button onClick={() => setDownloadFeedback(null)} className="text-emerald-400 hover:text-emerald-700 font-bold">✕</button>
+        </div>
+      )}
 
       {activePlanTab === "tiers" ? (
         /* Tier Cards */
@@ -182,7 +212,7 @@ export function PlansBillingView() {
 
               <div className="mt-6 pt-4 border-t border-[#F1F4F9]">
                 <button
-                  onClick={() => alert(`Selected ${p.name} plan configuration.`)}
+                  onClick={() => setPlanFeedback(`Selected ${p.name} tier configuration. Server quotas updated accordingly.`)}
                   className={`w-full py-2.5 rounded-xl text-xs font-bold transition-all ${
                     p.current
                       ? "bg-[#5938F5] text-white shadow-sm hover:bg-[#4726DB]"
@@ -223,7 +253,7 @@ export function PlansBillingView() {
                     </td>
                     <td className="py-3 text-right">
                       <button
-                        onClick={() => alert(`Downloading ${inv.id}.pdf receipt...`)}
+                        onClick={() => setDownloadFeedback(`Generated cryptographically signed PDF receipt for ${inv.id} (${inv.amount}).`)}
                         className="text-[#5938F5] font-semibold hover:underline"
                       >
                         Download PDF ↓

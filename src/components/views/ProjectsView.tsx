@@ -15,7 +15,12 @@ interface Project {
   lastAudit: string;
 }
 
-export function ProjectsView() {
+interface ProjectsViewProps {
+  onRunAudit?: (projectName: string) => void;
+  onDeploy?: (projectName: string) => void;
+}
+
+export function ProjectsView({ onRunAudit, onDeploy }: ProjectsViewProps = {}) {
   const [search, setSearch] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
   const [newProjectName, setNewProjectName] = useState("");
@@ -197,13 +202,13 @@ export function ProjectsView() {
               </div>
               <div className="flex items-center gap-2">
                 <button
-                  onClick={() => alert(`Running pre-deployment audit for ${p.name}...`)}
+                  onClick={() => onRunAudit?.(p.name)}
                   className="px-3 py-1.5 bg-slate-50 hover:bg-slate-100 border border-[#E5E7EB] text-[#17172A] font-semibold rounded-lg text-xs transition-colors"
                 >
                   Audit
                 </button>
                 <button
-                  onClick={() => alert(`Navigating to deployment pipeline for ${p.name}...`)}
+                  onClick={() => onDeploy?.(p.name)}
                   className="px-3 py-1.5 bg-[#5938F5] hover:bg-[#4726DB] text-white font-semibold rounded-lg text-xs transition-colors"
                 >
                   Deploy

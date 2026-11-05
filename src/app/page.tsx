@@ -289,7 +289,17 @@ export default function DeployCheckApp() {
             />
           )}
 
-          {activeView === "projects" && <ProjectsView />}
+          {activeView === "projects" && (
+            <ProjectsView
+              onRunAudit={(_name) => {
+                setActiveView("audits");
+                runLiveAudit();
+              }}
+              onDeploy={(_name) => {
+                setActiveView("deployments");
+              }}
+            />
+          )}
 
           {activeView === "audits" && (
             <AuditReportsView
