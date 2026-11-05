@@ -9,6 +9,8 @@ export function MonitoringView() {
   const [newTargetName, setNewTargetName] = useState("");
   const [newTargetUrl, setNewTargetUrl] = useState("");
   const [newInterval, setNewInterval] = useState("60s");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
   const [probes, setProbes] = useState([
     {
       id: "probe-1",
@@ -177,6 +179,13 @@ export function MonitoringView() {
                 </select>
               </div>
 
+              {errorMessage && (
+                <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl text-rose-800 text-[11px] flex items-center justify-between">
+                  <span>❌ {errorMessage}</span>
+                  <button onClick={() => setErrorMessage(null)} className="text-rose-500 font-bold">✕</button>
+                </div>
+              )}
+
               <div className="p-3 bg-blue-50 border border-blue-200 rounded-xl text-blue-900 text-[11px]">
                 🛡️ <strong>SSRF Guard Invariant:</strong> DeployCheck validates all probe destinations against RFC 1918 private ranges, AWS/GCP instance metadata, and loopback IP addresses before socket creation.
               </div>
@@ -184,35 +193,65 @@ export function MonitoringView() {
 
             <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#E5E7EB]">
               <button
-                onClick={() => setShowAddModal(false)}
+                onClick={() => {
+                  setShowAddModal(false);
+                  setErrorMessage(null);
+                }}
                 className="px-4 py-2 border border-[#E5E7EB] rounded-xl text-xs font-semibold text-[#667085] hover:bg-slate-50"
               >
                 Cancel
               </button>
               <button
-                onClick={() => {
+                disabled={isSaving}
+                onClick={async () => {
                   if (!newTargetName.trim() || !newTargetUrl.trim()) return;
-                  setProbes([
-                    ...probes,
-                    {
-                      id: `probe-${Date.now()}`,
-                      name: newTargetName,
-                      url: newTargetUrl,
-                      interval: newInterval,
-                      latency: "54ms",
-                      status: "Operational",
-                      uptime: "100%",
-                      sslDays: 90,
-                      lastCheck: "Just now",
-                    },
-                  ]);
-                  setNewTargetName("");
-                  setNewTargetUrl("");
-                  setShowAddModal(false);
+                  setIsSaving(true);
+                  setErrorMessage(null);
+                  try {
+                    const res = await fetch("/api/v1/monitoring/targets", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        workspaceId: "ws_alpha",
+                        projectId: "proj_default",
+                        name: newTargetName,
+                        endpointUrl: newTargetUrl,
+                        intervalSeconds: newInterval === "30s" ? 30 : newInterval === "300s" ? 300 : 60,
+                      }),
+                    });
+                    if (res.ok) {
+                      const data = await res.json();
+                      const target = data.data;
+                      setProbes([
+                        ...probes,
+                        {
+                          id: target?.id || `probe-${Date.now()}`,
+                          name: target?.name || newTargetName,
+                          url: target?.endpointUrl || newTargetUrl,
+                          interval: `${target?.intervalSeconds || 60}s`,
+                          latency: "45ms",
+                          status: "Operational",
+                          uptime: "100%",
+                          sslDays: 90,
+                          lastCheck: "Just now",
+                        },
+                      ]);
+                      setNewTargetName("");
+                      setNewTargetUrl("");
+                      setShowAddModal(false);
+                    } else {
+                      const errData = await res.json();
+                      setErrorMessage(errData.error || "SSRF validation failed: Endpoint rejected by security policy.");
+                    }
+                  } catch {
+                    setErrorMessage("Connection failed. Check target format.");
+                  } finally {
+                    setIsSaving(false);
+                  }
                 }}
-                className="px-5 py-2 bg-[#5938F5] hover:bg-[#4726DB] text-white rounded-xl text-xs font-bold"
+                className="px-5 py-2 bg-[#5938F5] hover:bg-[#4726DB] text-white rounded-xl text-xs font-bold disabled:opacity-50"
               >
-                Create Target & Start Probing
+                {isSaving ? "Verifying SSRF..." : "Create Target & Start Probing"}
               </button>
             </div>
           </div>
