@@ -135,33 +135,33 @@ export function Sidebar({ activeView, onSelectView, collapsed, onToggleCollapse 
   return (
     <aside
       className={`${
-        collapsed ? "w-[72px]" : "w-64"
+        collapsed ? "w-[72px]" : "w-[270px]"
       } bg-white border-r border-[#E5E7EB] flex flex-col justify-between transition-all duration-200 shrink-0 z-20 h-screen sticky top-0 select-none`}
     >
       {/* Top: Brand Logo & Navigation */}
       <div className="flex-1 overflow-y-auto custom-scrollbar p-3">
         {/* Brand Header */}
-        <div className="flex items-center justify-between px-2 py-2.5 mb-3">
+        <div className="flex items-center justify-between px-2 py-2 mb-3">
           <div
             onClick={() => onSelectView("dashboard")}
-            className="flex items-center gap-3 overflow-hidden cursor-pointer group"
+            className="flex items-center gap-3 cursor-pointer group flex-1 min-w-0"
           >
             <div className="w-9 h-9 rounded-xl bg-[#5938F5] text-white flex items-center justify-center font-bold shadow-xs shrink-0 group-hover:bg-[#4726DB] transition-colors">
               <Zap size={20} className="text-white fill-white" />
             </div>
             {!collapsed && (
-              <div className="truncate">
-                <div className="flex items-center gap-1.5 leading-none">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-1.5 leading-none whitespace-nowrap">
                   <span className="font-extrabold text-[15px] text-[#17172A] tracking-tight">DevSparks</span>
-                  <span className="font-medium text-[15px] text-[#17172A]">DeployCheck</span>
+                  <span className="font-semibold text-[15px] text-[#5938F5]">DeployCheck</span>
                 </div>
-                <div className="text-[11px] text-[#667085] font-medium mt-1">By DevSparks India</div>
+                <div className="text-[11px] text-[#667085] font-medium mt-1 whitespace-nowrap">By DevSparks India</div>
               </div>
             )}
           </div>
           <button
             onClick={onToggleCollapse}
-            className="p-1.5 text-slate-400 hover:text-[#17172A] hover:bg-slate-50 rounded-lg transition-colors shrink-0"
+            className="p-1.5 text-slate-400 hover:text-[#17172A] hover:bg-slate-50 rounded-lg transition-colors shrink-0 ml-1"
             title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
             aria-label="Toggle sidebar collapse"
           >
