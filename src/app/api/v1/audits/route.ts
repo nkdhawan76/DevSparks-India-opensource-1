@@ -28,11 +28,19 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Convert file dictionary to Map for AuditEngine runner
+    // Convert file dictionary or file list to Map for AuditEngine runner
     const filesMap = new Map<string, string>();
     if (files && typeof files === "object") {
-      for (const [key, val] of Object.entries(files)) {
-        filesMap.set(key, String(val));
+      if (Array.isArray(files)) {
+        for (const f of files) {
+          if (f && typeof f === "object" && f.path && f.content !== undefined) {
+            filesMap.set(String(f.path), String(f.content));
+          }
+        }
+      } else {
+        for (const [key, val] of Object.entries(files)) {
+          filesMap.set(key, String(val));
+        }
       }
     }
 
