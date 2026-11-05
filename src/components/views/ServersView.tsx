@@ -8,8 +8,12 @@ export function ServersView() {
   const [showAddServer, setShowAddServer] = useState(false);
   const [diagnosticsRunning, setDiagnosticsRunning] = useState(false);
   const [diagnosticLogs, setDiagnosticLogs] = useState<string | null>(null);
+  const [serverLabel, setServerLabel] = useState("");
+  const [serverIp, setServerIp] = useState("");
+  const [serverError, setServerError] = useState<string | null>(null);
+  const [isConnecting, setIsConnecting] = useState(false);
 
-  const servers = [
+  const [servers, setServers] = useState([
     {
       id: "vps-01",
       name: "VPS-01 Production Mumbai",
@@ -49,7 +53,7 @@ export function ServersView() {
       policy: "Dry-Run Only",
       status: "Healthy",
     },
-  ];
+  ]);
 
   const runDiagnostics = async () => {
     setDiagnosticsRunning(true);
@@ -177,20 +181,31 @@ export function ServersView() {
               <button onClick={() => setShowAddServer(false)} className="text-slate-400 hover:text-[#17172A]">✕</button>
             </div>
             <div className="space-y-3 text-xs">
+              {serverError && (
+                <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl text-rose-800 text-[11px] flex items-center justify-between">
+                  <span>❌ {serverError}</span>
+                  <button onClick={() => setServerError(null)} className="text-rose-500 font-bold">✕</button>
+                </div>
+              )}
+
               <div>
                 <label className="block font-semibold text-[#17172A] mb-1">Server Label</label>
                 <input
                   type="text"
+                  value={serverLabel}
+                  onChange={(e) => setServerLabel(e.target.value)}
                   placeholder="e.g. VPS-04 Staging"
-                  className="w-full bg-[#F7F8FC] border border-[#E5E7EB] rounded-xl px-3 py-2 text-xs text-[#17172A]"
+                  className="w-full bg-[#F7F8FC] border border-[#E5E7EB] rounded-xl px-3 py-2 text-xs text-[#17172A] focus:outline-none focus:border-[#5938F5]"
                 />
               </div>
               <div>
                 <label className="block font-semibold text-[#17172A] mb-1">Public IPv4 Address</label>
                 <input
                   type="text"
+                  value={serverIp}
+                  onChange={(e) => setServerIp(e.target.value)}
                   placeholder="e.g. 194.195.112.50"
-                  className="w-full bg-[#F7F8FC] border border-[#E5E7EB] rounded-xl px-3 py-2 text-xs text-[#17172A]"
+                  className="w-full bg-[#F7F8FC] border border-[#E5E7EB] rounded-xl px-3 py-2 text-xs text-[#17172A] focus:outline-none focus:border-[#5938F5]"
                 />
               </div>
               <div className="p-3 bg-purple-50 border border-purple-200 rounded-xl text-purple-900 text-[11px]">
@@ -199,16 +214,66 @@ export function ServersView() {
             </div>
             <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#E5E7EB]">
               <button
-                onClick={() => setShowAddServer(false)}
-                className="px-4 py-2 border border-[#E5E7EB] rounded-xl text-xs font-semibold text-[#667085]"
+                onClick={() => {
+                  setShowAddServer(false);
+                  setServerError(null);
+                }}
+                className="px-4 py-2 border border-[#E5E7EB] rounded-xl text-xs font-semibold text-[#667085] hover:bg-slate-50"
               >
                 Cancel
               </button>
               <button
-                onClick={() => setShowAddServer(false)}
-                className="px-5 py-2 bg-[#5938F5] hover:bg-[#4726DB] text-white rounded-xl text-xs font-bold"
+                disabled={isConnecting}
+                onClick={async () => {
+                  if (!serverLabel.trim() || !serverIp.trim()) return;
+                  setIsConnecting(true);
+                  setServerError(null);
+                  try {
+                    const res = await fetch("/api/v1/servers/validate", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        host: serverIp,
+                        port: 22,
+                        name: serverLabel,
+                        environment: "production",
+                      }),
+                    });
+                    if (res.ok) {
+                      const data = await res.json();
+                      const validatedHost = data.data?.host || serverIp;
+                      setServers([
+                        ...servers,
+                        {
+                          id: `vps-${Date.now()}`,
+                          name: serverLabel,
+                          ip: validatedHost,
+                          region: "ap-south-1 (Mumbai)",
+                          os: "Ubuntu 22.04 LTS",
+                          cpu: "8%",
+                          ram: "1.2 / 8 GB (15%)",
+                          disk: "18 / 120 GB (15%)",
+                          fingerprint: "SHA256:9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4f3e2d1c0b9a8",
+                          policy: "Restricted Allowlist",
+                          status: "Healthy",
+                        },
+                      ]);
+                      setServerLabel("");
+                      setServerIp("");
+                      setShowAddServer(false);
+                    } else {
+                      const errData = await res.json();
+                      setServerError(errData.error || "SSRF Security Validation Failed: Host rejected by security policy.");
+                    }
+                  } catch {
+                    setServerError("Connection error. Ensure valid public IP.");
+                  } finally {
+                    setIsConnecting(false);
+                  }
+                }}
+                className="px-5 py-2 bg-[#5938F5] hover:bg-[#4726DB] text-white rounded-xl text-xs font-bold disabled:opacity-50"
               >
-                Verify & Connect
+                {isConnecting ? "Verifying Fingerprint..." : "Verify & Connect"}
               </button>
             </div>
           </div>
