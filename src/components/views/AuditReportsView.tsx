@@ -92,23 +92,23 @@ export function AuditReportsView({
       <div className="bg-white border border-[#E5E7EB] rounded-2xl p-6 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1.5">
-            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-[#16A34A] border border-emerald-200">
-              Deterministic Static Scanner v1.3
+            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-[#16A34A] border border-emerald-100">
+              Static Scanner v1.3
             </span>
-            <span className="text-xs text-[#667085]">Zero-Failure CI Protocol</span>
+            <span className="text-xs text-[#667085]">Automated Security Checks</span>
           </div>
           <h1 className="text-2xl font-extrabold tracking-tight text-[#17172A]">
-            Pre-Deployment Audit Engine
+            Pre-Deployment Audit Reports
           </h1>
           <p className="text-xs text-[#667085] mt-1">
-            Deep static inspection across dependencies, environment templates, Dockerfiles, and secrets.
+            Static inspection across dependencies, environment templates, Dockerfiles, and secrets.
           </p>
         </div>
 
         <button
           onClick={onRunAudit}
           disabled={isLoading}
-          className="px-5 py-2.5 bg-[#5938F5] hover:bg-[#4726DB] text-white text-xs font-bold rounded-xl shadow-sm transition-all flex items-center gap-2 self-start md:self-auto disabled:opacity-50"
+          className="px-5 py-2.5 bg-[#5938F5] hover:bg-[#4726DB] text-white text-xs font-bold rounded-xl shadow-xs transition-colors flex items-center gap-2 self-start md:self-auto disabled:opacity-50 active:scale-[0.98]"
         >
           <ShieldCheck size={16} className={isLoading ? "animate-spin" : ""} />
           <span>{isLoading ? "Scanning Workspace..." : "Trigger Live Audit"}</span>

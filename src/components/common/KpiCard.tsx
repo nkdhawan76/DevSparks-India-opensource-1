@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useId } from "react";
 import { ArrowUpRight, ArrowDownRight } from "./Icons";
 
 export interface KpiCardProps {
@@ -25,6 +25,9 @@ export function KpiCard({
   badge,
   sparklineColor = "purple",
 }: KpiCardProps) {
+  const generatedId = useId();
+  const gradientId = `kpi-grad-${sparklineColor}-${generatedId.replace(/:/g, "")}`;
+
   // Sparkline color themes
   const sparklineGradients = {
     purple: {
@@ -60,19 +63,25 @@ export function KpiCard({
   };
 
   const theme = sparklineGradients[sparklineColor] || sparklineGradients.purple;
-  const gradientId = `grad-${sparklineColor}-${Math.random().toString(36).substring(2, 6)}`;
 
   return (
-    <div className="bg-white border border-[#E5E7EB] rounded-2xl p-5 shadow-xs hover:shadow-sm transition-all flex flex-col justify-between group relative overflow-hidden">
+    <div className="bg-white border border-[#E5E7EB] rounded-2xl p-5 shadow-2xs hover:border-slate-300 transition-colors flex flex-col justify-between group relative overflow-hidden">
       <div>
         {/* Top: Icon + Title */}
-        <div className="flex items-center gap-2.5 mb-3">
-          {icon && (
-            <div className="w-8 h-8 rounded-xl bg-slate-50 border border-[#E5E7EB] flex items-center justify-center text-slate-700 shrink-0">
-              {icon}
-            </div>
+        <div className="flex items-center justify-between gap-2 mb-3">
+          <div className="flex items-center gap-2 min-w-0">
+            {icon && (
+              <div className="w-7 h-7 rounded-lg bg-slate-50 border border-[#E5E7EB] flex items-center justify-center text-slate-600 shrink-0">
+                {icon}
+              </div>
+            )}
+            <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider truncate">{title}</span>
+          </div>
+          {badge && (
+            <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 border border-[#E5E7EB]">
+              {badge}
+            </span>
           )}
-          <span className="text-xs font-semibold text-[#667085] truncate">{title}</span>
         </div>
 
         {/* Middle: Big Metric Value + Trend Indicator */}

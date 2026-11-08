@@ -51,8 +51,8 @@ function LoginForm() {
 
   return (
     <AuthLayout
-      title="Welcome Back"
-      subtitle="Sign in to your DevSparks DeployCheck operations plane"
+      title="Sign In"
+      subtitle="Access your DevSparks DeployCheck workspace"
     >
       {errorMsg && (
         <div className="mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-[#DC2626] flex items-center gap-2">

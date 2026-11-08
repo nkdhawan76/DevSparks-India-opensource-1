@@ -34,7 +34,7 @@ export function AuthLayout({ children, title, subtitle }: AuthLayoutProps) {
           </Link>
           <Link
             href="/signup"
-            className="px-3 py-1.5 rounded-lg bg-[#5938F5] text-white hover:bg-[#4726DB] transition-all shadow-xs"
+            className="px-3 py-1.5 rounded-lg bg-[#5938F5] text-white hover:bg-[#4726DB] transition-colors shadow-xs"
           >
             Create Account
           </Link>

@@ -95,7 +95,7 @@ export function Header({
           className="flex-1 max-w-md flex items-center relative cursor-pointer group"
         >
           <Search size={16} className="absolute left-3.5 text-slate-400 group-hover:text-slate-600 transition-colors" />
-          <div className="w-full bg-[#F7F8FC] group-hover:bg-slate-100/70 border border-[#E5E7EB] rounded-xl pl-10 pr-16 py-2 text-xs text-slate-400 select-none transition-all flex items-center justify-between shadow-2xs">
+          <div className="w-full bg-[#F7F8FC] group-hover:bg-slate-100/70 border border-[#E5E7EB] rounded-xl pl-10 pr-16 py-2 text-xs text-slate-400 select-none transition-colors flex items-center justify-between shadow-2xs">
             <span className="truncate">Search projects, servers, audits...</span>
           </div>
           <kbd className="absolute right-3 px-2 py-0.5 text-[10px] bg-white border border-[#E5E7EB] rounded-md text-slate-500 font-mono shadow-2xs">
@@ -109,7 +109,7 @@ export function Header({
         {/* New Project Primary Action */}
         <button
           onClick={() => onNavigateView?.("projects")}
-          className="hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#5938F5] hover:bg-[#4726DB] text-white text-xs font-semibold shadow-xs transition-all active:scale-[0.98]"
+          className="hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#5938F5] hover:bg-[#4726DB] text-white text-xs font-semibold shadow-xs transition-colors active:scale-[0.98]"
         >
           <Plus size={15} />
           <span>New Project</span>
@@ -120,7 +120,7 @@ export function Header({
         <button
           onClick={onRefreshHealth}
           disabled={isRefreshing}
-          className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-[#E5E7EB] bg-slate-50 hover:bg-white text-xs text-[#17172A] transition-all"
+          className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-[#E5E7EB] bg-slate-50 hover:bg-white text-xs text-[#17172A] transition-colors"
           title="System health status (click to refresh)"
         >
           <StatusBadge

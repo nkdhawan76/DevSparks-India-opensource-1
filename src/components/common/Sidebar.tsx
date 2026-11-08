@@ -194,11 +194,11 @@ export function Sidebar({
                 {!isOverview && (
                   <button
                     onClick={() => toggleGroup(section.group)}
-                    className="w-full flex items-center justify-between px-3 py-1 text-[11px] font-semibold text-[#667085] hover:text-[#17172A] tracking-normal transition-colors"
+                    className="w-full flex items-center justify-between px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider hover:text-slate-700 transition-colors"
                   >
                     <span>{section.group}</span>
                     <span className="text-slate-400">
-                      {isGroupCollapsed ? <ChevronDown size={14} /> : <ChevronUp size={14} />}
+                      {isGroupCollapsed ? <ChevronDown size={13} /> : <ChevronUp size={13} />}
                     </span>
                   </button>
                 )}
@@ -214,16 +214,16 @@ export function Sidebar({
                         <button
                           key={item.id}
                           onClick={() => handleItemClick(item.id)}
-                          className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs transition-all relative ${
+                          className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs transition-colors group relative ${
                             isActive
-                              ? "bg-[#5938F5] text-white shadow-xs font-semibold"
-                              : "text-[#334155] hover:bg-slate-50 hover:text-[#17172A] font-medium"
+                              ? "bg-purple-50/90 text-[#5938F5] font-semibold border-l-[3px] border-[#5938F5] shadow-2xs"
+                              : "text-slate-600 hover:bg-slate-50 hover:text-[#17172A] font-medium"
                           }`}
                         >
                           <Icon
-                            size={18}
-                            className={`shrink-0 ${
-                              isActive ? "text-white" : "text-slate-500 group-hover:text-[#17172A]"
+                            size={16}
+                            className={`shrink-0 transition-colors ${
+                              isActive ? "text-[#5938F5]" : "text-slate-400 group-hover:text-slate-700"
                             }`}
                           />
                           <span className="truncate">{item.label}</span>
