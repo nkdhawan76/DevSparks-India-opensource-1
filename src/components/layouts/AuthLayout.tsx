@@ -2,7 +2,8 @@
 
 import React, { useRef } from "react";
 import Link from "next/link";
-import { Zap, Check } from "lucide-react";
+import { Check } from "lucide-react";
+import { DeployCheckLogo } from "@/components/common/Icons";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { WebsiteHeader } from "@/components/navigation/WebsiteHeader";
@@ -193,9 +194,11 @@ export function AuthLayout({
               {/* Brand Header Inside Right Pane: strictly "DeployCheck" by "DevSparks India" */}
               <div className="mb-3.5">
                 <Link href="/" className="inline-flex items-center gap-2 group mb-2">
-                  <div className="w-7 h-7 rounded-[8px] bg-[#5938F5] text-white flex items-center justify-center font-bold shadow-xs group-hover:bg-[#4726DB] transition-all shrink-0">
-                    <Zap className="h-3.5 w-3.5 fill-white" />
-                  </div>
+                  <DeployCheckLogo
+                    size={28}
+                    className="w-7 h-7 shrink-0 shadow-xs transition-transform duration-150 group-hover:scale-105 active:scale-95"
+                    aria-hidden="true"
+                  />
                   <div className="flex flex-col">
                     <span className="font-extrabold text-xs text-[#17172A] tracking-tight leading-none group-hover:text-[#5938F5] transition-colors">
                       DeployCheck

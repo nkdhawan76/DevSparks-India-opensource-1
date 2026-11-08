@@ -20,7 +20,7 @@ import {
   Bell,
   ChevronDown,
   ChevronUp,
-  Zap,
+  DeployCheckLogo,
   X,
 } from "./Icons";
 
@@ -157,9 +157,11 @@ export function Sidebar({
             onClick={() => handleItemClick("dashboard")}
             className="flex items-center gap-3 cursor-pointer group flex-1 min-w-0"
           >
-            <div className="w-9 h-9 rounded-xl bg-[#5938F5] text-white flex items-center justify-center font-bold shadow-xs shrink-0 group-hover:bg-[#4726DB] transition-colors">
-              <Zap size={20} className="text-white fill-white" />
-            </div>
+            <DeployCheckLogo
+              size={36}
+              className="w-9 h-9 shrink-0 shadow-xs transition-transform duration-150 group-hover:scale-105 active:scale-95"
+              aria-hidden="true"
+            />
             <div className="flex-1 min-w-0">
               <div className="leading-none whitespace-nowrap">
                 <span className="font-extrabold text-[15px] text-[#17172A] tracking-tight">DeployCheck</span>

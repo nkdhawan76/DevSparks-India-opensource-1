@@ -624,7 +624,7 @@ export function DeployCheckLogo({ size = 32, className = "", ...props }: IconPro
       className={className}
       {...props}
     >
-      <circle cx="16" cy="16" r="16" fill="#5938F5" />
+      <rect width="32" height="32" rx="7" fill="#5938F5" />
       <polygon
         points="18 7 8 19 17 19 16 27 26 15 17 15 18 7"
         fill="#FFFFFF"
