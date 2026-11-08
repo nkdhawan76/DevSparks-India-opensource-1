@@ -71,3 +71,4 @@ INSERT INTO email_domain_allowlist (domain, reason) VALUES
     ('devsparks.in', 'DevSparks India primary domain'),
     ('devsparksindia.com', 'DevSparks India secondary domain')
 ON CONFLICT (domain) DO NOTHING;
+

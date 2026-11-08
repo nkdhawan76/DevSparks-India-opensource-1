@@ -17,7 +17,7 @@ export function AuthLayout({
   children,
   mode: _mode = "login",
 }: AuthLayoutProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const mainRef = useRef<HTMLElement>(null);
   const mockupRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -91,19 +91,16 @@ export function AuthLayout({
         });
       }
     },
-    { scope: containerRef }
+    { scope: mainRef }
   );
 
   return (
-    <div
-      ref={containerRef}
-      className="min-h-screen bg-[#F7F8FC] flex flex-col justify-between p-2.5 sm:p-4 font-sans antialiased text-[#17172A] select-none"
-    >
+    <div className="min-h-screen bg-[#F7F8FC] flex flex-col justify-between font-sans antialiased text-[#17172A] select-none">
       {/* Top Website Header with Mega Menus */}
       <WebsiteHeader />
 
       {/* Main Container with Outer Double-Line Frame and Curv 32px (Fully Responsive) */}
-      <main className="flex-1 flex items-center justify-center py-3 sm:py-6 w-full">
+      <main ref={mainRef} className="flex-1 flex items-center justify-center py-4 sm:py-8 px-2.5 sm:px-4 w-full">
         {/* Outer Frame with Padding & Outer Border Line */}
         <div className="auth-outer-frame w-full max-w-[750px] mx-auto p-1.5 sm:p-2.5 rounded-[24px] sm:rounded-[36px] bg-slate-100/70 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-xs ring-1 ring-slate-200/50">
           {/* Inner Card with Curv 32px & Inner Border Line */}

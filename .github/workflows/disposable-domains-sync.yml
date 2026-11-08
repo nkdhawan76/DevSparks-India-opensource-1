@@ -52,3 +52,4 @@ jobs:
           git add src/data/disposable-domains.json
           git commit -m "chore(security): sync disposable email domains upstream"
           git push origin main
+

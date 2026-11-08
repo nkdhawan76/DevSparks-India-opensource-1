@@ -120,12 +120,17 @@ export function ProductMegaMenu({ onClose }: { onClose?: () => void }) {
 
       const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
 
-      tl.from(containerRef.current, {
-        y: -6,
-        opacity: 0,
-        scale: 0.985,
-        duration: 0.22,
-      });
+      tl.fromTo(
+        containerRef.current,
+        { y: -6, opacity: 0, scale: 0.985 },
+        {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 0.22,
+          clearProps: "all",
+        }
+      );
 
       tl.from(
         ".product-column",

@@ -10,8 +10,6 @@ import { SolutionsMegaMenu } from "./SolutionsMegaMenu";
 import { ResourcesMegaMenu } from "./ResourcesMegaMenu";
 import { OpenSourceDropdown } from "./OpenSourceDropdown";
 import { MobileNavigationDrawer } from "./MobileNavigationDrawer";
-import { gsap } from "gsap";
-import { useGSAP } from "@gsap/react";
 
 type ActiveMenu = "product" | "solutions" | "resources" | "opensource" | null;
 
@@ -20,7 +18,6 @@ export function WebsiteHeader() {
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const navContainerRef = useRef<HTMLDivElement>(null);
-  const headerBarRef = useRef<HTMLElement>(null);
   const leaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Track window scroll for sticky visual elevation
@@ -32,24 +29,6 @@ export function WebsiteHeader() {
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  // Initial GSAP header entrance
-  useGSAP(
-    () => {
-      if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        return;
-      }
-      if (headerBarRef.current) {
-        gsap.from(headerBarRef.current, {
-          y: -10,
-          opacity: 0,
-          duration: 0.4,
-          ease: "power2.out",
-        });
-      }
-    },
-    { scope: navContainerRef }
-  );
 
   const handleMouseEnter = (menu: ActiveMenu) => {
     if (leaveTimeoutRef.current) {
@@ -98,8 +77,7 @@ export function WebsiteHeader() {
     >
       {/* Floating Sticky Header Container */}
       <header
-        ref={headerBarRef}
-        className={`max-w-6xl mx-auto w-full py-1.5 px-3 sm:px-4 rounded-2xl border transition-all duration-200 backdrop-blur-md flex items-center justify-between text-xs will-change-transform ${
+        className={`max-w-6xl mx-auto w-full py-1.5 px-3 sm:px-4 rounded-2xl border transition-colors transition-shadow duration-200 backdrop-blur-md flex items-center justify-between text-xs opacity-100 visible ${
           isScrolled
             ? "bg-white/95 border-slate-300/90 shadow-md shadow-slate-300/30 ring-1 ring-slate-200/50"
             : "bg-white/90 border-slate-200/90 shadow-xs"

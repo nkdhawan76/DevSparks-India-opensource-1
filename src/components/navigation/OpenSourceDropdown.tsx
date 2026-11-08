@@ -51,12 +51,17 @@ export function OpenSourceDropdown({ onClose }: { onClose?: () => void }) {
 
       const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
 
-      tl.from(containerRef.current, {
-        y: -4,
-        opacity: 0,
-        scale: 0.98,
-        duration: 0.2,
-      });
+      tl.fromTo(
+        containerRef.current,
+        { y: -4, opacity: 0, scale: 0.98 },
+        {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 0.2,
+          clearProps: "all",
+        }
+      );
 
       tl.from(
         ".dropdown-item",
