@@ -52,29 +52,29 @@ function LoginForm() {
       const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
 
       tl.from(".login-header", {
-        y: 12,
+        y: 10,
         opacity: 0,
-        duration: 0.4,
+        duration: 0.35,
       });
 
       tl.from(
         ".test-accounts-box",
         {
-          y: 10,
+          y: 8,
           opacity: 0,
           scale: 0.98,
-          duration: 0.35,
+          duration: 0.3,
         },
-        "-=0.2"
+        "-=0.15"
       );
 
       tl.from(
         ".login-input-row",
         {
-          y: 12,
+          y: 10,
           opacity: 0,
-          duration: 0.35,
-          stagger: 0.06,
+          duration: 0.3,
+          stagger: 0.05,
         },
         "-=0.15"
       );
@@ -82,9 +82,9 @@ function LoginForm() {
       tl.from(
         ".login-submit-btn",
         {
-          scale: 0.97,
+          scale: 0.98,
           opacity: 0,
-          duration: 0.35,
+          duration: 0.3,
         },
         "-=0.1"
       );
@@ -92,18 +92,18 @@ function LoginForm() {
       tl.from(
         ".login-sso-section",
         {
-          y: 10,
+          y: 8,
           opacity: 0,
-          duration: 0.35,
+          duration: 0.3,
         },
-        "-=0.15"
+        "-=0.1"
       );
 
       tl.from(
         ".login-footer-row",
         {
           opacity: 0,
-          duration: 0.3,
+          duration: 0.25,
         },
         "-=0.1"
       );
@@ -173,12 +173,11 @@ function LoginForm() {
       setPassword("ChangeMe_Admin_2026!");
     }
 
-    // GSAP micro-pulse feedback on the inputs
     if (formScopeRef.current) {
       gsap.fromTo(
         formScopeRef.current.querySelectorAll(".shadcn-auth-input"),
         { borderColor: "#5938F5", backgroundColor: "rgba(89, 56, 245, 0.05)" },
-        { borderColor: "#E5E7EB", backgroundColor: "#ffffff", duration: 0.5, ease: "power2.out" }
+        { borderColor: "#E5E7EB", backgroundColor: "#ffffff", duration: 0.45, ease: "power2.out" }
       );
     }
   };
@@ -187,11 +186,11 @@ function LoginForm() {
     <AuthLayout mode="login">
       <div ref={formScopeRef}>
         {/* Form Header */}
-        <div className="login-header mb-6">
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#17172A]">
+        <div className="login-header mb-3.5">
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#17172A]">
             Welcome Back
           </h1>
-          <p className="text-xs text-[#667085] mt-1.5">
+          <p className="text-[11px] text-[#667085] mt-0.5">
             Sign in to your DevSparks DeployCheck account
           </p>
         </div>
@@ -200,9 +199,9 @@ function LoginForm() {
         {errorMsg && (
           <div
             ref={errorRef}
-            className="mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-[#DC2626] flex items-center gap-2 will-change-transform"
+            className="mb-3 p-2.5 rounded-lg bg-rose-50 border border-rose-200 text-[11px] text-[#DC2626] flex items-center gap-2 will-change-transform"
           >
-            <AlertCircle className="h-4 w-4 shrink-0" />
+            <AlertCircle className="h-3.5 w-3.5 shrink-0" />
             <span>{errorMsg}</span>
           </div>
         )}
@@ -210,38 +209,38 @@ function LoginForm() {
         {successMsg && (
           <div
             ref={successRef}
-            className="mb-4 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-[#16A34A] flex items-center gap-2 will-change-transform"
+            className="mb-3 p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-[11px] text-[#16A34A] flex items-center gap-2 will-change-transform"
           >
-            <CheckCircle2 className="h-4 w-4 shrink-0" />
+            <CheckCircle2 className="h-3.5 w-3.5 shrink-0" />
             <span>{successMsg}</span>
           </div>
         )}
 
-        {/* 1-Click Developer Test Account Switcher (shadcn style) */}
-        <div className="test-accounts-box mb-5 p-2 rounded-xl bg-slate-50 border border-[#E5E7EB] shadow-2xs">
-          <div className="flex items-center justify-between mb-1.5 px-1">
-            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
-              <Zap className="h-3 w-3 text-[#5938F5]" />
-              <span>Developer Test Accounts</span>
+        {/* 1-Click Developer Test Account Switcher (Compact) */}
+        <div className="test-accounts-box mb-3.5 p-1.5 rounded-lg bg-slate-50 border border-[#E5E7EB]">
+          <div className="flex items-center justify-between mb-1 px-1">
+            <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
+              <Zap className="h-2.5 w-2.5 text-[#5938F5]" />
+              <span>Test Accounts</span>
             </span>
-            <Badge variant="secondary" className="text-[10px] py-0 px-1.5 font-mono">
-              1-click fill
+            <Badge variant="secondary" className="text-[9px] py-0 px-1 font-mono h-3.5">
+              1-click
             </Badge>
           </div>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-1.5">
             <Button
               type="button"
               variant={activeTestFill === "super" ? "default" : "outline"}
               size="sm"
               onClick={() => handleQuickFill("super")}
-              className={`h-auto p-2 justify-start flex-col items-start text-left transition-all active:scale-[0.98] ${
+              className={`h-auto p-1.5 justify-start flex-col items-start text-left rounded-md ${
                 activeTestFill === "super"
                   ? "bg-purple-50 text-[#5938F5] border-[#5938F5] hover:bg-purple-100"
                   : "bg-white hover:bg-slate-50 text-[#17172A]"
               }`}
             >
-              <span className="font-bold text-[11px] truncate w-full">Super Admin</span>
-              <span className="text-[10px] text-slate-500 font-mono font-normal truncate w-full">
+              <span className="font-bold text-[10px] truncate w-full">Super Admin</span>
+              <span className="text-[9px] text-slate-400 font-mono font-normal truncate w-full">
                 nikhil@devsparks...
               </span>
             </Button>
@@ -251,14 +250,14 @@ function LoginForm() {
               variant={activeTestFill === "admin" ? "default" : "outline"}
               size="sm"
               onClick={() => handleQuickFill("admin")}
-              className={`h-auto p-2 justify-start flex-col items-start text-left transition-all active:scale-[0.98] ${
+              className={`h-auto p-1.5 justify-start flex-col items-start text-left rounded-md ${
                 activeTestFill === "admin"
                   ? "bg-purple-50 text-[#5938F5] border-[#5938F5] hover:bg-purple-100"
                   : "bg-white hover:bg-slate-50 text-[#17172A]"
               }`}
             >
-              <span className="font-bold text-[11px] truncate w-full">Workspace Admin</span>
-              <span className="text-[10px] text-slate-500 font-mono font-normal truncate w-full">
+              <span className="font-bold text-[10px] truncate w-full">Workspace Admin</span>
+              <span className="text-[9px] text-slate-400 font-mono font-normal truncate w-full">
                 admin.test@acs...
               </span>
             </Button>
@@ -266,12 +265,12 @@ function LoginForm() {
         </div>
 
         {/* Main Login Form with shadcn components */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-3">
           {/* Email Address */}
-          <div className="login-input-row space-y-1.5">
+          <div className="login-input-row space-y-1">
             <Label htmlFor="email">Email Address</Label>
             <div className="relative">
-              <Mail className="absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
+              <Mail className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
               <Input
                 id="email"
                 type="email"
@@ -283,24 +282,24 @@ function LoginForm() {
                 }}
                 required
                 autoComplete="email"
-                className="shadcn-auth-input pl-10"
+                className="shadcn-auth-input pl-8.5 h-9"
               />
             </div>
           </div>
 
           {/* Password */}
-          <div className="login-input-row space-y-1.5">
+          <div className="login-input-row space-y-1">
             <div className="flex items-center justify-between">
               <Label htmlFor="password">Password</Label>
               <Link
                 href="/forgot-password"
-                className="text-xs font-semibold text-[#5938F5] hover:underline"
+                className="text-[11px] font-semibold text-[#5938F5] hover:underline"
               >
                 Forgot password?
               </Link>
             </div>
             <div className="relative">
-              <Lock className="absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
+              <Lock className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
               <Input
                 id="password"
                 type={showPassword ? "text" : "password"}
@@ -312,15 +311,15 @@ function LoginForm() {
                 }}
                 required
                 autoComplete="current-password"
-                className="shadcn-auth-input pl-10 pr-11"
+                className="shadcn-auth-input pl-8.5 pr-8.5 h-9"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3.5 top-3 text-slate-400 hover:text-slate-700"
+                className="absolute right-2.5 top-2.5 text-slate-400 hover:text-slate-700"
                 title={showPassword ? "Hide password" : "Show password"}
               >
-                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                {showPassword ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
               </button>
             </div>
           </div>
@@ -332,7 +331,7 @@ function LoginForm() {
               checked={rememberMe}
               onCheckedChange={(checked) => setRememberMe(!!checked)}
             />
-            <Label htmlFor="remember" className="font-medium text-[#667085] cursor-pointer">
+            <Label htmlFor="remember" className="font-normal text-[#667085] cursor-pointer text-[11px]">
               Remember me
             </Label>
           </div>
@@ -341,14 +340,14 @@ function LoginForm() {
           <Button
             type="submit"
             disabled={isLoading}
-            className="login-submit-btn w-full h-11 text-xs font-bold gap-2 mt-2 shadow-md shadow-[#5938F5]/20 active:scale-[0.99] transition-all"
+            className="login-submit-btn w-full h-9 text-xs font-semibold gap-1.5 mt-1 shadow-xs"
           >
             {isLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
             ) : (
               <>
                 <span>Sign In</span>
-                <ArrowRight className="h-4 w-4" />
+                <ArrowRight className="h-3.5 w-3.5" />
               </>
             )}
           </Button>
@@ -356,50 +355,52 @@ function LoginForm() {
 
         {/* Or Continue With Social SSO */}
         <div className="login-sso-section">
-          <div className="relative my-6">
+          <div className="relative my-3.5">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-[#E5E7EB]" />
             </div>
-            <div className="relative flex justify-center text-xs">
-              <span className="bg-white px-3 text-[#667085] font-medium">
+            <div className="relative flex justify-center text-[10px]">
+              <span className="bg-white px-2.5 text-[#667085] font-medium">
                 Or continue with
               </span>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-2">
             <Button
               type="button"
               variant="outline"
+              size="sm"
               onClick={() => {
                 setEmail("nikhil@devsparksindia.com");
                 setPassword("DevSparks@2026!");
               }}
-              className="gap-2.5 h-10 border-[#E5E7EB] hover:bg-slate-50 active:scale-[0.98] transition-transform"
+              className="gap-2 h-8.5 border-[#E5E7EB] hover:bg-slate-50 text-xs"
             >
-              <GitHubIcon size={16} />
+              <GitHubIcon size={14} />
               <span>GitHub</span>
             </Button>
 
             <Button
               type="button"
               variant="outline"
+              size="sm"
               onClick={() => {
                 setEmail("admin.test@acs-solar.local");
                 setPassword("ChangeMe_Admin_2026!");
               }}
-              className="gap-2.5 h-10 border-[#E5E7EB] hover:bg-slate-50 active:scale-[0.98] transition-transform"
+              className="gap-2 h-8.5 border-[#E5E7EB] hover:bg-slate-50 text-xs"
             >
-              <GoogleIcon size={16} />
+              <GoogleIcon size={14} />
               <span>Google</span>
             </Button>
           </div>
         </div>
 
         {/* Bottom Footer Switcher */}
-        <div className="login-footer-row mt-8 text-center text-xs text-[#667085]">
+        <div className="login-footer-row mt-4 text-center text-[11px] text-[#667085]">
           <span>Don&apos;t have an account? </span>
-          <Link href="/signup" className="font-bold text-[#5938F5] hover:underline">
+          <Link href="/signup" className="font-semibold text-[#5938F5] hover:underline">
             Create Account
           </Link>
         </div>
