@@ -25,7 +25,7 @@ const RELEASES = [
     version: "v0.1.0-dev",
     date: "November 8, 2026",
     badge: "Current Release",
-    badgeVariant: "purple" as const,
+    badgeVariant: "default" as const,
     highlights: [
       "Complete public marketing website with dedicated product, feature, solution, legal, and resource pages.",
       "Refined high-contrast mega menus (Product, Solutions, Resources) with balanced 4-item columns and CLI bottom bars.",
@@ -39,7 +39,7 @@ const RELEASES = [
     version: "v0.0.3-alpha",
     date: "November 5, 2026",
     badge: "Milestone",
-    badgeVariant: "blue" as const,
+    badgeVariant: "secondary" as const,
     highlights: [
       "Responsive authenticated dashboard shell with collapsible navigation sidebar and mobile drawer.",
       "Complete developer authentication flow: Sign-In, Sign-Up, Password Recovery, and Session Management.",
@@ -63,7 +63,7 @@ const RELEASES = [
     version: "v0.0.1-alpha",
     date: "November 3, 2026",
     badge: "Foundation",
-    badgeVariant: "secondary" as const,
+    badgeVariant: "outline" as const,
     highlights: [
       "Core architecture definition (ARD & PRD master specifications).",
       "Modular monolith Next.js 14 App Router project setup with strict TypeScript configuration.",

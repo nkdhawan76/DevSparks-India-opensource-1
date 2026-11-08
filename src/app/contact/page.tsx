@@ -9,7 +9,6 @@ import { Label } from "@/components/ui/label";
 import {
   Mail,
   User,
-  MessageSquare,
   Send,
   CheckCircle2,
   AlertCircle,

@@ -6,7 +6,6 @@ import { CTASection } from "@/components/marketing/CTASection";
 import { FAQAccordion, FAQItem } from "@/components/marketing/FAQAccordion";
 import { getRouteMetadata } from "@/lib/metadata-registry";
 import {
-  Wrench,
   Clock,
   Database,
   Trash2,

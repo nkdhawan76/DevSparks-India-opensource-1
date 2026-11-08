@@ -50,7 +50,7 @@ const TIERS = [
     price: "$29",
     period: "per workspace / month",
     badge: "Most Popular",
-    badgeVariant: "purple" as const,
+    badgeVariant: "default" as const,
     description: "Advanced team collaboration, granular permissions, and priority support.",
     features: [
       "Everything in Community Core",
@@ -71,7 +71,7 @@ const TIERS = [
     price: "Planned",
     period: "Milestone 9",
     badge: "Upcoming",
-    badgeVariant: "blue" as const,
+    badgeVariant: "secondary" as const,
     description: "Zero-ops fully managed multi-tenant cloud hosting with multi-region edge probes.",
     features: [
       "Everything in Team Self-Hosted",
