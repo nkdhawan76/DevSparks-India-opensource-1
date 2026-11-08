@@ -10,6 +10,10 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["Inter", "-apple-system", "BlinkMacSystemFont", '"Segoe UI"', "Roboto", "sans-serif"],
+        mono: ["Inter", "-apple-system", "BlinkMacSystemFont", '"Segoe UI"', "Roboto", "sans-serif"],
+      },
       colors: {
         deploycheck: {
           bg: "#F7F8FC",
@@ -42,4 +46,3 @@ const config: Config = {
 };
 
 export default config;
-

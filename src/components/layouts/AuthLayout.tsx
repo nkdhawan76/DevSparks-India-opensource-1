@@ -117,31 +117,54 @@ export function AuthLayout({
       ref={containerRef}
       className="min-h-screen bg-[#F7F8FC] flex flex-col justify-between p-4 sm:p-6 lg:p-8 font-sans antialiased text-[#17172A] select-none"
     >
-      {/* Top Header Bar with Brand & Mode Switcher */}
-      <header className="auth-header max-w-[890px] mx-auto w-full flex items-center justify-between text-xs py-2">
-        <Link href="/" className="inline-flex items-center gap-2.5 group">
-          <div className="w-8 h-8 rounded-[8px] bg-[#5938F5] text-white flex items-center justify-center font-bold shadow-xs group-hover:bg-[#4726DB] transition-all group-hover:scale-105 active:scale-95">
-            <Zap className="h-4 w-4 fill-white" />
-          </div>
-          <div className="flex flex-col">
-            <span className="font-bold text-sm text-[#17172A] tracking-tight leading-none">
-              DevSparks <span className="text-[#5938F5]">DeployCheck</span>
-            </span>
-            <span className="text-[10px] text-slate-400 font-medium leading-tight mt-0.5">By DevSparks India</span>
-          </div>
-        </Link>
+      {/* Redesigned Floating Studio Header Bar with Brand, Status Pill & Mode Switcher */}
+      <header className="auth-header max-w-[890px] mx-auto w-full py-2.5 px-4 rounded-2xl bg-white/80 border border-slate-200/90 shadow-xs backdrop-blur-md flex items-center justify-between text-xs">
+        {/* Brand Identity & Live Operational Status */}
+        <div className="flex items-center gap-3">
+          <Link href="/" className="inline-flex items-center gap-2.5 group">
+            <div className="w-8 h-8 rounded-[8px] bg-gradient-to-br from-[#5938F5] to-[#4726DB] text-white flex items-center justify-center font-bold shadow-xs group-hover:scale-105 active:scale-95 transition-all">
+              <Zap className="h-4 w-4 fill-white" />
+            </div>
+            <div className="flex flex-col">
+              <div className="flex items-center gap-1.5 leading-none">
+                <span className="font-extrabold text-sm text-[#17172A] tracking-tight">
+                  DevSparks
+                </span>
+                <span className="font-bold text-sm text-[#5938F5]">
+                  DeployCheck
+                </span>
+              </div>
+              <span className="text-[9.5px] text-slate-400 font-medium leading-tight mt-0.5">
+                By DevSparks India
+              </span>
+            </div>
+          </Link>
+
+          {/* Live System Operational Pill */}
+          <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-[10px] font-semibold text-emerald-700 ml-1 select-none">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span>Systems Operational</span>
+          </span>
+        </div>
+
+        {/* Center Minimal Version Tag */}
+        <div className="hidden md:flex items-center gap-2">
+          <span className="px-2 py-0.5 rounded-md bg-slate-100 border border-slate-200/80 text-[10px] font-medium text-slate-500 select-none">
+            v0.1.0-dev
+          </span>
+        </div>
 
         {/* Top Right Auth Action Switcher */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-2 sm:gap-2.5">
           {mode === "login" ? (
             <>
-              <span className="text-xs font-semibold text-[#17172A] px-1.5">
+              <span className="text-xs font-semibold text-[#17172A] px-2 py-1 select-none">
                 Sign In
               </span>
               <Button
                 size="sm"
                 asChild
-                className="rounded-full px-4 h-8 text-xs font-semibold bg-[#5938F5] hover:bg-[#4726DB] text-white shadow-2xs"
+                className="rounded-[8px] px-3.5 h-8 text-xs font-semibold bg-[#5938F5] hover:bg-[#4726DB] text-white shadow-2xs"
               >
                 <Link href="/signup">Create Account</Link>
               </Button>
@@ -149,13 +172,13 @@ export function AuthLayout({
           ) : mode === "signup" ? (
             <>
               <span className="hidden sm:inline text-xs text-[#667085]">
-                Already registered?
+                Already have an account?
               </span>
               <Button
                 variant="outline"
                 size="sm"
                 asChild
-                className="rounded-full px-4 h-8 text-xs font-semibold border-[#E5E7EB] hover:bg-slate-50"
+                className="rounded-[8px] px-3.5 h-8 text-xs font-semibold border-[#E5E7EB] hover:bg-slate-50"
               >
                 <Link href="/login">Sign In</Link>
               </Button>
@@ -165,7 +188,7 @@ export function AuthLayout({
               variant="outline"
               size="sm"
               asChild
-              className="rounded-full px-4 h-8 text-xs font-semibold border-[#E5E7EB] hover:bg-slate-50"
+              className="rounded-[8px] px-3.5 h-8 text-xs font-semibold border-[#E5E7EB] hover:bg-slate-50"
             >
               <Link href="/login">Back to Sign In</Link>
             </Button>
