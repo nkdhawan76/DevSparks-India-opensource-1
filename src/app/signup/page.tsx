@@ -4,7 +4,19 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { AuthLayout } from "@/components/layouts/AuthLayout";
-import { RefreshCw, CheckCircle2, AlertCircle, Zap } from "@/components/common/Icons";
+import {
+  RefreshCw,
+  CheckCircle2,
+  AlertCircle,
+  Mail,
+  Lock,
+  User,
+  ArrowRight,
+  Eye,
+  EyeOff,
+  GitHubIcon,
+  GoogleIcon,
+} from "@/components/common/Icons";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -15,6 +27,7 @@ export default function SignupPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
@@ -26,9 +39,6 @@ export default function SignupPage() {
   const hasNumberOrSymbol = /[0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password);
   const strengthScore = [hasMinLength, hasUppercase, hasLowercase, hasNumberOrSymbol].filter(Boolean).length;
 
-  const strengthLabels = ["Very Weak", "Weak", "Fair", "Good", "Strong"];
-  const strengthColors = ["bg-rose-400", "bg-rose-400", "bg-amber-400", "bg-blue-400", "bg-emerald-500"];
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg(null);
@@ -39,12 +49,12 @@ export default function SignupPage() {
     }
 
     if (strengthScore < 3) {
-      setErrorMsg("Please choose a stronger password matching the criteria below.");
+      setErrorMsg("Please choose a stronger password (at least 8 chars, mixed case, and numbers/symbols).");
       return;
     }
 
     if (!acceptTerms) {
-      setErrorMsg("You must accept the Terms of Service to proceed.");
+      setErrorMsg("You must agree to the Terms of Use and Privacy Policy to proceed.");
       return;
     }
 
@@ -59,7 +69,7 @@ export default function SignupPage() {
 
       const data = await res.json();
       if (!res.ok) {
-        setErrorMsg(data.error || "Registration failed.");
+        setErrorMsg(data.error || "Failed to create developer account.");
         setIsLoading(false);
         return;
       }
@@ -77,115 +87,126 @@ export default function SignupPage() {
 
   return (
     <AuthLayout mode="signup">
-      <div className="bg-white border border-[#E5E7EB] rounded-2xl p-7 sm:p-9 shadow-xl shadow-slate-200/50 relative">
-        <div className="text-center mb-6">
-          <div className="w-12 h-12 rounded-2xl bg-[#5938F5] text-white flex items-center justify-center mx-auto mb-3.5 shadow-md shadow-[#5938F5]/25">
-            <Zap size={24} className="fill-white" />
-          </div>
-          <h1 className="text-2xl font-bold tracking-tight text-[#17172A]">
-            Create Developer Account
-          </h1>
-          <p className="text-xs text-[#667085] mt-1.5">
-            Register a new workspace on DevSparks DeployCheck
-          </p>
+      {/* Form Header */}
+      <div className="mb-6">
+        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#17172A]">
+          Create an Account
+        </h1>
+        <p className="text-xs text-[#667085] mt-1.5">
+          Get started with DevSparks DeployCheck
+        </p>
+      </div>
+
+      {/* Alert Messages */}
+      {errorMsg && (
+        <div className="mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-[#DC2626] flex items-center gap-2">
+          <AlertCircle size={15} className="shrink-0" />
+          <span>{errorMsg}</span>
         </div>
+      )}
 
-        {errorMsg && (
-          <div className="mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-[#DC2626] flex items-center gap-2">
-            <AlertCircle size={15} className="shrink-0" />
-            <span>{errorMsg}</span>
-          </div>
-        )}
-
-        {successMsg && (
-          <div className="mb-4 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-[#16A34A] flex items-center gap-2">
-            <CheckCircle2 size={15} className="shrink-0" />
-            <span>{successMsg}</span>
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} className="space-y-3.5 text-xs">
-        <div>
-          <label className="block font-semibold text-[#17172A] mb-1">Full Name</label>
-          <input
-            type="text"
-            placeholder="Nikhil Dhawan"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            autoComplete="name"
-            className="w-full bg-[#F7F8FC] border border-[#E5E7EB] rounded-xl px-3.5 py-2.5 text-xs text-[#17172A] placeholder-slate-400 focus:outline-none focus:border-[#5938F5] focus:bg-white transition-all shadow-2xs"
-          />
+      {successMsg && (
+        <div className="mb-4 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-[#16A34A] flex items-center gap-2">
+          <CheckCircle2 size={15} className="shrink-0" />
+          <span>{successMsg}</span>
         </div>
+      )}
 
+      {/* Signup Form */}
+      <form onSubmit={handleSubmit} className="space-y-3.5 text-xs">
+        {/* Full Name */}
         <div>
-          <label className="block font-semibold text-[#17172A] mb-1">Work Email Address</label>
-          <input
-            type="email"
-            placeholder="developer@company.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            autoComplete="email"
-            className="w-full bg-[#F7F8FC] border border-[#E5E7EB] rounded-xl px-3.5 py-2.5 text-xs text-[#17172A] placeholder-slate-400 focus:outline-none focus:border-[#5938F5] focus:bg-white transition-all shadow-2xs"
-          />
-        </div>
-
-        <div>
-          <label className="block font-semibold text-[#17172A] mb-1">Password</label>
+          <label className="block font-semibold text-[#17172A] mb-1">
+            Full Name
+          </label>
           <div className="relative">
+            <User size={16} className="absolute left-3.5 top-3 text-slate-400" />
+            <input
+              type="text"
+              placeholder="Enter your full name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              autoComplete="name"
+              className="w-full bg-white border border-[#E5E7EB] hover:border-slate-300 focus:border-[#5938F5] focus:ring-2 focus:ring-[#5938F5]/10 rounded-xl pl-10 pr-3.5 py-2.5 text-xs text-[#17172A] placeholder-slate-400 focus:outline-none transition-colors shadow-2xs"
+            />
+          </div>
+        </div>
+
+        {/* Email Address */}
+        <div>
+          <label className="block font-semibold text-[#17172A] mb-1">
+            Email Address
+          </label>
+          <div className="relative">
+            <Mail size={16} className="absolute left-3.5 top-3 text-slate-400" />
+            <input
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              autoComplete="email"
+              className="w-full bg-white border border-[#E5E7EB] hover:border-slate-300 focus:border-[#5938F5] focus:ring-2 focus:ring-[#5938F5]/10 rounded-xl pl-10 pr-3.5 py-2.5 text-xs text-[#17172A] placeholder-slate-400 focus:outline-none transition-colors shadow-2xs"
+            />
+          </div>
+        </div>
+
+        {/* Password */}
+        <div>
+          <label className="block font-semibold text-[#17172A] mb-1">
+            Password
+          </label>
+          <div className="relative">
+            <Lock size={16} className="absolute left-3.5 top-3 text-slate-400" />
             <input
               type={showPassword ? "text" : "password"}
-              placeholder="••••••••••••"
+              placeholder="Create a password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               autoComplete="new-password"
-              className="w-full bg-[#F7F8FC] border border-[#E5E7EB] rounded-xl pl-3.5 pr-12 py-2.5 text-xs text-[#17172A] placeholder-slate-400 focus:outline-none focus:border-[#5938F5] focus:bg-white transition-all shadow-2xs"
+              className="w-full bg-white border border-[#E5E7EB] hover:border-slate-300 focus:border-[#5938F5] focus:ring-2 focus:ring-[#5938F5]/10 rounded-xl pl-10 pr-11 py-2.5 text-xs text-[#17172A] placeholder-slate-400 focus:outline-none transition-colors shadow-2xs"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-2.5 text-slate-400 hover:text-[#17172A] text-[11px] font-medium"
+              className="absolute right-3.5 top-3 text-slate-400 hover:text-slate-700"
+              title={showPassword ? "Hide password" : "Show password"}
             >
-              {showPassword ? "Hide" : "Show"}
+              {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
             </button>
           </div>
-
-          {/* Password Strength Indicator */}
-          {password.length > 0 && (
-            <div className="mt-2 space-y-1.5">
-              <div className="flex items-center justify-between text-[10px]">
-                <span className="text-[#667085]">Password strength:</span>
-                <span className="font-semibold text-[#17172A]">{strengthLabels[strengthScore]}</span>
-              </div>
-              <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden flex gap-1">
-                {[1, 2, 3, 4].map((step) => (
-                  <div
-                    key={step}
-                    className={`h-full flex-1 rounded-full transition-all ${
-                      strengthScore >= step ? strengthColors[strengthScore] : "bg-slate-200"
-                    }`}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
         </div>
 
+        {/* Confirm Password */}
         <div>
-          <label className="block font-semibold text-[#17172A] mb-1">Confirm Password</label>
-          <input
-            type={showPassword ? "text" : "password"}
-            placeholder="••••••••••••"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-            autoComplete="new-password"
-            className="w-full bg-[#F7F8FC] border border-[#E5E7EB] rounded-xl px-3.5 py-2.5 text-xs text-[#17172A] placeholder-slate-400 focus:outline-none focus:border-[#5938F5] focus:bg-white transition-all shadow-2xs"
-          />
+          <label className="block font-semibold text-[#17172A] mb-1">
+            Confirm Password
+          </label>
+          <div className="relative">
+            <Lock size={16} className="absolute left-3.5 top-3 text-slate-400" />
+            <input
+              type={showConfirmPassword ? "text" : "password"}
+              placeholder="Confirm your password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+              autoComplete="new-password"
+              className="w-full bg-white border border-[#E5E7EB] hover:border-slate-300 focus:border-[#5938F5] focus:ring-2 focus:ring-[#5938F5]/10 rounded-xl pl-10 pr-11 py-2.5 text-xs text-[#17172A] placeholder-slate-400 focus:outline-none transition-colors shadow-2xs"
+            />
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className="absolute right-3.5 top-3 text-slate-400 hover:text-slate-700"
+              title={showConfirmPassword ? "Hide password" : "Show password"}
+            >
+              {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+            </button>
+          </div>
         </div>
 
+        {/* Terms Agreement Checkbox */}
         <div className="pt-1">
           <label className="flex items-start gap-2 cursor-pointer select-none">
             <input
@@ -195,12 +216,12 @@ export default function SignupPage() {
               className="w-4 h-4 rounded text-[#5938F5] focus:ring-0 border-[#E5E7EB] mt-0.5"
             />
             <span className="text-[11px] text-[#667085] leading-snug">
-              I accept the{" "}
-              <span className="font-semibold text-[#17172A] hover:underline cursor-pointer">
-                Terms of Service
+              I agree to the{" "}
+              <span className="font-semibold text-[#5938F5] hover:underline cursor-pointer">
+                Terms of Use
               </span>{" "}
-              and acknowledge the{" "}
-              <span className="font-semibold text-[#17172A] hover:underline cursor-pointer">
+              and{" "}
+              <span className="font-semibold text-[#5938F5] hover:underline cursor-pointer">
                 Privacy Policy
               </span>
               .
@@ -208,22 +229,73 @@ export default function SignupPage() {
           </label>
         </div>
 
+        {/* Primary Submit Button */}
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full py-2.5 px-4 rounded-xl bg-[#5938F5] hover:bg-[#4726DB] text-white text-xs font-semibold shadow-xs transition-all active:scale-[0.99] flex items-center justify-center gap-2 disabled:opacity-60 mt-3"
+          className="w-full py-3 px-4 rounded-xl bg-[#5938F5] hover:bg-[#4726DB] text-white text-xs font-bold shadow-md shadow-[#5938F5]/20 hover:shadow-lg transition-all active:scale-[0.99] flex items-center justify-center gap-2 disabled:opacity-60 cursor-pointer mt-2"
         >
-          {isLoading && <RefreshCw size={14} className="animate-spin" />}
-          <span>{isLoading ? "Creating Account..." : "Create Developer Account"}</span>
+          {isLoading ? (
+            <RefreshCw size={15} className="animate-spin" />
+          ) : (
+            <>
+              <span>Create Account</span>
+              <ArrowRight size={15} />
+            </>
+          )}
         </button>
       </form>
 
-        <div className="mt-5 pt-4 border-t border-[#F1F4F9] text-center text-xs text-[#667085]">
-          <span>Already have an account? </span>
-          <Link href="/login" className="font-semibold text-[#5938F5] hover:underline">
-            Sign In
-          </Link>
+      {/* Or Sign Up With Social SSO */}
+      <div className="relative my-5">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full border-t border-[#E5E7EB]" />
         </div>
+        <div className="relative flex justify-center text-xs">
+          <span className="bg-white px-3 text-[#667085] font-medium">
+            Or sign up with
+          </span>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3">
+        <button
+          type="button"
+          onClick={() => {
+            setName("Nikhil Dhawan");
+            setEmail("nikhil@devsparksindia.com");
+            setPassword("DevSparks@2026!");
+            setConfirmPassword("DevSparks@2026!");
+            setAcceptTerms(true);
+          }}
+          className="flex items-center justify-center gap-2.5 py-2.5 px-4 rounded-xl border border-[#E5E7EB] hover:border-slate-300 bg-white hover:bg-slate-50 text-xs font-semibold text-[#17172A] transition-colors shadow-2xs"
+        >
+          <GitHubIcon size={16} className="text-[#17172A]" />
+          <span>GitHub</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setName("Nikhil Dhawan");
+            setEmail("admin.test@acs-solar.local");
+            setPassword("ChangeMe_Admin_2026!");
+            setConfirmPassword("ChangeMe_Admin_2026!");
+            setAcceptTerms(true);
+          }}
+          className="flex items-center justify-center gap-2.5 py-2.5 px-4 rounded-xl border border-[#E5E7EB] hover:border-slate-300 bg-white hover:bg-slate-50 text-xs font-semibold text-[#17172A] transition-colors shadow-2xs"
+        >
+          <GoogleIcon size={16} />
+          <span>Google</span>
+        </button>
+      </div>
+
+      {/* Bottom Footer Switcher */}
+      <div className="mt-6 text-center text-xs text-[#667085]">
+        <span>Already have an account? </span>
+        <Link href="/login" className="font-bold text-[#5938F5] hover:underline">
+          Sign In
+        </Link>
       </div>
     </AuthLayout>
   );
