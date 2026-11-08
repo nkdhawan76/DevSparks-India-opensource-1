@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { authService } from "@/modules/auth/service";
+import { resolveClientIp } from "@/lib/ip-resolver.js";
 
 export async function POST(req: NextRequest) {
   try {
@@ -13,7 +14,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const ip = req.headers.get("x-forwarded-for") || req.ip || "127.0.0.1";
+    const ip = resolveClientIp(req);
     const result = await authService.login(email, password, Boolean(rememberMe), ip);
 
     if (!result.success || !result.data) {

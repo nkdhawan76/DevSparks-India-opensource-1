@@ -24,9 +24,15 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // SSRF Guard validation of target URL
+    // Protocol & SSRF Guard validation of target URL (CodeQL Alert #3 server-side enforcement)
     try {
       const parsedUrl = new URL(endpointUrl);
+      if (parsedUrl.protocol !== "http:" && parsedUrl.protocol !== "https:") {
+        return NextResponse.json(
+          { error: "Endpoint URL must strictly use HTTP or HTTPS protocol." },
+          { status: 400 }
+        );
+      }
       const port = parsedUrl.port ? Number(parsedUrl.port) : parsedUrl.protocol === "https:" ? 443 : 80;
       const ssrfCheck = SsrfGuard.validateHostAndPort(parsedUrl.hostname, port);
 

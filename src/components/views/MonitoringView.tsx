@@ -5,6 +5,24 @@ import { StatusBadge } from "../common/StatusBadge";
 import { KpiCard } from "../common/KpiCard";
 import { Globe, Zap, Lock, ShieldCheck, X, AlertCircle } from "../common/Icons";
 
+/**
+ * Safely parses and validates dynamic endpoint URLs.
+ * Strictly enforces http and https protocols to prevent DOM text reinterpretation as HTML / script execution (CodeQL Alert #3).
+ */
+export function getSafeMonitoringUrl(rawUrl: string): string | null {
+  if (!rawUrl || typeof rawUrl !== "string") return null;
+  const trimmed = rawUrl.trim();
+  try {
+    const parsed = new URL(trimmed);
+    if (parsed.protocol === "http:" || parsed.protocol === "https:") {
+      return parsed.href;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 export function MonitoringView() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [newTargetName, setNewTargetName] = useState("");
@@ -108,9 +126,22 @@ export function MonitoringView() {
                 <tr key={p.id} className="hover:bg-slate-50 transition-colors">
                   <td className="py-3 font-bold text-[#17172A]">{p.name}</td>
                   <td className="py-3 font-mono text-[11px] text-[#5938F5]">
-                    <a href={p.url} target="_blank" rel="noreferrer" className="hover:underline">
-                      {p.url} ↗
-                    </a>
+                    {(() => {
+                      const safeHref = getSafeMonitoringUrl(p.url);
+                      if (safeHref) {
+                        return (
+                          <a
+                            href={safeHref}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hover:underline"
+                          >
+                            {p.url} ↗
+                          </a>
+                        );
+                      }
+                      return <span className="text-slate-500 font-mono">{p.url}</span>;
+                    })()}
                   </td>
                   <td className="py-3 font-mono font-semibold text-[#17172A]">{p.latency}</td>
                   <td className="py-3 font-bold text-[#16A34A]">{p.uptime}</td>
@@ -206,6 +237,11 @@ export function MonitoringView() {
                 disabled={isSaving}
                 onClick={async () => {
                   if (!newTargetName.trim() || !newTargetUrl.trim()) return;
+                  const validatedUrl = getSafeMonitoringUrl(newTargetUrl.trim());
+                  if (!validatedUrl) {
+                    setErrorMessage("Please enter a valid HTTP or HTTPS endpoint URL (e.g. https://api.example.com/health). Dangerous protocols like javascript: or data: are strictly prohibited.");
+                    return;
+                  }
                   setIsSaving(true);
                   setErrorMessage(null);
                   try {
@@ -216,7 +252,7 @@ export function MonitoringView() {
                         workspaceId: "ws_alpha",
                         projectId: "proj_default",
                         name: newTargetName,
-                        endpointUrl: newTargetUrl,
+                        endpointUrl: validatedUrl,
                         intervalSeconds: newInterval === "30s" ? 30 : newInterval === "300s" ? 300 : 60,
                       }),
                     });

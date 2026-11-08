@@ -88,6 +88,56 @@ export function validatePasswordStrength(password: string): { valid: boolean; re
 }
 
 /**
+ * Validates an email address safely against RFC 5321/5322 constraints.
+ * Enforces maximum input length (254 chars) and linear structural tokenization
+ * to completely eliminate polynomial regular expression backtracking (CodeQL ReDoS Alert #4).
+ */
+export function isValidEmail(email: unknown): boolean {
+  if (typeof email !== "string") return false;
+  const trimmed = email.trim().toLowerCase();
+
+  // RFC 5321 Section 4.5.3.1.3: Total email length must not exceed 254 octets
+  if (trimmed.length === 0 || trimmed.length > 254) return false;
+
+  // Exactly one '@' symbol separating local and domain parts
+  const atIndex = trimmed.indexOf("@");
+  if (atIndex <= 0 || atIndex !== trimmed.lastIndexOf("@")) return false;
+
+  const localPart = trimmed.slice(0, atIndex);
+  const domainPart = trimmed.slice(atIndex + 1);
+
+  // Local part max length: 64 octets
+  if (localPart.length === 0 || localPart.length > 64) return false;
+
+  // Domain part max length: 253 octets
+  if (domainPart.length === 0 || domainPart.length > 253) return false;
+
+  // Local part formatting: cannot start/end with dot, no consecutive dots
+  if (localPart.startsWith(".") || localPart.endsWith(".") || localPart.includes("..")) return false;
+
+  // Bounded non-backtracking character set check for local part
+  if (!/^[a-z0-9!#$%&'*+/=?^_`{|}~.-]+$/.test(localPart)) return false;
+
+  // Domain formatting: cannot start/end with dot, no consecutive dots
+  if (domainPart.startsWith(".") || domainPart.endsWith(".") || domainPart.includes("..")) return false;
+
+  const labels = domainPart.split(".");
+  if (labels.length < 2) return false;
+
+  for (const label of labels) {
+    if (label.length === 0 || label.length > 63) return false;
+    if (label.startsWith("-") || label.endsWith("-")) return false;
+    if (!/^[a-z0-9-]+$/.test(label)) return false;
+  }
+
+  // TLD must consist of at least 2 alpha characters
+  const tld = labels[labels.length - 1];
+  if (!/^[a-z]{2,}$/.test(tld)) return false;
+
+  return true;
+}
+
+/**
  * Check rate limit for an identifier (e.g. IP or email)
  */
 export function checkLoginRateLimit(identifier: string): boolean {
@@ -322,9 +372,9 @@ export class AuthService {
   ): Promise<{ success: boolean; data?: AuthSessionResult; error?: string; status: number }> {
     await this.initialize();
 
-    // 1. Validate Email
+    // 1. Validate Email (Strict bounded RFC 5321 check, CodeQL ReDoS remediation)
     const normalizedEmail = email.toLowerCase().trim();
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
+    if (!isValidEmail(normalizedEmail)) {
       return { success: false, error: "Please provide a valid email address.", status: 400 };
     }
 
@@ -458,6 +508,9 @@ export class AuthService {
   public async requestPasswordReset(email: string): Promise<{ success: boolean; token?: string }> {
     await this.initialize();
     const normalized = email.toLowerCase().trim();
+    if (!isValidEmail(normalized)) {
+      return { success: true }; // Constant-time enumeration defense for invalid input
+    }
     const user = await dbClient.getUserByEmail(normalized);
 
     // Invariant: Always return success to prevent account enumeration
