@@ -2,7 +2,8 @@
 
 import React from "react";
 import Link from "next/link";
-import { Zap, Check } from "@/components/common/Icons";
+import { Zap, Check } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -11,28 +12,65 @@ interface AuthLayoutProps {
 
 export function AuthLayout({
   children,
-  mode: _mode = "login",
+  mode = "login",
 }: AuthLayoutProps) {
   return (
     <div className="min-h-screen bg-[#F7F8FC] flex flex-col justify-between p-4 sm:p-6 lg:p-8 font-sans antialiased text-[#17172A] select-none">
-      {/* Top minimal status bar (optional helper) */}
-      <div className="max-w-5xl mx-auto w-full flex items-center justify-between text-xs py-2">
-        <Link href="/" className="inline-flex items-center gap-2 group">
-          <div className="w-7 h-7 rounded-lg bg-[#5938F5] text-white flex items-center justify-center font-bold shadow-2xs group-hover:bg-[#4726DB] transition-colors">
-            <Zap size={16} className="text-white fill-white" />
+      {/* Top minimal header bar with Brand and Auth Action Pill */}
+      <header className="max-w-5xl mx-auto w-full flex items-center justify-between text-xs py-2">
+        <Link href="/" className="inline-flex items-center gap-2.5 group">
+          <div className="w-8 h-8 rounded-xl bg-[#5938F5] text-white flex items-center justify-center font-bold shadow-xs group-hover:bg-[#4726DB] transition-colors">
+            <Zap className="h-4 w-4 fill-white" />
           </div>
-          <span className="font-extrabold text-sm text-[#17172A] tracking-tight">DeployCheck</span>
+          <div className="flex flex-col">
+            <span className="font-extrabold text-sm text-[#17172A] tracking-tight leading-none">
+              DevSparks <span className="text-[#5938F5]">DeployCheck</span>
+            </span>
+            <span className="text-[10px] text-slate-500 font-medium">By DevSparks India</span>
+          </div>
         </Link>
 
-        <div className="flex items-center gap-3 text-xs text-[#667085]">
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[11px] font-semibold">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#16A34A] animate-pulse" />
-            <span>Systems Operational</span>
-          </span>
-          <span className="text-slate-300">•</span>
-          <span className="text-[11px] font-mono text-slate-500">v0.1.0</span>
+        {/* Top Right Auth Action Switcher */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          {mode === "login" ? (
+            <>
+              <span className="text-xs font-semibold text-[#17172A] px-2 py-1">
+                Sign In
+              </span>
+              <Button
+                size="sm"
+                asChild
+                className="rounded-full px-4 h-8 text-xs font-bold bg-[#5938F5] hover:bg-[#4726DB] text-white shadow-xs"
+              >
+                <Link href="/signup">Create Account</Link>
+              </Button>
+            </>
+          ) : mode === "signup" ? (
+            <>
+              <span className="hidden sm:inline text-xs text-[#667085]">
+                Already have an account?
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                asChild
+                className="rounded-full px-4 h-8 text-xs font-bold border-[#E5E7EB] hover:bg-slate-50"
+              >
+                <Link href="/login">Sign In</Link>
+              </Button>
+            </>
+          ) : (
+            <Button
+              variant="outline"
+              size="sm"
+              asChild
+              className="rounded-full px-4 h-8 text-xs font-bold border-[#E5E7EB] hover:bg-slate-50"
+            >
+              <Link href="/login">Back to Sign In</Link>
+            </Button>
+          )}
         </div>
-      </div>
+      </header>
 
       {/* Main Split-Card Studio Container (Matches Figma Mockup) */}
       <main className="flex-1 flex items-center justify-center py-4 sm:py-6">
@@ -73,7 +111,7 @@ export function AuthLayout({
                 {/* Window Body Mockup */}
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-full bg-emerald-500 text-white flex items-center justify-center shrink-0 shadow-md shadow-emerald-500/20">
-                    <Check size={22} className="stroke-[3]" />
+                    <Check className="h-6 w-6 stroke-[3]" />
                   </div>
                   <div className="flex-1 space-y-1.5">
                     <div className="h-2.5 w-3/4 bg-[#5938F5]/20 rounded-full" />
@@ -104,7 +142,7 @@ export function AuthLayout({
               ].map((feature) => (
                 <div key={feature} className="flex items-center gap-2.5 text-xs font-semibold text-[#17172A]">
                   <div className="w-5 h-5 rounded-full bg-purple-100 text-[#5938F5] flex items-center justify-center shrink-0">
-                    <Check size={12} className="stroke-[2.5]" />
+                    <Check className="h-3 w-3 stroke-[2.5]" />
                   </div>
                   <span>{feature}</span>
                 </div>
@@ -118,7 +156,7 @@ export function AuthLayout({
             <div className="mb-6">
               <Link href="/" className="inline-flex items-center gap-3 group mb-5">
                 <div className="w-10 h-10 rounded-xl bg-[#5938F5] text-white flex items-center justify-center font-bold shadow-md shadow-[#5938F5]/20 group-hover:bg-[#4726DB] transition-colors shrink-0">
-                  <Zap size={22} className="text-white fill-white" />
+                  <Zap className="h-5 w-5 fill-white" />
                 </div>
                 <div>
                   <div className="flex items-center gap-1.5 leading-none">
@@ -140,15 +178,16 @@ export function AuthLayout({
       <footer className="max-w-5xl mx-auto w-full py-3 border-t border-[#E5E7EB]/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-[#667085]">
         <div>© 2026 DevSparks India. Strict Light Theme Developer Platform.</div>
         <div className="flex items-center gap-4">
-          <Link href="/documentation" className="hover:text-[#17172A] transition-colors">
-            Documentation
+          <Link href="/docs/security" className="hover:text-[#17172A] transition-colors">
+            Security Policy
           </Link>
           <span>•</span>
-          <span className="hover:text-[#17172A] cursor-pointer transition-colors">
-            Security Policy
-          </span>
+          <Link href="/docs/terms" className="hover:text-[#17172A] transition-colors">
+            Terms of Service
+          </Link>
           <span>•</span>
-          <span className="hover:text-[#17172A] cursor-pointer transition-colors">
+          <span className="inline-flex items-center gap-1.5 text-emerald-600 font-semibold">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
             Status (Operational)
           </span>
         </div>

@@ -2,9 +2,11 @@
 
 import React, { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
 import { AuthLayout } from "@/components/layouts/AuthLayout";
-import { RefreshCw, CheckCircle2, AlertCircle } from "@/components/common/Icons";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Lock, ArrowRight, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
 
 function ResetPasswordForm() {
   const router = useRouter();
@@ -76,65 +78,79 @@ function ResetPasswordForm() {
 
       {errorMsg && (
         <div className="mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-[#DC2626] flex items-center gap-2">
-          <AlertCircle size={15} className="shrink-0" />
+          <AlertCircle className="h-4 w-4 shrink-0" />
           <span>{errorMsg}</span>
         </div>
       )}
 
       {successMsg && (
         <div className="mb-4 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-[#16A34A] flex items-center gap-2">
-          <CheckCircle2 size={15} className="shrink-0" />
+          <CheckCircle2 className="h-4 w-4 shrink-0" />
           <span>{successMsg}</span>
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4 text-xs">
-        <div>
-          <label className="block font-semibold text-[#17172A] mb-1.5">New Password</label>
-          <input
-            type="password"
-            placeholder="••••••••••••"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="w-full bg-[#F7F8FC] border border-[#E5E7EB] rounded-xl px-3.5 py-2.5 text-xs text-[#17172A] placeholder-slate-400 focus:outline-none focus:border-[#5938F5] focus:bg-white transition-all shadow-2xs"
-          />
+        <div className="space-y-1.5">
+          <Label htmlFor="password">New Password</Label>
+          <div className="relative">
+            <Lock className="absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
+            <Input
+              id="password"
+              type="password"
+              placeholder="••••••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="pl-10"
+            />
+          </div>
         </div>
 
-        <div>
-          <label className="block font-semibold text-[#17172A] mb-1.5">Confirm New Password</label>
-          <input
-            type="password"
-            placeholder="••••••••••••"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-            className="w-full bg-[#F7F8FC] border border-[#E5E7EB] rounded-xl px-3.5 py-2.5 text-xs text-[#17172A] placeholder-slate-400 focus:outline-none focus:border-[#5938F5] focus:bg-white transition-all shadow-2xs"
-          />
+        <div className="space-y-1.5">
+          <Label htmlFor="confirmPassword">Confirm Password</Label>
+          <div className="relative">
+            <Lock className="absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
+            <Input
+              id="confirmPassword"
+              type="password"
+              placeholder="••••••••••••"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+              className="pl-10"
+            />
+          </div>
         </div>
 
-        <button
+        <Button
           type="submit"
           disabled={isLoading}
-          className="w-full py-2.5 px-4 rounded-xl bg-[#5938F5] hover:bg-[#4726DB] text-white text-xs font-semibold shadow-xs transition-all active:scale-[0.99] flex items-center justify-center gap-2 disabled:opacity-60"
+          className="w-full h-11 text-xs font-bold gap-2 mt-2 shadow-md shadow-[#5938F5]/20"
         >
-          {isLoading && <RefreshCw size={14} className="animate-spin" />}
-          <span>{isLoading ? "Updating..." : "Update Password"}</span>
-        </button>
+          {isLoading ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <>
+              <span>Save & Sign In</span>
+              <ArrowRight className="h-4 w-4" />
+            </>
+          )}
+        </Button>
       </form>
-
-        <div className="mt-6 pt-5 border-t border-[#F1F4F9] text-center text-xs text-[#667085]">
-          <Link href="/login" className="font-semibold text-[#5938F5] hover:underline">
-            Return to Sign In
-          </Link>
-        </div>
     </AuthLayout>
   );
 }
 
 export default function ResetPasswordPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#F7F8FC] flex items-center justify-center text-xs text-slate-400 font-mono">Loading...</div>}>
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#F7F8FC] flex items-center justify-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#5938F5]" />
+        </div>
+      }
+    >
       <ResetPasswordForm />
     </Suspense>
   );

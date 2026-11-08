@@ -3,7 +3,8 @@
 import React from "react";
 import Link from "next/link";
 import { AuthLayout } from "@/components/layouts/AuthLayout";
-import { CheckCircle2 } from "@/components/common/Icons";
+import { Button } from "@/components/ui/button";
+import { CheckCircle2, ArrowRight } from "lucide-react";
 
 export default function VerifyEmailPage() {
   return (
@@ -18,9 +19,9 @@ export default function VerifyEmailPage() {
       </div>
 
       <div className="space-y-4 text-xs text-center">
-        <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-[#16A34A] space-y-2">
-          <div className="flex items-center justify-center gap-2 font-bold text-sm">
-            <CheckCircle2 size={18} />
+        <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-[#16A34A] space-y-2 text-left">
+          <div className="flex items-center gap-2 font-bold text-sm">
+            <CheckCircle2 className="h-5 w-5 shrink-0" />
             <span>Verification Successful</span>
           </div>
           <p className="text-[11px] leading-relaxed text-[#17172A]">
@@ -28,14 +29,13 @@ export default function VerifyEmailPage() {
           </p>
         </div>
 
-        <Link
-          href="/login"
-          className="w-full py-2.5 px-4 rounded-xl bg-[#5938F5] hover:bg-[#4726DB] text-white text-xs font-semibold shadow-xs transition-colors flex items-center justify-center"
-        >
-          Sign In to Dashboard
-        </Link>
+        <Button asChild className="w-full h-11 text-xs font-bold gap-2 mt-2 shadow-md shadow-[#5938F5]/20">
+          <Link href="/login">
+            <span>Sign In to Dashboard</span>
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </Button>
       </div>
     </AuthLayout>
   );
 }
-

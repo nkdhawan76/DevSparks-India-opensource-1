@@ -3,7 +3,10 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { AuthLayout } from "@/components/layouts/AuthLayout";
-import { RefreshCw, CheckCircle2, AlertCircle } from "@/components/common/Icons";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Mail, ArrowRight, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -50,7 +53,7 @@ export default function ForgotPasswordPage() {
 
       {errorMsg && (
         <div className="mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-[#DC2626] flex items-center gap-2">
-          <AlertCircle size={15} className="shrink-0" />
+          <AlertCircle className="h-4 w-4 shrink-0" />
           <span>{errorMsg}</span>
         </div>
       )}
@@ -59,7 +62,7 @@ export default function ForgotPasswordPage() {
         <div className="space-y-4 text-xs">
           <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-[#16A34A] space-y-2">
             <div className="flex items-center gap-2 font-bold text-sm">
-              <CheckCircle2 size={18} />
+              <CheckCircle2 className="h-5 w-5" />
               <span>Recovery Link Dispatched</span>
             </div>
             <p className="text-[11px] leading-relaxed text-[#17172A]">
@@ -67,46 +70,52 @@ export default function ForgotPasswordPage() {
             </p>
           </div>
 
-          <Link
-            href="/login"
-            className="w-full py-2.5 px-4 rounded-xl bg-[#5938F5] hover:bg-[#4726DB] text-white text-xs font-semibold shadow-xs transition-all flex items-center justify-center text-center"
-          >
-            Return to Sign In
-          </Link>
+          <Button asChild className="w-full h-11 text-xs font-bold mt-2 shadow-md shadow-[#5938F5]/20">
+            <Link href="/login">Return to Sign In</Link>
+          </Button>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4 text-xs">
-          <div>
-            <label className="block font-semibold text-[#17172A] mb-1.5">Work Email Address</label>
-            <input
-              type="email"
-              placeholder="developer@company.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              autoComplete="email"
-              className="w-full bg-[#F7F8FC] border border-[#E5E7EB] rounded-xl px-3.5 py-2.5 text-xs text-[#17172A] placeholder-slate-400 focus:outline-none focus:border-[#5938F5] focus:bg-white transition-all shadow-2xs"
-            />
+          <div className="space-y-1.5">
+            <Label htmlFor="email">Work Email Address</Label>
+            <div className="relative">
+              <Mail className="absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
+              <Input
+                id="email"
+                type="email"
+                placeholder="developer@company.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                autoComplete="email"
+                className="pl-10"
+              />
+            </div>
           </div>
 
-          <button
+          <Button
             type="submit"
             disabled={isLoading}
-            className="w-full py-2.5 px-4 rounded-xl bg-[#5938F5] hover:bg-[#4726DB] text-white text-xs font-semibold shadow-xs transition-all active:scale-[0.99] flex items-center justify-center gap-2 disabled:opacity-60"
+            className="w-full h-11 text-xs font-bold gap-2 mt-2 shadow-md shadow-[#5938F5]/20"
           >
-            {isLoading && <RefreshCw size={14} className="animate-spin" />}
-            <span>{isLoading ? "Sending..." : "Send Password Reset Link"}</span>
-          </button>
+            {isLoading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <>
+                <span>Send Password Reset Link</span>
+                <ArrowRight className="h-4 w-4" />
+              </>
+            )}
+          </Button>
         </form>
       )}
 
-      <div className="mt-6 pt-5 border-t border-[#F1F4F9] text-center text-xs text-[#667085]">
+      <div className="mt-6 text-center text-xs text-[#667085]">
         <span>Remember your password? </span>
-        <Link href="/login" className="font-semibold text-[#5938F5] hover:underline">
-          Back to Sign In
+        <Link href="/login" className="font-bold text-[#5938F5] hover:underline">
+          Sign In
         </Link>
       </div>
     </AuthLayout>
   );
 }
-
