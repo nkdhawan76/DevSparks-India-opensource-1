@@ -1,24 +1,63 @@
 version: 2
 updates:
+  # 1. GitHub Actions Workflows & Pinned SHAs
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
+      day: "monday"
+      time: "04:00"
+      timezone: "Asia/Kolkata"
+    open-pull-requests-limit: 5
     groups:
       actions:
         patterns:
           - "*"
 
+  # 2. Production & Development npm Dependencies
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 10
+      day: "monday"
+      time: "04:30"
+      timezone: "Asia/Kolkata"
+    open-pull-requests-limit: 5
+    versioning-strategy: increase
     groups:
-      dependencies:
-        patterns:
-          - "*"
+      # Grouped Production Dependencies (Minor & Patch Only)
+      production-dependencies:
+        dependency-type: "production"
         update-types:
           - "minor"
           - "patch"
+        patterns:
+          - "*"
 
+      # Grouped Development Tooling & Linters
+      development-dependencies:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
+        patterns:
+          - "@types/*"
+          - "eslint*"
+          - "@typescript-eslint/*"
+          - "typescript"
+          - "postcss"
+          - "autoprefixer"
+          - "tailwindcss"
+
+    # Ignore breaking major version bumps to prevent automated incompatible breaking PRs
+    ignore:
+      - dependency-name: "next"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-dom"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "eslint"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "tailwindcss"
+        update-types: ["version-update:semver-major"]

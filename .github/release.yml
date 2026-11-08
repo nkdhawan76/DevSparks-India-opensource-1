@@ -1,0 +1,41 @@
+# .github/release.yml
+# Configuration for GitHub Automatic Release Notes Generator
+
+changelog:
+  categories:
+    - title: "🔒 Security Fixes & Vulnerability Remediation"
+      labels:
+        - "security"
+        - "codeql"
+        - "dependencies"
+    - title: "🚀 New Features & Capabilities"
+      labels:
+        - "enhancement"
+        - "feature"
+    - title: "🐛 Bug Fixes & Stability Improvements"
+      labels:
+        - "bug"
+        - "fix"
+    - title: "⚡ Performance & Optimization"
+      labels:
+        - "performance"
+    - title: "🛠️ CI/CD & Build Infrastructure"
+      labels:
+        - "ci"
+        - "build"
+    - title: "📚 Documentation & Specifications"
+      labels:
+        - "documentation"
+        - "docs"
+    - title: "🔄 Maintenance & Chore"
+      labels:
+        - "chore"
+        - "dependencies"
+
+  exclude:
+    labels:
+      - "skip-changelog"
+      - "duplicate"
+      - "invalid"
+    authors:
+      - "dependabot[bot]"

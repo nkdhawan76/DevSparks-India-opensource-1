@@ -50,7 +50,7 @@ We follow the [Conventional Commits](https://www.conventionalcommits.org/) speci
 Before opening a Pull Request:
 1. Ensure your branch is rebased on the latest `main`.
 2. Verify all linting, type-checking, and tests pass locally.
-3. Verify that all UI changes adhere to the **Light Theme Only** policy (`#F7F9FC` background, `#FFFFFF` cards, `#3563E9` accents).
+3. Verify that all UI changes adhere to the **Strict Light Theme Only** policy (`#F7F8FC` background, `#FFFFFF` cards, `#5938F5` brand purple accents, `#17172A` text). Zero dark mode tokens or theme toggles.
 4. Do not include sensitive credentials, local `.env` files, or unredacted secrets.
 5. Link relevant issues using `Closes #<issue-number>`.
 

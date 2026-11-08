@@ -177,7 +177,7 @@ export class WebhookDispatcher {
           });
           continue;
         }
-      } catch (err: unknown) {
+      } catch (_err: unknown) {
         results.push({
           webhookId: webhook.id,
           provider: webhook.provider,

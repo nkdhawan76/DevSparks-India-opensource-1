@@ -16,40 +16,58 @@ permissions:
 
 jobs:
   validate:
-    name: Lint, Typecheck & Test
+    name: Validate (Node ${{ matrix.node-version }})
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [24, 26]
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 1
 
       - name: Setup Node.js LTS
         uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
         with:
-          node-version: 20
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
 
-      - name: Install dependencies
+      - name: Verify package-lock integrity & install
         run: |
           if [ -f package-lock.json ]; then
             npm ci
           else
-            npm install --prefer-offline --no-audit
+            echo "::error::package-lock.json is missing! Failing CI per Zero-Failure CI Invariant."
+            exit 1
           fi
 
-      - name: Run Core Verification Test Suite
+      - name: CodeQL Remediation Unit Tests
+        run: node scripts/verify-codeql-fixes.mjs
+
+      - name: Core Platform Verification Suite
         run: node scripts/verify-mvp.mjs
 
-      - name: Run Pre-Deployment Auditor
+      - name: Pre-Deployment Architecture Auditor
         run: node scripts/run-audit.mjs
 
-      - name: TypeScript typecheck
+      - name: TypeScript Strict Typecheck
         run: npx tsc --noEmit
 
-      - name: Lint
-        run: npx eslint . --ext .ts,.tsx --max-warnings 10
+      - name: Strict ESLint Validation (Zero Warnings)
+        run: npx eslint . --ext .ts,.tsx --max-warnings 0
 
-      - name: Build Next.js application
+      - name: Production Dependency Security Audit
+        run: npm audit --omit=dev --audit-level=high
+
+      - name: Production Next.js Build
         run: npm run build
         env:
           NEXT_TELEMETRY_DISABLED: 1
+          NODE_ENV: production
+
+      - name: Clean Working Tree Check
+        run: git diff --check

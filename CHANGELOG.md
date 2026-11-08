@@ -7,7 +7,52 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [0.2.0-dev] - 2026-11-08
+## [Unreleased]
+
+---
+
+## [0.1.0-alpha.1] - 2026-11-08
+
+### Security & Vulnerability Remediation
+- **Remediated CodeQL Alert #4 (Polynomial ReDoS in Email Validation):**
+  - Replaced naive unbounded regular expression in `src/modules/auth/service.ts` with `isValidEmail()`.
+  - Enforced RFC 5321 length limits (maximum 254 characters total, 64 local, 253 domain) and linear token validation executing in $0.11\text{ms}$ with zero catastrophic backtracking.
+  - Added unit test coverage in `scripts/verify-codeql-fixes.mjs` verifying rejection of oversized and repeated adversarial character payloads.
+- **Remediated CodeQL Alert #3 (DOM Text Reinterpreted as HTML / DOM XSS):**
+  - Implemented `getSafeMonitoringUrl()` in `src/components/views/MonitoringView.tsx` with a strict protocol whitelist (only `http:` and `https:` permitted).
+  - Explicitly sanitized dynamic link interpolation, rejecting `javascript:`, `data:`, `vbscript:`, and unparseable inputs.
+  - Added server-side protocol verification in `src/app/api/v1/monitoring/targets/route.ts` to block non-HTTP/HTTPS destinations before SSRF evaluation.
+- **Dependency Security Upgrades (0 Vulnerabilities in `npm audit`):**
+  - Upgraded Next.js from `14.2.35` to `15.5.29` (maintained security backport), resolving 1 Critical and multiple High advisories (GHSA-9g9p-9gw9-jx7f, GHSA-h25m-26qc-wcjf, GHSA-ggv3-7p47-pfv8, GHSA-p293-qw3h-jr36).
+  - Upgraded Zod to `^4.6.7`, remediating high-severity memory exhaustion vulnerability (GHSA-mrhx-c7xc-m3w5).
+  - Upgraded `@typescript-eslint/parser` and `@typescript-eslint/eslint-plugin` to `^8.72.1` paired with `minimatch@^11.0.5` override, eliminating glob amplification DoS (GHSA-g3hv-75wg-m249).
+- **Reverse-Proxy-Aware Client IP Resolver:**
+  - Implemented `resolveClientIp` in `src/lib/ip-resolver.js` removing reliance on deprecated `NextRequest.ip`.
+  - Added IP address format validation and multi-hop `x-forwarded-for` leftmost IP extraction for brute-force rate-limiting in `src/app/api/v1/auth/login/route.ts`.
+
+### Added
+- **Complete Public Marketing Website (34 Unique Routes):**
+  - Homepage (`/`) with Hero dashboard preview, architecture timeline, integration grid, and FAQ.
+  - 8 Feature Pages: Pre-deployment Audit (`/features/pre-deployment-audit`), AI Assistant (`/features/ai-assistant`), VPS Management (`/features/vps-management`), Guided Deployment (`/features/guided-deployment`), Website Monitoring (`/features/website-monitoring`), Maintenance (`/features/maintenance`), Container Scanning (`/features/container-scanning`), and Multi-Region Probes (`/features/multi-region-monitoring`).
+  - 5 Solution Pages: Developers (`/solutions/developers`), DevOps Teams (`/solutions/devops-teams`), Agencies (`/solutions/agencies`), Startups (`/solutions/startups`), and Security & Reliability (`/solutions/security-reliability`).
+  - 6 Resource & Doc Pages: Documentation index (`/docs`), API Reference (`/docs/api`), Getting Started (`/docs/getting-started`), Tutorials (`/tutorials`), Changelog (`/changelog`), and Roadmap (`/roadmap`).
+  - 5 Company Pages: About (`/about`), Contact (`/contact` with interactive client validation), Community (`/community`), Contribute (`/contribute`), and Support (`/support`).
+  - 6 Legal & Compliance Pages: Privacy Policy (`/privacy`), Terms of Service (`/terms`), Cookie Policy (`/cookies`), Acceptable Use (`/acceptable-use`), Security (`/security`), and License (`/license`).
+- **Interactive Global Navigation & Modern Mega Menu:**
+  - Three-column mega menus (`ProductMegaMenu`, `SolutionsMegaMenu`, `ResourcesMegaMenu`) with full-width bottom discovery bar.
+  - Sticky glassmorphic pill header with GSAP entrance and dynamic scroll elevation.
+  - Standalone vector brand component (`DeployCheckLogo`) in `src/components/common/Icons.tsx` replacing previous icon container with crisp 32px circular `#5938F5` badge.
+  - Mobile navigation drawer with animated overlay, collapsible sections, and direct GitHub links.
+- **Automated GitHub Release & CI/CD Governance:**
+  - Configured automated GitHub Release publication (`.github/workflows/release.yml`) triggered on verified semantic version tags (`v*`).
+  - Added GitHub Release notes category mapping in `.github/release.yml`.
+  - Grouped Dependabot configuration in `.github/dependabot.yml` separating production from development updates.
+  - Added comprehensive security runbooks: `docs/SECURITY_BASELINE.md`, `docs/GITHUB_SECURITY_SETTINGS.md`, `docs/PR_TRIAGE.md`, and `docs/GITHUB_RELEASE_PROCESS.md`.
+
+### Changed
+- Enforced strict ESLint maximum warnings threshold (`--max-warnings 0`) across all TypeScript and TSX files.
+- Added custom fractional spacing utilities (`4.5`, `5.5`, `6.5`, `7.5`) to `tailwind.config.ts`.
+- Configured `.eslintrc.json` with browser environment and ignore patterns for auto-generated files.
 
 ### Added
 - **Database-Backed Authentication & Route Protection:**

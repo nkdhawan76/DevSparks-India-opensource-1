@@ -1,31 +1,60 @@
-## Description
+## Summary of Changes
 
-<!-- Provide a clear summary of changes and the problem solved. -->
+<!-- Provide a clear, high-level summary of what this pull request introduces or fixes. -->
 
-Closes # <!-- Link related issue if applicable -->
+### Related Issue
+Closes # <!-- Link related issue if applicable, e.g., Closes #42 -->
+
+---
+
+## Root Cause & Motivation
+
+<!-- What was the underlying root cause of the bug, or the technical motivation for this feature? -->
+
+---
+
+## Implementation Details
+
+<!-- Outline the technical approach, architectural decisions, and key files modified. -->
+
+---
+
+## Security Impact & Invariant Verification
+
+- [ ] **Strict Light Theme Only (Rule 1):** Verified zero dark mode tokens, dark surfaces, or theme toggles. Palette strictly adheres to `#5938F5` (purple), `#F7F8FC` (canvas), `#FFFFFF` (cards), `#17172A` (text), and `#E5E7EB` (border).
+- [ ] **Policy-Controlled AI (Rule 2):** Model operations propose structured JSON patches only. No unrestricted shell execution.
+- [ ] **Truth in Engineering (Rule 3):** No fabricated metrics, mock data, or artificial commits.
+- [ ] **Credential Isolation (Rule 4):** No `.env` files, API keys, private keys, or plaintext secrets committed or returned in API responses.
+- [ ] **Evidence-Based Quality (Rule 6):** Local test suite passed with verified output before requesting review.
+- [ ] **Zero-Failure CI (Rule 7):** All prerequisite configurations, lockfiles, and workflows pass with 0 errors and 0 warnings.
 
 ---
 
 ## Type of Change
 
-- [ ] `feat`: New feature or capability
+- [ ] `fix(security)`: Vulnerability remediation or defensive hardening
+- [ ] `feat`: New user-facing feature or API capability
 - [ ] `fix`: Bug fix
-- [ ] `docs`: Documentation update
-- [ ] `refactor`: Code refactoring without behavior change
-- [ ] `test`: New or updated tests
-- [ ] `security`: Security remediation or hardening
-- [ ] `chore`: Build tooling or maintenance
+- [ ] `build(deps)`: Dependency upgrade or security patch
+- [ ] `ci`: Workflow, action, or build infrastructure change
+- [ ] `docs`: Documentation, runbook, or specification update
+- [ ] `refactor`: Internal code refactoring without behavior change
 
 ---
 
-## Invariant & Quality Checklist
+## Verification Evidence & Test Output
 
-Please confirm each item before requesting review:
+Please paste observed terminal command results:
+- `npm run typecheck` output:
+- `npx eslint . --ext .ts,.tsx --max-warnings 0` output:
+- `node scripts/verify-mvp.mjs` output:
+- `npm audit` output:
 
-- [ ] **Light Theme Only:** Verified that NO dark theme tokens, dark surfaces, or theme toggles are introduced. UI adheres strictly to the light palette (`#F7F9FC` background, `#FFFFFF` cards, `#3563E9` accents).
-- [ ] **No Hardcoded Secrets:** Verified that no `.env` files, API keys, private keys, or credentials are committed.
-- [ ] **Tests Added / Passing:** Unit, integration, or fixture tests added or verified for this change.
-- [ ] **Type Check & Lint:** Passed `typecheck` and `lint` without errors or warnings.
-- [ ] **Documentation Updated:** `docs/`, OpenAPI specs, or README updated if applicable.
-- [ ] **Conventional Commit:** PR title and commit messages adhere to Conventional Commits format.
+---
 
+## Reviewer Checklist
+
+- [ ] Verified diff contains no extraneous or unintended file modifications.
+- [ ] Verified input validation, parameter boundaries, and SSRF guards where applicable.
+- [ ] Confirmed `CHANGELOG.md` entry added under `[Unreleased]`.
+- [ ] Verified responsive layout and accessibility guards.

@@ -1,0 +1,23 @@
+# .github/CODEOWNERS
+# Global code ownership rules for DevSparks DeployCheck
+# Maintainer: @nkdhawan76 (DevSparks India)
+
+# Default owner for everything in the repository
+* @nkdhawan76
+
+# CI/CD & GitHub Security Workflows
+/.github/workflows/ @nkdhawan76
+/.github/dependabot.yml @nkdhawan76
+/.github/release.yml @nkdhawan76
+
+# Authentication & Security Infrastructure
+/src/modules/auth/ @nkdhawan76
+/src/modules/server/ssrf-guard.ts @nkdhawan76
+/src/middleware.ts @nkdhawan76
+
+# Database Schemas & Migrations
+/migrations/ @nkdhawan76
+/src/db/ @nkdhawan76
+
+# Core Audit & Verification Scripts
+/scripts/ @nkdhawan76

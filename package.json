@@ -1,6 +1,6 @@
 {
   "name": "devsparks-deploycheck",
-  "version": "0.1.0-dev",
+  "version": "0.1.0-alpha.1",
   "description": "Prepare, deploy, and maintain applications with confidence — Open-source developer operations platform",
   "author": "DevSparks India",
   "license": "MIT",
@@ -46,7 +46,7 @@
     "typescript": "^5.6.3"
   },
   "overrides": {
-    "minimatch": "^10.2.6",
+    "minimatch": "^11.0.5",
     "postcss": "^8.5.3"
   }
 }
