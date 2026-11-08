@@ -38,11 +38,21 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <AuthLayout
-      title="Reset Password"
-      subtitle="Enter your email to receive recovery instructions"
-    >
-      {errorMsg && (
+    <AuthLayout mode="recovery">
+      <div className="bg-white border border-[#E5E7EB] rounded-2xl p-7 sm:p-9 shadow-xl shadow-slate-200/50 relative">
+        <div className="text-center mb-6">
+          <div className="w-12 h-12 rounded-2xl bg-[#5938F5] text-white flex items-center justify-center mx-auto mb-3.5 shadow-md shadow-[#5938F5]/25">
+            <RefreshCw size={22} className="text-white" />
+          </div>
+          <h1 className="text-2xl font-bold tracking-tight text-[#17172A]">
+            Reset Password
+          </h1>
+          <p className="text-xs text-[#667085] mt-1.5">
+            Enter your work email to receive recovery instructions
+          </p>
+        </div>
+
+        {errorMsg && (
         <div className="mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-[#DC2626] flex items-center gap-2">
           <AlertCircle size={15} className="shrink-0" />
           <span>{errorMsg}</span>
@@ -94,11 +104,12 @@ export default function ForgotPasswordPage() {
         </form>
       )}
 
-      <div className="mt-6 pt-5 border-t border-[#F1F4F9] text-center text-xs text-[#667085]">
-        <span>Remember your password? </span>
-        <Link href="/login" className="font-semibold text-[#5938F5] hover:underline">
-          Back to Sign In
-        </Link>
+        <div className="mt-6 pt-5 border-t border-[#F1F4F9] text-center text-xs text-[#667085]">
+          <span>Remember your password? </span>
+          <Link href="/login" className="font-semibold text-[#5938F5] hover:underline">
+            Back to Sign In
+          </Link>
+        </div>
       </div>
     </AuthLayout>
   );

@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { AuthLayout } from "@/components/layouts/AuthLayout";
-import { RefreshCw, CheckCircle2, AlertCircle } from "@/components/common/Icons";
+import { RefreshCw, CheckCircle2, AlertCircle, Zap } from "@/components/common/Icons";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -76,27 +76,35 @@ export default function SignupPage() {
   };
 
   return (
-    <AuthLayout
-      title="Create Developer Account"
-      subtitle="Register a new developer workspace on DevSparks DeployCheck."
-      badge="Developer Access"
-      mode="signup"
-    >
-      {errorMsg && (
-        <div className="mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-[#DC2626] flex items-center gap-2">
-          <AlertCircle size={15} className="shrink-0" />
-          <span>{errorMsg}</span>
+    <AuthLayout mode="signup">
+      <div className="bg-white border border-[#E5E7EB] rounded-2xl p-7 sm:p-9 shadow-xl shadow-slate-200/50 relative">
+        <div className="text-center mb-6">
+          <div className="w-12 h-12 rounded-2xl bg-[#5938F5] text-white flex items-center justify-center mx-auto mb-3.5 shadow-md shadow-[#5938F5]/25">
+            <Zap size={24} className="fill-white" />
+          </div>
+          <h1 className="text-2xl font-bold tracking-tight text-[#17172A]">
+            Create Developer Account
+          </h1>
+          <p className="text-xs text-[#667085] mt-1.5">
+            Register a new workspace on DevSparks DeployCheck
+          </p>
         </div>
-      )}
 
-      {successMsg && (
-        <div className="mb-4 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-[#16A34A] flex items-center gap-2">
-          <CheckCircle2 size={15} className="shrink-0" />
-          <span>{successMsg}</span>
-        </div>
-      )}
+        {errorMsg && (
+          <div className="mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-[#DC2626] flex items-center gap-2">
+            <AlertCircle size={15} className="shrink-0" />
+            <span>{errorMsg}</span>
+          </div>
+        )}
 
-      <form onSubmit={handleSubmit} className="space-y-3.5 text-xs">
+        {successMsg && (
+          <div className="mb-4 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-[#16A34A] flex items-center gap-2">
+            <CheckCircle2 size={15} className="shrink-0" />
+            <span>{successMsg}</span>
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-3.5 text-xs">
         <div>
           <label className="block font-semibold text-[#17172A] mb-1">Full Name</label>
           <input
@@ -210,11 +218,12 @@ export default function SignupPage() {
         </button>
       </form>
 
-      <div className="mt-5 pt-4 border-t border-[#F1F4F9] text-center text-xs text-[#667085]">
-        <span>Already have an account? </span>
-        <Link href="/login" className="font-semibold text-[#5938F5] hover:underline">
-          Sign In
-        </Link>
+        <div className="mt-5 pt-4 border-t border-[#F1F4F9] text-center text-xs text-[#667085]">
+          <span>Already have an account? </span>
+          <Link href="/login" className="font-semibold text-[#5938F5] hover:underline">
+            Sign In
+          </Link>
+        </div>
       </div>
     </AuthLayout>
   );

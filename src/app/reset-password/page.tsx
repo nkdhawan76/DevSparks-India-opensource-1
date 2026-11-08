@@ -4,7 +4,7 @@ import React, { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { AuthLayout } from "@/components/layouts/AuthLayout";
-import { RefreshCw, CheckCircle2, AlertCircle } from "@/components/common/Icons";
+import { RefreshCw, CheckCircle2, AlertCircle, Lock } from "@/components/common/Icons";
 
 function ResetPasswordForm() {
   const router = useRouter();
@@ -64,11 +64,21 @@ function ResetPasswordForm() {
   };
 
   return (
-    <AuthLayout
-      title="Create New Password"
-      subtitle="Enter a strong new password for your account"
-    >
-      {errorMsg && (
+    <AuthLayout mode="recovery">
+      <div className="bg-white border border-[#E5E7EB] rounded-2xl p-7 sm:p-9 shadow-xl shadow-slate-200/50 relative">
+        <div className="text-center mb-6">
+          <div className="w-12 h-12 rounded-2xl bg-[#5938F5] text-white flex items-center justify-center mx-auto mb-3.5 shadow-md shadow-[#5938F5]/25">
+            <Lock size={22} className="text-white" />
+          </div>
+          <h1 className="text-2xl font-bold tracking-tight text-[#17172A]">
+            Create New Password
+          </h1>
+          <p className="text-xs text-[#667085] mt-1.5">
+            Enter a strong new password for your account
+          </p>
+        </div>
+
+        {errorMsg && (
         <div className="mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-[#DC2626] flex items-center gap-2">
           <AlertCircle size={15} className="shrink-0" />
           <span>{errorMsg}</span>
@@ -117,10 +127,11 @@ function ResetPasswordForm() {
         </button>
       </form>
 
-      <div className="mt-6 pt-5 border-t border-[#F1F4F9] text-center text-xs text-[#667085]">
-        <Link href="/login" className="font-semibold text-[#5938F5] hover:underline">
-          Return to Sign In
-        </Link>
+        <div className="mt-6 pt-5 border-t border-[#F1F4F9] text-center text-xs text-[#667085]">
+          <Link href="/login" className="font-semibold text-[#5938F5] hover:underline">
+            Return to Sign In
+          </Link>
+        </div>
       </div>
     </AuthLayout>
   );
