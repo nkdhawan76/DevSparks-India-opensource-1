@@ -18,9 +18,20 @@ type ActiveMenu = "product" | "solutions" | "resources" | "opensource" | null;
 export function WebsiteHeader() {
   const [activeMenu, setActiveMenu] = useState<ActiveMenu>(null);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const navContainerRef = useRef<HTMLDivElement>(null);
   const headerBarRef = useRef<HTMLElement>(null);
   const leaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Track window scroll for sticky visual elevation
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 15);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // Initial GSAP header entrance
   useGSAP(
@@ -79,11 +90,20 @@ export function WebsiteHeader() {
   }, []);
 
   return (
-    <div ref={navContainerRef} className="relative w-full z-40 select-none">
-      {/* Floating Header Container */}
+    <div
+      ref={navContainerRef}
+      className={`sticky top-2 sm:top-3.5 w-full z-50 select-none transition-all duration-200 ${
+        isScrolled ? "py-0.5" : "py-0"
+      }`}
+    >
+      {/* Floating Sticky Header Container */}
       <header
         ref={headerBarRef}
-        className="max-w-6xl mx-auto w-full py-1.5 px-3 sm:px-4 rounded-2xl bg-white/95 border border-slate-200/90 shadow-xs backdrop-blur-md flex items-center justify-between text-xs will-change-transform"
+        className={`max-w-6xl mx-auto w-full py-1.5 px-3 sm:px-4 rounded-2xl border transition-all duration-200 backdrop-blur-md flex items-center justify-between text-xs will-change-transform ${
+          isScrolled
+            ? "bg-white/95 border-slate-300/90 shadow-md shadow-slate-300/30 ring-1 ring-slate-200/50"
+            : "bg-white/90 border-slate-200/90 shadow-xs"
+        }`}
       >
         {/* Left: Brand Identity (DeployCheck By DevSparks India) */}
         <Link href="/" onClick={closeMenu} className="inline-flex items-center gap-2 group shrink-0 py-0.5">
