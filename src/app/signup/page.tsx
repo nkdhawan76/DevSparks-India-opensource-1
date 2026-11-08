@@ -77,8 +77,10 @@ export default function SignupPage() {
 
   return (
     <AuthLayout
-      title="Create Account"
-      subtitle="Register a developer workspace on DevSparks DeployCheck"
+      title="Create Developer Account"
+      subtitle="Register a new developer workspace on DevSparks DeployCheck."
+      badge="Developer Access"
+      mode="signup"
     >
       {errorMsg && (
         <div className="mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-[#DC2626] flex items-center gap-2">
