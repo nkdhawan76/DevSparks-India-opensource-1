@@ -78,7 +78,7 @@ export async function GET(req: NextRequest) {
       server: d.server,
       branch: d.branch || "main",
       status: d.status === "SUCCESS" ? "Success" : "Failed",
-      deployedAt: new Date(d.deployedAt).toLocaleDateString("en-US", {
+      deployedAt: new Date(String(d.deployedAt || Date.now())).toLocaleDateString("en-US", {
         month: "short",
         day: "numeric",
         hour: "2-digit",

@@ -40,17 +40,17 @@ export default function DashboardPage() {
 
       const totalProjects = Array.isArray(projectsData) && projectsData.length > 0 ? projectsData.length : 5;
       const healthyProjects = Array.isArray(projectsData)
-        ? projectsData.filter((p: any) => p.status === "Healthy").length
+        ? projectsData.filter((p: { status?: string }) => p.status === "Healthy").length
         : 4;
       const warningProjects = Array.isArray(projectsData)
-        ? projectsData.filter((p: any) => p.status === "Attention").length
+        ? projectsData.filter((p: { status?: string }) => p.status === "Attention").length
         : 1;
       const criticalProjects = Array.isArray(projectsData)
-        ? projectsData.filter((p: any) => p.status === "Critical").length
+        ? projectsData.filter((p: { status?: string }) => p.status === "Critical").length
         : 0;
 
       const criticalFindings = Array.isArray(auditsData)
-        ? auditsData.reduce((acc: number, a: any) => acc + (a.criticalCount || 0), 0)
+        ? auditsData.reduce((acc: number, a: { criticalCount?: number }) => acc + (a.criticalCount || 0), 0)
         : 0;
 
       setStats({

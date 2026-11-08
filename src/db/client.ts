@@ -185,29 +185,29 @@ export class DatabaseClient {
   }
 
   // --- Deployment Repository Methods ---
-  private deployments: Map<string, any> = new Map();
+  private deployments: Map<string, Record<string, unknown>> = new Map();
 
-  public async recordDeployment(dep: any): Promise<any> {
+  public async recordDeployment(dep: Record<string, unknown> & { id: string }): Promise<Record<string, unknown>> {
     this.deployments.set(dep.id, dep);
     return dep;
   }
 
-  public async getAllDeployments(): Promise<any[]> {
+  public async getAllDeployments(): Promise<Record<string, unknown>[]> {
     this.ensureInitialData();
     return Array.from(this.deployments.values()).sort(
-      (a, b) => new Date(b.deployedAt).getTime() - new Date(a.deployedAt).getTime()
+      (a, b) => new Date(String(b.deployedAt)).getTime() - new Date(String(a.deployedAt)).getTime()
     );
   }
 
   // --- Server Infrastructure Repository Methods ---
-  private servers: Map<string, any> = new Map();
+  private servers: Map<string, Record<string, unknown>> = new Map();
 
-  public async getAllServers(): Promise<any[]> {
+  public async getAllServers(): Promise<Record<string, unknown>[]> {
     this.ensureInitialData();
     return Array.from(this.servers.values());
   }
 
-  public async recordServer(server: any): Promise<any> {
+  public async recordServer(server: Record<string, unknown> & { id: string }): Promise<Record<string, unknown>> {
     this.servers.set(server.id, server);
     return server;
   }

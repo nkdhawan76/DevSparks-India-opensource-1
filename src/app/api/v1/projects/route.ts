@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
     const projects = rawProjects.map((p) => {
       const projectAudits = allAudits.filter((a) => a.projectId === p.id);
       const latestAudit = projectAudits[0] || null;
-      const score = (latestAudit?.summary as any)?.score ?? 100;
+      const score = (latestAudit?.summary as Record<string, unknown>)?.score as number ?? 100;
       const status =
         latestAudit?.status === "SUCCESS"
           ? "Healthy"

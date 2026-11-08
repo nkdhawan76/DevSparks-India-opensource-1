@@ -136,8 +136,8 @@ export async function GET(req: NextRequest) {
 
     const formattedAudits = rawAudits.map((a) => {
       const proj = projectMap.get(a.projectId);
-      const summary = (a.summary as any) || {};
-      const totalFindings = summary.totalFindings ?? 0;
+      const summary = (a.summary as Record<string, unknown>) || {};
+      const totalFindings = (summary.totalFindings as number) ?? 0;
       const statusLabel =
         a.status === "SUCCESS"
           ? "Passed"
