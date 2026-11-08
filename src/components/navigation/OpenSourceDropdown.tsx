@@ -1,9 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import Link from "next/link";
 import { ExternalLink, GitPullRequest, Map, FileText, Bug } from "lucide-react";
 import { GitHubIcon } from "@/components/common/Icons";
+import { gsap } from "gsap";
+import { useGSAP } from "@gsap/react";
 
 const OPEN_SOURCE_ITEMS = [
   {
@@ -39,8 +41,42 @@ const OPEN_SOURCE_ITEMS = [
 ];
 
 export function OpenSourceDropdown({ onClose }: { onClose?: () => void }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(
+    () => {
+      if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        return;
+      }
+
+      const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
+
+      tl.from(containerRef.current, {
+        y: -4,
+        opacity: 0,
+        scale: 0.98,
+        duration: 0.2,
+      });
+
+      tl.from(
+        ".dropdown-item",
+        {
+          y: 3,
+          opacity: 0,
+          duration: 0.15,
+          stagger: 0.02,
+        },
+        "-=0.1"
+      );
+    },
+    { scope: containerRef }
+  );
+
   return (
-    <div className="w-[240px] bg-white border border-[#E5E7EB] rounded-xl shadow-xl shadow-slate-200/50 p-2 font-sans">
+    <div
+      ref={containerRef}
+      className="w-[220px] bg-white border border-[#E5E7EB] rounded-xl shadow-xl shadow-slate-200/60 p-1.5 font-sans select-none will-change-transform"
+    >
       <div className="space-y-0.5">
         {OPEN_SOURCE_ITEMS.map((item) => {
           const Icon = item.icon;
@@ -52,13 +88,15 @@ export function OpenSourceDropdown({ onClose }: { onClose?: () => void }) {
                 target="_blank"
                 rel="noreferrer noopener"
                 onClick={onClose}
-                className="flex items-center justify-between p-2 rounded-lg text-xs font-semibold text-[#17172A] hover:bg-slate-50 hover:text-[#5938F5] transition-colors group"
+                className="dropdown-item flex items-center justify-between p-1.5 rounded-[7px] text-[11.5px] font-semibold text-[#17172A] hover:bg-slate-50 hover:text-[#5938F5] transition-colors group"
               >
-                <div className="flex items-center gap-2.5">
-                  <Icon className="h-3.5 w-3.5 text-slate-500 group-hover:text-[#5938F5]" size={14} />
+                <div className="flex items-center gap-2">
+                  <div className="w-5.5 h-5.5 rounded-[5px] bg-slate-50 text-slate-700 flex items-center justify-center group-hover:bg-purple-50 group-hover:text-[#5938F5] transition-colors">
+                    <Icon className="h-3 w-3" size={12} />
+                  </div>
                   <span>{item.title}</span>
                 </div>
-                <ExternalLink className="h-3 w-3 text-slate-400 opacity-60" />
+                <ExternalLink className="h-2.5 w-2.5 text-slate-400 opacity-60" />
               </a>
             );
           }
@@ -67,9 +105,11 @@ export function OpenSourceDropdown({ onClose }: { onClose?: () => void }) {
               key={item.title}
               href={item.route}
               onClick={onClose}
-              className="flex items-center gap-2.5 p-2 rounded-lg text-xs font-semibold text-[#17172A] hover:bg-slate-50 hover:text-[#5938F5] transition-colors group"
+              className="dropdown-item flex items-center gap-2 p-1.5 rounded-[7px] text-[11.5px] font-semibold text-[#17172A] hover:bg-slate-50 hover:text-[#5938F5] transition-colors group"
             >
-              <Icon className="h-3.5 w-3.5 text-slate-500 group-hover:text-[#5938F5]" size={14} />
+              <div className="w-5.5 h-5.5 rounded-[5px] bg-slate-50 text-slate-700 flex items-center justify-center group-hover:bg-purple-50 group-hover:text-[#5938F5] transition-colors">
+                <Icon className="h-3 w-3" size={12} />
+              </div>
               <span>{item.title}</span>
             </Link>
           );

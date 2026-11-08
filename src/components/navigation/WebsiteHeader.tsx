@@ -9,6 +9,8 @@ import { SolutionsMegaMenu } from "./SolutionsMegaMenu";
 import { ResourcesMegaMenu } from "./ResourcesMegaMenu";
 import { OpenSourceDropdown } from "./OpenSourceDropdown";
 import { MobileNavigationDrawer } from "./MobileNavigationDrawer";
+import { gsap } from "gsap";
+import { useGSAP } from "@gsap/react";
 
 type ActiveMenu = "product" | "solutions" | "resources" | "opensource" | null;
 
@@ -16,7 +18,26 @@ export function WebsiteHeader() {
   const [activeMenu, setActiveMenu] = useState<ActiveMenu>(null);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
   const navContainerRef = useRef<HTMLDivElement>(null);
+  const headerBarRef = useRef<HTMLElement>(null);
   const leaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Initial GSAP header entrance
+  useGSAP(
+    () => {
+      if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        return;
+      }
+      if (headerBarRef.current) {
+        gsap.from(headerBarRef.current, {
+          y: -10,
+          opacity: 0,
+          duration: 0.4,
+          ease: "power2.out",
+        });
+      }
+    },
+    { scope: navContainerRef }
+  );
 
   const handleMouseEnter = (menu: ActiveMenu) => {
     if (leaveTimeoutRef.current) {
@@ -29,7 +50,7 @@ export function WebsiteHeader() {
   const handleMouseLeave = () => {
     leaveTimeoutRef.current = setTimeout(() => {
       setActiveMenu(null);
-    }, 150);
+    }, 200);
   };
 
   const closeMenu = () => {
@@ -59,24 +80,27 @@ export function WebsiteHeader() {
   return (
     <div ref={navContainerRef} className="relative w-full z-40 select-none">
       {/* Floating Header Container */}
-      <header className="max-w-6xl mx-auto w-full py-2 px-3 sm:px-5 rounded-2xl bg-white/90 border border-slate-200/90 shadow-xs backdrop-blur-md flex items-center justify-between text-xs">
+      <header
+        ref={headerBarRef}
+        className="max-w-6xl mx-auto w-full py-1.5 px-3 sm:px-4 rounded-2xl bg-white/95 border border-slate-200/90 shadow-xs backdrop-blur-md flex items-center justify-between text-xs will-change-transform"
+      >
         {/* Left: Brand Identity (DeployCheck By DevSparks India) */}
-        <Link href="/" onClick={closeMenu} className="inline-flex items-center gap-2.5 group shrink-0">
-          <div className="w-8 h-8 rounded-[8px] bg-[#5938F5] text-white flex items-center justify-center font-bold shadow-xs group-hover:bg-[#4726DB] group-hover:scale-105 active:scale-95 transition-all">
-            <Zap className="h-4 w-4 fill-white" />
+        <Link href="/" onClick={closeMenu} className="inline-flex items-center gap-2 group shrink-0 py-0.5">
+          <div className="w-7.5 h-7.5 rounded-[8px] bg-[#5938F5] text-white flex items-center justify-center font-bold shadow-xs group-hover:bg-[#4726DB] group-hover:scale-105 active:scale-95 transition-all">
+            <Zap className="h-3.5 w-3.5 fill-white" />
           </div>
           <div className="flex flex-col">
-            <span className="font-extrabold text-sm text-[#17172A] tracking-tight leading-none group-hover:text-[#5938F5] transition-colors">
+            <span className="font-extrabold text-[13px] text-[#17172A] tracking-tight leading-none group-hover:text-[#5938F5] transition-colors">
               DeployCheck
             </span>
-            <span className="text-[9.5px] text-slate-400 font-medium leading-tight mt-0.5">
+            <span className="text-[9px] text-slate-400 font-medium leading-tight mt-0.5">
               By DevSparks India
             </span>
           </div>
         </Link>
 
         {/* Center: Desktop Navigation Bar with Mega Menus */}
-        <nav className="hidden lg:flex items-center gap-1">
+        <nav className="hidden lg:flex items-center gap-0.5">
           {/* Product Trigger */}
           <div
             className="relative"
@@ -85,7 +109,7 @@ export function WebsiteHeader() {
           >
             <button
               onClick={() => setActiveMenu(activeMenu === "product" ? null : "product")}
-              className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+              className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-[8px] text-[11.5px] font-semibold transition-colors ${
                 activeMenu === "product"
                   ? "bg-purple-50 text-[#5938F5]"
                   : "text-slate-700 hover:text-[#17172A] hover:bg-slate-50"
@@ -94,7 +118,7 @@ export function WebsiteHeader() {
             >
               <span>Product</span>
               <ChevronDown
-                className={`h-3.5 w-3.5 transition-transform duration-200 ${
+                className={`h-3 w-3 transition-transform duration-200 ${
                   activeMenu === "product" ? "rotate-180 text-[#5938F5]" : "text-slate-400"
                 }`}
               />
@@ -109,7 +133,7 @@ export function WebsiteHeader() {
           >
             <button
               onClick={() => setActiveMenu(activeMenu === "solutions" ? null : "solutions")}
-              className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+              className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-[8px] text-[11.5px] font-semibold transition-colors ${
                 activeMenu === "solutions"
                   ? "bg-purple-50 text-[#5938F5]"
                   : "text-slate-700 hover:text-[#17172A] hover:bg-slate-50"
@@ -118,7 +142,7 @@ export function WebsiteHeader() {
             >
               <span>Solutions</span>
               <ChevronDown
-                className={`h-3.5 w-3.5 transition-transform duration-200 ${
+                className={`h-3 w-3 transition-transform duration-200 ${
                   activeMenu === "solutions" ? "rotate-180 text-[#5938F5]" : "text-slate-400"
                 }`}
               />
@@ -133,7 +157,7 @@ export function WebsiteHeader() {
           >
             <button
               onClick={() => setActiveMenu(activeMenu === "resources" ? null : "resources")}
-              className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+              className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-[8px] text-[11.5px] font-semibold transition-colors ${
                 activeMenu === "resources"
                   ? "bg-purple-50 text-[#5938F5]"
                   : "text-slate-700 hover:text-[#17172A] hover:bg-slate-50"
@@ -142,14 +166,14 @@ export function WebsiteHeader() {
             >
               <span>Resources</span>
               <ChevronDown
-                className={`h-3.5 w-3.5 transition-transform duration-200 ${
+                className={`h-3 w-3 transition-transform duration-200 ${
                   activeMenu === "resources" ? "rotate-180 text-[#5938F5]" : "text-slate-400"
                 }`}
               />
             </button>
           </div>
 
-          {/* Open Source Dropdown Trigger */}
+          {/* Open Source Dropdown Trigger with Direct Child Anchor */}
           <div
             className="relative"
             onMouseEnter={() => handleMouseEnter("opensource")}
@@ -157,7 +181,7 @@ export function WebsiteHeader() {
           >
             <button
               onClick={() => setActiveMenu(activeMenu === "opensource" ? null : "opensource")}
-              className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+              className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-[8px] text-[11.5px] font-semibold transition-colors ${
                 activeMenu === "opensource"
                   ? "bg-purple-50 text-[#5938F5]"
                   : "text-slate-700 hover:text-[#17172A] hover:bg-slate-50"
@@ -166,30 +190,46 @@ export function WebsiteHeader() {
             >
               <span>Open Source</span>
               <ChevronDown
-                className={`h-3.5 w-3.5 transition-transform duration-200 ${
+                className={`h-3 w-3 transition-transform duration-200 ${
                   activeMenu === "opensource" ? "rotate-180 text-[#5938F5]" : "text-slate-400"
                 }`}
               />
             </button>
+
+            {/* Anchored Open Source Dropdown right below the trigger */}
+            {activeMenu === "opensource" && (
+              <div
+                className="absolute top-full left-0 pt-2 z-50 pointer-events-auto"
+                onMouseEnter={() => {
+                  if (leaveTimeoutRef.current) {
+                    clearTimeout(leaveTimeoutRef.current);
+                    leaveTimeoutRef.current = null;
+                  }
+                }}
+                onMouseLeave={handleMouseLeave}
+              >
+                <OpenSourceDropdown onClose={closeMenu} />
+              </div>
+            )}
           </div>
 
           {/* Pricing Direct Link */}
           <Link
             href="/documentation"
             onClick={closeMenu}
-            className="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 hover:text-[#17172A] hover:bg-slate-50 transition-colors"
+            className="px-2.5 py-1.5 rounded-[8px] text-[11.5px] font-semibold text-slate-700 hover:text-[#17172A] hover:bg-slate-50 transition-colors"
           >
             Pricing
           </Link>
         </nav>
 
         {/* Right Desktop Actions */}
-        <div className="hidden lg:flex items-center gap-2">
+        <div className="hidden lg:flex items-center gap-1.5">
           <Link
             href="/documentation"
-            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:text-[#17172A] hover:bg-slate-50 transition-colors"
+            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-[8px] text-[11.5px] font-medium text-slate-600 hover:text-[#17172A] hover:bg-slate-50 transition-colors"
           >
-            <BookOpen className="h-3.5 w-3.5 text-slate-400" />
+            <BookOpen className="h-3 w-3 text-slate-400" />
             <span>Documentation</span>
           </Link>
 
@@ -197,7 +237,7 @@ export function WebsiteHeader() {
             variant="outline"
             size="sm"
             asChild
-            className="h-8 rounded-[8px] px-3.5 text-xs font-semibold border-[#E5E7EB] hover:bg-slate-50 text-[#17172A]"
+            className="h-7.5 rounded-[7px] px-3 text-[11px] font-semibold border-[#E5E7EB] hover:bg-slate-50 text-[#17172A]"
           >
             <Link href="/login">Sign In</Link>
           </Button>
@@ -205,39 +245,39 @@ export function WebsiteHeader() {
           <Button
             size="sm"
             asChild
-            className="h-8 rounded-[8px] px-3.5 text-xs font-bold bg-[#5938F5] hover:bg-[#4726DB] text-white shadow-2xs gap-1.5"
+            className="h-7.5 rounded-[7px] px-3 text-[11px] font-bold bg-[#5938F5] hover:bg-[#4726DB] text-white shadow-2xs gap-1"
           >
             <Link href="/signup">
               <span>Get Started Free</span>
-              <ArrowRight className="h-3.5 w-3.5" />
+              <ArrowRight className="h-3 w-3" />
             </Link>
           </Button>
         </div>
 
         {/* Mobile Hamburger Button */}
-        <div className="lg:hidden flex items-center gap-2">
+        <div className="lg:hidden flex items-center gap-1.5">
           <Button
             size="sm"
             asChild
-            className="h-7.5 rounded-[8px] px-2.5 text-[11px] font-bold bg-[#5938F5] text-white"
+            className="h-7 rounded-[7px] px-2.5 text-[10.5px] font-bold bg-[#5938F5] text-white"
           >
             <Link href="/signup">Get Started</Link>
           </Button>
 
           <button
             onClick={() => setMobileDrawerOpen(true)}
-            className="p-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+            className="p-1 rounded-[7px] text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
             aria-label="Open navigation menu"
           >
-            <Menu className="h-5 w-5" />
+            <Menu className="h-4.5 w-4.5" />
           </button>
         </div>
       </header>
 
-      {/* Floating Mega Menu Panels Layer */}
-      {activeMenu && (
+      {/* Centered Mega Menu Floating Layer (Product, Solutions, Resources) */}
+      {activeMenu && activeMenu !== "opensource" && (
         <div
-          className="absolute top-full left-0 right-0 mt-2 flex justify-center z-50 pointer-events-auto animate-in fade-in-0 zoom-in-95 duration-150"
+          className="absolute top-full left-0 right-0 pt-2 flex justify-center z-50 pointer-events-auto"
           onMouseEnter={() => {
             if (leaveTimeoutRef.current) {
               clearTimeout(leaveTimeoutRef.current);
@@ -249,7 +289,6 @@ export function WebsiteHeader() {
           {activeMenu === "product" && <ProductMegaMenu onClose={closeMenu} />}
           {activeMenu === "solutions" && <SolutionsMegaMenu onClose={closeMenu} />}
           {activeMenu === "resources" && <ResourcesMegaMenu onClose={closeMenu} />}
-          {activeMenu === "opensource" && <OpenSourceDropdown onClose={closeMenu} />}
         </div>
       )}
 

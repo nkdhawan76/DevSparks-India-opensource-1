@@ -92,3 +92,4 @@ This document outlines the architecture, interaction models, and responsive desi
 - **1440px / 1280px:** Full desktop layout with multi-column mega menus.
 - **1024px:** Compact desktop layout, menus center-aligned within viewport.
 - **768px / 390px:** Mobile layout with hamburger trigger and full-height slide drawer.
+

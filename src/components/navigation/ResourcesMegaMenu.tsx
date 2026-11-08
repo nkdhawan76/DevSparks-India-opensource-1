@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import Link from "next/link";
 import {
   BookOpen,
@@ -13,6 +13,8 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { GitHubIcon } from "@/components/common/Icons";
+import { gsap } from "gsap";
+import { useGSAP } from "@gsap/react";
 
 interface ResourceItem {
   title: string;
@@ -25,13 +27,13 @@ interface ResourceItem {
 const LEARN_ITEMS: ResourceItem[] = [
   {
     title: "Documentation",
-    description: "Installation and complete usage guides.",
+    description: "Installation and complete guides.",
     icon: BookOpen,
     route: "/documentation",
   },
   {
     title: "API Reference",
-    description: "Explore API endpoints and integration examples.",
+    description: "API endpoints and client examples.",
     icon: Code2,
     route: "/docs/api",
   },
@@ -43,7 +45,7 @@ const LEARN_ITEMS: ResourceItem[] = [
   },
   {
     title: "Tutorials",
-    description: "Practical developer guides.",
+    description: "Real-world developer tutorials.",
     icon: GraduationCap,
     route: "/documentation",
   },
@@ -52,26 +54,26 @@ const LEARN_ITEMS: ResourceItem[] = [
 const COMMUNITY_ITEMS: ResourceItem[] = [
   {
     title: "GitHub Repository",
-    description: "Explore source code and contribute.",
+    description: "Explore source and star on GitHub.",
     icon: GitHubIcon,
     route: "https://github.com/nkdhawan76/DevSparks-India-opensource-1",
     external: true,
   },
   {
     title: "Changelog",
-    description: "See latest improvements and releases.",
+    description: "Latest improvements and releases.",
     icon: History,
     route: "/changelog",
   },
   {
     title: "Roadmap",
-    description: "Explore upcoming milestones.",
+    description: "Upcoming platform milestones.",
     icon: Map,
     route: "/roadmap",
   },
   {
     title: "Community Discussions",
-    description: "Ask questions and share ideas.",
+    description: "Ask questions and share feedback.",
     icon: MessagesSquare,
     route: "https://github.com/nkdhawan76/DevSparks-India-opensource-1/discussions",
     external: true,
@@ -79,14 +81,59 @@ const COMMUNITY_ITEMS: ResourceItem[] = [
 ];
 
 export function ResourcesMegaMenu({ onClose }: { onClose?: () => void }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(
+    () => {
+      if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        return;
+      }
+
+      const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
+
+      tl.from(containerRef.current, {
+        y: -6,
+        opacity: 0,
+        scale: 0.985,
+        duration: 0.22,
+      });
+
+      tl.from(
+        ".resources-column",
+        {
+          y: 6,
+          opacity: 0,
+          duration: 0.2,
+          stagger: 0.04,
+        },
+        "-=0.12"
+      );
+
+      tl.from(
+        ".resources-item",
+        {
+          y: 4,
+          opacity: 0,
+          duration: 0.16,
+          stagger: 0.015,
+        },
+        "-=0.12"
+      );
+    },
+    { scope: containerRef }
+  );
+
   return (
-    <div className="w-[580px] bg-white border border-[#E5E7EB] rounded-2xl shadow-xl shadow-slate-200/50 p-6 grid grid-cols-2 gap-5 font-sans">
+    <div
+      ref={containerRef}
+      className="w-[520px] max-w-[95vw] bg-white border border-[#E5E7EB] rounded-2xl shadow-xl shadow-slate-200/60 p-4 sm:p-5 grid grid-cols-2 gap-4 font-sans select-none will-change-transform"
+    >
       {/* LEARN */}
-      <div>
-        <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2.5">
+      <div className="resources-column">
+        <div className="text-[9.5px] font-bold text-slate-400 uppercase tracking-wider mb-2 px-1">
           LEARN
         </div>
-        <div className="space-y-1">
+        <div className="space-y-0.5">
           {LEARN_ITEMS.map((item) => {
             const Icon = item.icon;
             return (
@@ -94,16 +141,16 @@ export function ResourcesMegaMenu({ onClose }: { onClose?: () => void }) {
                 key={item.title}
                 href={item.route}
                 onClick={onClose}
-                className="flex items-start gap-2.5 p-2 rounded-lg hover:bg-slate-50 transition-colors group"
+                className="resources-item flex items-start gap-2 p-1.5 rounded-[8px] hover:bg-slate-50 transition-colors group"
               >
-                <div className="w-7 h-7 rounded-md bg-purple-50 text-[#5938F5] flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-[#5938F5] group-hover:text-white transition-colors">
+                <div className="w-6.5 h-6.5 rounded-[6px] bg-purple-50 text-[#5938F5] flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-[#5938F5] group-hover:text-white transition-all duration-150 group-hover:scale-105">
                   <Icon className="h-3.5 w-3.5" />
                 </div>
-                <div>
-                  <div className="text-xs font-semibold text-[#17172A] group-hover:text-[#5938F5] transition-colors leading-tight">
+                <div className="min-w-0">
+                  <div className="text-[11.5px] font-semibold text-[#17172A] group-hover:text-[#5938F5] transition-colors leading-tight">
                     {item.title}
                   </div>
-                  <div className="text-[10.5px] text-[#667085] leading-tight mt-0.5">
+                  <div className="text-[10px] text-[#667085] leading-tight mt-0.5 line-clamp-1">
                     {item.description}
                   </div>
                 </div>
@@ -114,35 +161,58 @@ export function ResourcesMegaMenu({ onClose }: { onClose?: () => void }) {
       </div>
 
       {/* COMMUNITY */}
-      <div>
-        <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2.5">
+      <div className="resources-column">
+        <div className="text-[9.5px] font-bold text-slate-400 uppercase tracking-wider mb-2 px-1">
           COMMUNITY
         </div>
-        <div className="space-y-1">
+        <div className="space-y-0.5">
           {COMMUNITY_ITEMS.map((item) => {
             const Icon = item.icon;
+            if (item.external) {
+              return (
+                <a
+                  key={item.title}
+                  href={item.route}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  onClick={onClose}
+                  className="resources-item flex items-start gap-2 p-1.5 rounded-[8px] hover:bg-slate-50 transition-colors group"
+                >
+                  <div className="w-6.5 h-6.5 rounded-[6px] bg-slate-100 text-slate-700 flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-[#17172A] group-hover:text-white transition-all duration-150 group-hover:scale-105">
+                    <Icon className="h-3.5 w-3.5" size={13} />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="text-[11.5px] font-semibold text-[#17172A] group-hover:text-[#5938F5] transition-colors flex items-center justify-between leading-tight">
+                      <span>{item.title}</span>
+                      <ExternalLink className="h-2.5 w-2.5 text-slate-400 opacity-60" />
+                    </div>
+                    <div className="text-[10px] text-[#667085] leading-tight mt-0.5 line-clamp-1">
+                      {item.description}
+                    </div>
+                  </div>
+                </a>
+              );
+            }
+
             return (
-              <a
+              <Link
                 key={item.title}
                 href={item.route}
-                target={item.external ? "_blank" : undefined}
-                rel={item.external ? "noreferrer noopener" : undefined}
                 onClick={onClose}
-                className="flex items-start gap-2.5 p-2 rounded-lg hover:bg-slate-50 transition-colors group"
+                className="resources-item flex items-start gap-2 p-1.5 rounded-[8px] hover:bg-slate-50 transition-colors group"
               >
-                <div className="w-7 h-7 rounded-md bg-slate-100 text-slate-700 flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-[#17172A] group-hover:text-white transition-colors">
-                  <Icon className="h-3.5 w-3.5" size={14} />
+                <div className="w-6.5 h-6.5 rounded-[6px] bg-slate-100 text-slate-700 flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-[#17172A] group-hover:text-white transition-all duration-150 group-hover:scale-105">
+                  <Icon className="h-3.5 w-3.5" size={13} />
                 </div>
-                <div className="flex-1">
-                  <div className="text-xs font-semibold text-[#17172A] group-hover:text-[#5938F5] transition-colors leading-tight flex items-center gap-1">
-                    <span>{item.title}</span>
-                    {item.external && <ExternalLink className="h-3 w-3 opacity-40" />}
+                <div className="min-w-0">
+                  <div className="text-[11.5px] font-semibold text-[#17172A] group-hover:text-[#5938F5] transition-colors leading-tight">
+                    {item.title}
                   </div>
-                  <div className="text-[10.5px] text-[#667085] leading-tight mt-0.5">
+                  <div className="text-[10px] text-[#667085] leading-tight mt-0.5 line-clamp-1">
                     {item.description}
                   </div>
                 </div>
-              </a>
+              </Link>
             );
           })}
         </div>

@@ -1,9 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import Link from "next/link";
 import { Zap, ExternalLink } from "lucide-react";
 import { GitHubIcon } from "@/components/common/Icons";
+import { gsap } from "gsap";
+import { useGSAP } from "@gsap/react";
 
 interface FooterLinkItem {
   label: string;
@@ -57,49 +59,68 @@ const LEGAL_LINKS: FooterLinkItem[] = [
 ];
 
 export function WebsiteFooter() {
+  const footerRef = useRef<HTMLElement>(null);
+
+  useGSAP(
+    () => {
+      if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        return;
+      }
+
+      gsap.from(".footer-column", {
+        y: 10,
+        opacity: 0,
+        duration: 0.35,
+        stagger: 0.04,
+        ease: "power2.out",
+      });
+    },
+    { scope: footerRef }
+  );
+
   return (
-    <footer className="w-full bg-[#F7F8FC] border-t border-[#E5E7EB] font-sans select-none mt-8">
+    <footer ref={footerRef} className="w-full bg-[#F7F8FC] border-t border-[#E5E7EB] font-sans select-none mt-8 will-change-transform">
       {/* 5-Column Content Section */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 lg:py-16">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 lg:py-14">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-10">
           {/* Brand Info Column (4 cols) */}
-          <div className="md:col-span-4 space-y-4">
+          <div className="footer-column md:col-span-4 space-y-3.5">
             <Link href="/" className="inline-flex items-center gap-2.5 group">
-              <div className="w-8 h-8 rounded-[8px] bg-[#5938F5] text-white flex items-center justify-center font-bold shadow-xs group-hover:bg-[#4726DB] transition-colors">
+              <div className="w-7.5 h-7.5 rounded-[8px] bg-[#5938F5] text-white flex items-center justify-center font-bold shadow-xs group-hover:bg-[#4726DB] transition-colors">
                 <Zap className="h-4 w-4 fill-white" />
               </div>
               <div className="flex flex-col">
-                <span className="font-extrabold text-sm text-[#17172A] tracking-tight leading-none">
+                <span className="font-extrabold text-[13px] text-[#17172A] tracking-tight leading-none">
                   DeployCheck
                 </span>
-                <span className="text-[10px] text-slate-400 font-medium leading-tight mt-0.5">
+                <span className="text-[9.5px] text-slate-400 font-medium leading-tight mt-0.5">
                   By DevSparks India
                 </span>
               </div>
             </Link>
 
-            <p className="text-xs text-[#667085] leading-relaxed max-w-sm">
+            <p className="text-[11.5px] text-[#667085] leading-relaxed max-w-sm">
               Open-source developer operations platform for auditing, AI-assisted development, secure deployment and website monitoring.
             </p>
 
             {/* Social Links */}
-            <div className="flex items-center gap-3 pt-2">
+            <div className="flex items-center gap-2.5 pt-1">
               <a
                 href="https://github.com/nkdhawan76/DevSparks-India-opensource-1"
                 target="_blank"
                 rel="noreferrer noopener"
-                className="w-8 h-8 rounded-lg bg-white border border-[#E5E7EB] text-slate-700 hover:text-[#17172A] hover:border-slate-300 flex items-center justify-center transition-colors shadow-2xs"
+                className="w-7.5 h-7.5 rounded-lg bg-white border border-[#E5E7EB] text-slate-700 hover:text-[#17172A] hover:border-slate-300 flex items-center justify-center transition-colors shadow-2xs"
                 title="GitHub"
                 aria-label="GitHub"
               >
-                <GitHubIcon size={15} />
+                <GitHubIcon size={14} />
               </a>
 
               <a
                 href="https://linkedin.com/company/devsparks-india"
                 target="_blank"
                 rel="noreferrer noopener"
-                className="w-8 h-8 rounded-lg bg-white border border-[#E5E7EB] text-slate-700 hover:text-[#3563E9] hover:border-slate-300 flex items-center justify-center transition-colors shadow-2xs text-xs font-bold"
+                className="w-7.5 h-7.5 rounded-lg bg-white border border-[#E5E7EB] text-slate-700 hover:text-[#3563E9] hover:border-slate-300 flex items-center justify-center transition-colors shadow-2xs text-[11px] font-bold"
                 title="LinkedIn"
                 aria-label="LinkedIn"
               >
@@ -110,7 +131,7 @@ export function WebsiteFooter() {
                 href="https://x.com/devsparksindia"
                 target="_blank"
                 rel="noreferrer noopener"
-                className="w-8 h-8 rounded-lg bg-white border border-[#E5E7EB] text-slate-700 hover:text-[#17172A] hover:border-slate-300 flex items-center justify-center transition-colors shadow-2xs text-xs font-bold"
+                className="w-7.5 h-7.5 rounded-lg bg-white border border-[#E5E7EB] text-slate-700 hover:text-[#17172A] hover:border-slate-300 flex items-center justify-center transition-colors shadow-2xs text-[11px] font-bold"
                 title="X"
                 aria-label="X"
               >
@@ -120,13 +141,13 @@ export function WebsiteFooter() {
           </div>
 
           {/* Links Columns (8 cols: 5 distinct sub-columns) */}
-          <div className="md:col-span-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 text-xs">
+          <div className="md:col-span-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-5 text-xs">
             {/* PRODUCT */}
-            <div>
-              <h5 className="text-[10.5px] font-bold text-slate-400 uppercase tracking-wider mb-3">
+            <div className="footer-column">
+              <h5 className="text-[9.5px] font-bold text-slate-400 uppercase tracking-wider mb-2.5">
                 PRODUCT
               </h5>
-              <ul className="space-y-2">
+              <ul className="space-y-1.5 text-[11.5px]">
                 {PRODUCT_LINKS.map((link) => (
                   <li key={link.label}>
                     <Link
@@ -141,11 +162,11 @@ export function WebsiteFooter() {
             </div>
 
             {/* SOLUTIONS */}
-            <div>
-              <h5 className="text-[10.5px] font-bold text-slate-400 uppercase tracking-wider mb-3">
+            <div className="footer-column">
+              <h5 className="text-[9.5px] font-bold text-slate-400 uppercase tracking-wider mb-2.5">
                 SOLUTIONS
               </h5>
-              <ul className="space-y-2">
+              <ul className="space-y-1.5 text-[11.5px]">
                 {SOLUTIONS_LINKS.map((link) => (
                   <li key={link.label}>
                     <Link
@@ -160,11 +181,11 @@ export function WebsiteFooter() {
             </div>
 
             {/* RESOURCES */}
-            <div>
-              <h5 className="text-[10.5px] font-bold text-slate-400 uppercase tracking-wider mb-3">
+            <div className="footer-column">
+              <h5 className="text-[9.5px] font-bold text-slate-400 uppercase tracking-wider mb-2.5">
                 RESOURCES
               </h5>
-              <ul className="space-y-2">
+              <ul className="space-y-1.5 text-[11.5px]">
                 {RESOURCES_LINKS.map((link) => (
                   <li key={link.label}>
                     {link.external ? (
@@ -191,11 +212,11 @@ export function WebsiteFooter() {
             </div>
 
             {/* COMPANY */}
-            <div>
-              <h5 className="text-[10.5px] font-bold text-slate-400 uppercase tracking-wider mb-3">
+            <div className="footer-column">
+              <h5 className="text-[9.5px] font-bold text-slate-400 uppercase tracking-wider mb-2.5">
                 COMPANY
               </h5>
-              <ul className="space-y-2">
+              <ul className="space-y-1.5 text-[11.5px]">
                 {COMPANY_LINKS.map((link) => (
                   <li key={link.label}>
                     {link.external ? (
@@ -222,11 +243,11 @@ export function WebsiteFooter() {
             </div>
 
             {/* LEGAL */}
-            <div>
-              <h5 className="text-[10.5px] font-bold text-slate-400 uppercase tracking-wider mb-3">
+            <div className="footer-column">
+              <h5 className="text-[9.5px] font-bold text-slate-400 uppercase tracking-wider mb-2.5">
                 LEGAL
               </h5>
-              <ul className="space-y-2">
+              <ul className="space-y-1.5 text-[11.5px]">
                 {LEGAL_LINKS.map((link) => (
                   <li key={link.label}>
                     <Link
@@ -244,12 +265,12 @@ export function WebsiteFooter() {
       </div>
 
       {/* Bottom Sub-Bar */}
-      <div className="border-t border-[#E5E7EB] bg-white py-4 px-4 sm:px-6">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#667085]">
-          <div>© DevSparks India. All rights reserved.</div>
+      <div className="border-t border-[#E5E7EB] bg-white py-3.5 px-4 sm:px-6">
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2.5 text-xs text-[#667085]">
+          <div className="text-[11px]">© DevSparks India. All rights reserved.</div>
 
           {/* Quick Legal Links & Status */}
-          <div className="flex items-center gap-4 text-[11px]">
+          <div className="flex items-center gap-3.5 text-[11px]">
             <Link href="/docs/terms" className="hover:text-[#17172A] transition-colors">
               Privacy
             </Link>
@@ -265,7 +286,7 @@ export function WebsiteFooter() {
             {/* System Status */}
             <Link
               href="/status"
-              className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 font-semibold hover:bg-emerald-100 transition-colors"
+              className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 font-semibold hover:bg-emerald-100 transition-colors"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               <span>Operational</span>

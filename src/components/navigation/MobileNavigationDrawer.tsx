@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import {
   X,
@@ -30,6 +30,8 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { GitHubIcon } from "@/components/common/Icons";
+import { gsap } from "gsap";
+import { useGSAP } from "@gsap/react";
 
 interface MobileNavigationDrawerProps {
   isOpen: boolean;
@@ -41,6 +43,9 @@ export function MobileNavigationDrawer({
   onClose,
 }: MobileNavigationDrawerProps) {
   const [expandedSection, setExpandedSection] = useState<string | null>("product");
+  const drawerRef = useRef<HTMLDivElement>(null);
+  const backdropRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // Prevent background scrolling when open & handle Escape key
   useEffect(() => {
@@ -59,6 +64,41 @@ export function MobileNavigationDrawer({
     }
   }, [isOpen, onClose]);
 
+  // GSAP Drawer animation on open
+  useGSAP(
+    () => {
+      if (!isOpen) return;
+
+      if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        return;
+      }
+
+      if (backdropRef.current && drawerRef.current) {
+        gsap.fromTo(
+          backdropRef.current,
+          { opacity: 0 },
+          { opacity: 1, duration: 0.25, ease: "power2.out" }
+        );
+
+        gsap.fromTo(
+          drawerRef.current,
+          { x: "-100%" },
+          { x: "0%", duration: 0.32, ease: "power3.out" }
+        );
+
+        gsap.from(".mobile-drawer-item", {
+          opacity: 0,
+          x: -8,
+          duration: 0.2,
+          stagger: 0.03,
+          delay: 0.1,
+          ease: "power2.out",
+        });
+      }
+    },
+    { dependencies: [isOpen], scope: containerRef }
+  );
+
   if (!isOpen) return null;
 
   const toggleSection = (section: string) => {
@@ -66,18 +106,22 @@ export function MobileNavigationDrawer({
   };
 
   return (
-    <div className="fixed inset-0 z-50 lg:hidden flex">
+    <div ref={containerRef} className="fixed inset-0 z-50 lg:hidden flex">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-slate-900/30 backdrop-blur-xs transition-opacity"
+        ref={backdropRef}
+        className="fixed inset-0 bg-slate-900/35 backdrop-blur-xs will-change-[opacity]"
         onClick={onClose}
         aria-hidden="true"
       />
 
       {/* Drawer */}
-      <div className="relative w-full max-w-sm bg-white h-full shadow-2xl flex flex-col justify-between overflow-y-auto font-sans z-10">
+      <div
+        ref={drawerRef}
+        className="relative w-full max-w-xs bg-white h-full shadow-2xl flex flex-col justify-between overflow-y-auto font-sans z-10 will-change-transform"
+      >
         {/* Top Header */}
-        <div className="p-4 border-b border-[#E5E7EB] flex items-center justify-between">
+        <div className="p-3.5 border-b border-[#E5E7EB] flex items-center justify-between">
           <Link href="/" onClick={onClose} className="inline-flex items-center gap-2">
             <div className="w-7 h-7 rounded-[8px] bg-[#5938F5] text-white flex items-center justify-center font-bold">
               <Zap className="h-3.5 w-3.5 fill-white" />
@@ -95,28 +139,28 @@ export function MobileNavigationDrawer({
             className="p-1.5 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors"
             aria-label="Close navigation"
           >
-            <X className="h-5 w-5" />
+            <X className="h-4.5 w-4.5" />
           </button>
         </div>
 
         {/* Accordion Navigation Groups */}
-        <div className="p-4 flex-1 space-y-2 overflow-y-auto">
+        <div className="p-3.5 flex-1 space-y-2 overflow-y-auto">
           {/* PRODUCT ACCORDION */}
-          <div className="border border-[#E5E7EB] rounded-xl overflow-hidden">
+          <div className="mobile-drawer-item border border-[#E5E7EB] rounded-xl overflow-hidden">
             <button
               onClick={() => toggleSection("product")}
-              className="w-full p-3 flex items-center justify-between text-xs font-bold text-[#17172A] bg-slate-50/60 hover:bg-slate-50"
+              className="w-full p-2.5 flex items-center justify-between text-xs font-bold text-[#17172A] bg-slate-50/60 hover:bg-slate-50"
             >
               <span>Product</span>
               <ChevronDown
-                className={`h-4 w-4 text-slate-400 transition-transform ${
+                className={`h-3.5 w-3.5 text-slate-400 transition-transform duration-200 ${
                   expandedSection === "product" ? "rotate-180 text-[#5938F5]" : ""
                 }`}
               />
             </button>
             {expandedSection === "product" && (
-              <div className="p-3 bg-white space-y-2 text-xs border-t border-[#E5E7EB]">
-                <div className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">DEVELOP</div>
+              <div className="p-2.5 bg-white space-y-1.5 text-xs border-t border-[#E5E7EB]">
+                <div className="text-[8.5px] font-bold text-slate-400 uppercase tracking-wider">DEVELOP</div>
                 <Link href="/app/projects" onClick={onClose} className="flex items-center gap-2 py-1 text-slate-700 hover:text-[#5938F5]">
                   <FolderKanban className="h-3.5 w-3.5 text-purple-600" />
                   <span>Projects</span>
@@ -134,7 +178,7 @@ export function MobileNavigationDrawer({
                   <span>Code Diff Review</span>
                 </Link>
 
-                <div className="text-[9px] font-bold text-slate-400 uppercase tracking-wider pt-2">DEPLOY</div>
+                <div className="text-[8.5px] font-bold text-slate-400 uppercase tracking-wider pt-1.5">DEPLOY</div>
                 <Link href="/features/vps" onClick={onClose} className="flex items-center gap-2 py-1 text-slate-700 hover:text-[#3563E9]">
                   <Server className="h-3.5 w-3.5 text-blue-600" />
                   <span>VPS Management</span>
@@ -148,7 +192,7 @@ export function MobileNavigationDrawer({
                   <span>SSH Server Assistant</span>
                 </Link>
 
-                <div className="text-[9px] font-bold text-slate-400 uppercase tracking-wider pt-2">MONITOR</div>
+                <div className="text-[8.5px] font-bold text-slate-400 uppercase tracking-wider pt-1.5">MONITOR</div>
                 <Link href="/features/monitoring" onClick={onClose} className="flex items-center gap-2 py-1 text-slate-700 hover:text-[#16A34A]">
                   <Activity className="h-3.5 w-3.5 text-emerald-600" />
                   <span>Website Monitoring</span>
@@ -166,21 +210,21 @@ export function MobileNavigationDrawer({
           </div>
 
           {/* SOLUTIONS ACCORDION */}
-          <div className="border border-[#E5E7EB] rounded-xl overflow-hidden">
+          <div className="mobile-drawer-item border border-[#E5E7EB] rounded-xl overflow-hidden">
             <button
               onClick={() => toggleSection("solutions")}
-              className="w-full p-3 flex items-center justify-between text-xs font-bold text-[#17172A] bg-slate-50/60 hover:bg-slate-50"
+              className="w-full p-2.5 flex items-center justify-between text-xs font-bold text-[#17172A] bg-slate-50/60 hover:bg-slate-50"
             >
               <span>Solutions</span>
               <ChevronDown
-                className={`h-4 w-4 text-slate-400 transition-transform ${
+                className={`h-3.5 w-3.5 text-slate-400 transition-transform duration-200 ${
                   expandedSection === "solutions" ? "rotate-180 text-[#5938F5]" : ""
                 }`}
               />
             </button>
             {expandedSection === "solutions" && (
-              <div className="p-3 bg-white space-y-2 text-xs border-t border-[#E5E7EB]">
-                <div className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">BY ROLE</div>
+              <div className="p-2.5 bg-white space-y-1.5 text-xs border-t border-[#E5E7EB]">
+                <div className="text-[8.5px] font-bold text-slate-400 uppercase tracking-wider">BY ROLE</div>
                 <Link href="/solutions/developers" onClick={onClose} className="flex items-center gap-2 py-1 text-slate-700 hover:text-[#5938F5]">
                   <Code className="h-3.5 w-3.5 text-purple-600" />
                   <span>For Developers</span>
@@ -202,20 +246,20 @@ export function MobileNavigationDrawer({
           </div>
 
           {/* RESOURCES ACCORDION */}
-          <div className="border border-[#E5E7EB] rounded-xl overflow-hidden">
+          <div className="mobile-drawer-item border border-[#E5E7EB] rounded-xl overflow-hidden">
             <button
               onClick={() => toggleSection("resources")}
-              className="w-full p-3 flex items-center justify-between text-xs font-bold text-[#17172A] bg-slate-50/60 hover:bg-slate-50"
+              className="w-full p-2.5 flex items-center justify-between text-xs font-bold text-[#17172A] bg-slate-50/60 hover:bg-slate-50"
             >
               <span>Resources</span>
               <ChevronDown
-                className={`h-4 w-4 text-slate-400 transition-transform ${
+                className={`h-3.5 w-3.5 text-slate-400 transition-transform duration-200 ${
                   expandedSection === "resources" ? "rotate-180 text-[#5938F5]" : ""
                 }`}
               />
             </button>
             {expandedSection === "resources" && (
-              <div className="p-3 bg-white space-y-2 text-xs border-t border-[#E5E7EB]">
+              <div className="p-2.5 bg-white space-y-1.5 text-xs border-t border-[#E5E7EB]">
                 <Link href="/documentation" onClick={onClose} className="flex items-center gap-2 py-1 text-slate-700 hover:text-[#5938F5]">
                   <BookOpen className="h-3.5 w-3.5 text-purple-600" />
                   <span>Documentation</span>
@@ -223,6 +267,10 @@ export function MobileNavigationDrawer({
                 <Link href="/docs/api" onClick={onClose} className="flex items-center gap-2 py-1 text-slate-700 hover:text-[#5938F5]">
                   <Code2 className="h-3.5 w-3.5 text-purple-600" />
                   <span>API Reference</span>
+                </Link>
+                <Link href="/documentation" onClick={onClose} className="flex items-center gap-2 py-1 text-slate-700 hover:text-[#5938F5]">
+                  <Bookmark className="h-3.5 w-3.5 text-purple-600" />
+                  <span>Getting Started</span>
                 </Link>
                 <Link href="/changelog" onClick={onClose} className="flex items-center gap-2 py-1 text-slate-700 hover:text-[#5938F5]">
                   <History className="h-3.5 w-3.5 text-purple-600" />
@@ -236,74 +284,54 @@ export function MobileNavigationDrawer({
             )}
           </div>
 
-          {/* OPEN SOURCE ACCORDION */}
-          <div className="border border-[#E5E7EB] rounded-xl overflow-hidden">
-            <button
-              onClick={() => toggleSection("opensource")}
-              className="w-full p-3 flex items-center justify-between text-xs font-bold text-[#17172A] bg-slate-50/60 hover:bg-slate-50"
+          {/* OPEN SOURCE DIRECT LINK */}
+          <div className="mobile-drawer-item border border-[#E5E7EB] rounded-xl p-2.5">
+            <a
+              href="https://github.com/nkdhawan76/DevSparks-India-opensource-1"
+              target="_blank"
+              rel="noreferrer noopener"
+              onClick={onClose}
+              className="flex items-center justify-between text-xs font-bold text-[#17172A] hover:text-[#5938F5]"
             >
-              <span>Open Source</span>
-              <ChevronDown
-                className={`h-4 w-4 text-slate-400 transition-transform ${
-                  expandedSection === "opensource" ? "rotate-180 text-[#5938F5]" : ""
-                }`}
-              />
-            </button>
-            {expandedSection === "opensource" && (
-              <div className="p-3 bg-white space-y-2 text-xs border-t border-[#E5E7EB]">
-                <a
-                  href="https://github.com/nkdhawan76/DevSparks-India-opensource-1"
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="flex items-center justify-between py-1 text-slate-700 hover:text-[#5938F5]"
-                >
-                  <span className="flex items-center gap-2">
-                    <GitHubIcon size={14} />
-                    <span>GitHub Repository</span>
-                  </span>
-                  <ExternalLink className="h-3 w-3 opacity-50" />
-                </a>
-                <Link href="/roadmap" onClick={onClose} className="flex items-center gap-2 py-1 text-slate-700 hover:text-[#5938F5]">
-                  <Map className="h-3.5 w-3.5 text-slate-500" />
-                  <span>Roadmap</span>
-                </Link>
-                <Link href="/docs/terms" onClick={onClose} className="flex items-center gap-2 py-1 text-slate-700 hover:text-[#5938F5]">
-                  <Bookmark className="h-3.5 w-3.5 text-slate-500" />
-                  <span>License (MIT)</span>
-                </Link>
+              <div className="flex items-center gap-2">
+                <GitHubIcon size={14} className="text-slate-800" />
+                <span>Open Source on GitHub</span>
               </div>
-            )}
+              <ExternalLink className="h-3 w-3 text-slate-400" />
+            </a>
           </div>
 
           {/* PRICING LINK */}
-          <Link
-            href="/documentation"
-            onClick={onClose}
-            className="block p-3 rounded-xl border border-[#E5E7EB] text-xs font-bold text-[#17172A] hover:bg-slate-50"
-          >
-            Pricing
-          </Link>
+          <div className="mobile-drawer-item border border-[#E5E7EB] rounded-xl p-2.5">
+            <Link
+              href="/documentation"
+              onClick={onClose}
+              className="flex items-center justify-between text-xs font-bold text-[#17172A] hover:text-[#5938F5]"
+            >
+              <span>Pricing</span>
+              <ArrowRight className="h-3 w-3 text-slate-400" />
+            </Link>
+          </div>
         </div>
 
-        {/* Bottom Actions */}
-        <div className="p-4 border-t border-[#E5E7EB] bg-slate-50 space-y-2">
+        {/* Bottom Drawer Actions */}
+        <div className="p-3.5 border-t border-[#E5E7EB] space-y-2 bg-slate-50/50">
           <Button
-            variant="outline"
             asChild
-            className="w-full h-9 rounded-[8px] text-xs font-semibold justify-center"
+            className="w-full h-8 text-xs font-bold bg-[#5938F5] hover:bg-[#4726DB] text-white rounded-[8px]"
           >
-            <Link href="/login" onClick={onClose}>
-              Sign In
+            <Link href="/signup" onClick={onClose}>
+              Get Started Free
             </Link>
           </Button>
 
           <Button
+            variant="outline"
             asChild
-            className="w-full h-9 rounded-[8px] text-xs font-bold bg-[#5938F5] hover:bg-[#4726DB] text-white justify-center shadow-xs"
+            className="w-full h-8 text-xs font-semibold border-[#E5E7EB] text-[#17172A] rounded-[8px] bg-white"
           >
-            <Link href="/signup" onClick={onClose}>
-              <span>Get Started Free</span>
-              <ArrowRight className="h-3.5 w-3.5 ml-1" />
+            <Link href="/login" onClick={onClose}>
+              Sign In
             </Link>
           </Button>
         </div>

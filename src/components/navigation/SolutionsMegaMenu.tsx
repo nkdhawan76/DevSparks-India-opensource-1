@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import Link from "next/link";
 import {
   Code,
@@ -13,6 +13,8 @@ import {
   HeartPulse,
   ArrowRight,
 } from "lucide-react";
+import { gsap } from "gsap";
+import { useGSAP } from "@gsap/react";
 
 interface SolutionItem {
   title: string;
@@ -24,25 +26,25 @@ interface SolutionItem {
 const BY_ROLE_ITEMS: SolutionItem[] = [
   {
     title: "For Developers",
-    description: "Audit, debug and prepare projects for deployment.",
+    description: "Audit, debug and prepare projects.",
     icon: Code,
     route: "/solutions/developers",
   },
   {
     title: "For DevOps Teams",
-    description: "Manage deployment workflows and server health.",
+    description: "Manage deployment and server health.",
     icon: Workflow,
     route: "/solutions/devops",
   },
   {
     title: "For Agencies",
-    description: "Manage multiple client projects and environments.",
+    description: "Manage client projects and setups.",
     icon: Users,
     route: "/solutions/agencies",
   },
   {
     title: "For Startups",
-    description: "Simplify deployment operations with less DevOps overhead.",
+    description: "Deploy fast with minimal overhead.",
     icon: Building2,
     route: "/solutions/startups",
   },
@@ -51,13 +53,13 @@ const BY_ROLE_ITEMS: SolutionItem[] = [
 const BY_USE_CASE_ITEMS: SolutionItem[] = [
   {
     title: "Pre-deployment Security",
-    description: "Catch issues before production.",
+    description: "Catch security flaws before production.",
     icon: ShieldCheck,
     route: "/features/audit",
   },
   {
     title: "AI-assisted Debugging",
-    description: "Understand errors and review suggested fixes.",
+    description: "Understand errors and review fixes.",
     icon: BrainCircuit,
     route: "/features/ai-assistant",
   },
@@ -76,16 +78,71 @@ const BY_USE_CASE_ITEMS: SolutionItem[] = [
 ];
 
 export function SolutionsMegaMenu({ onClose }: { onClose?: () => void }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(
+    () => {
+      if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        return;
+      }
+
+      const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
+
+      tl.from(containerRef.current, {
+        y: -6,
+        opacity: 0,
+        scale: 0.985,
+        duration: 0.22,
+      });
+
+      tl.from(
+        ".solutions-column",
+        {
+          y: 6,
+          opacity: 0,
+          duration: 0.2,
+          stagger: 0.04,
+        },
+        "-=0.12"
+      );
+
+      tl.from(
+        ".solutions-item",
+        {
+          y: 4,
+          opacity: 0,
+          duration: 0.16,
+          stagger: 0.015,
+        },
+        "-=0.12"
+      );
+
+      tl.from(
+        ".solutions-featured-panel",
+        {
+          x: 6,
+          opacity: 0,
+          duration: 0.2,
+        },
+        "-=0.15"
+      );
+    },
+    { scope: containerRef }
+  );
+
   return (
-    <div className="w-[680px] bg-white border border-[#E5E7EB] rounded-2xl shadow-xl shadow-slate-200/50 p-6 grid grid-cols-12 gap-5 font-sans">
+    <div
+      ref={containerRef}
+      className="w-[640px] max-w-[95vw] bg-white border border-[#E5E7EB] rounded-2xl shadow-xl shadow-slate-200/60 p-4 sm:p-5 grid grid-cols-12 gap-4 font-sans select-none will-change-transform"
+    >
       {/* 2 Main Columns (8 cols) */}
-      <div className="col-span-8 grid grid-cols-2 gap-4">
+      <div className="col-span-8 grid grid-cols-2 gap-3.5">
         {/* BY ROLE */}
-        <div>
-          <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2.5">
+        <div className="solutions-column">
+          <div className="text-[9.5px] font-bold text-slate-400 uppercase tracking-wider mb-2 px-1">
             BY ROLE
           </div>
-          <div className="space-y-1">
+          <div className="space-y-0.5">
             {BY_ROLE_ITEMS.map((item) => {
               const Icon = item.icon;
               return (
@@ -93,16 +150,16 @@ export function SolutionsMegaMenu({ onClose }: { onClose?: () => void }) {
                   key={item.title}
                   href={item.route}
                   onClick={onClose}
-                  className="flex items-start gap-2.5 p-2 rounded-lg hover:bg-slate-50 transition-colors group"
+                  className="solutions-item flex items-start gap-2 p-1.5 rounded-[8px] hover:bg-slate-50 transition-colors group"
                 >
-                  <div className="w-7 h-7 rounded-md bg-purple-50 text-[#5938F5] flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-[#5938F5] group-hover:text-white transition-colors">
+                  <div className="w-6.5 h-6.5 rounded-[6px] bg-purple-50 text-[#5938F5] flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-[#5938F5] group-hover:text-white transition-all duration-150 group-hover:scale-105">
                     <Icon className="h-3.5 w-3.5" />
                   </div>
-                  <div>
-                    <div className="text-xs font-semibold text-[#17172A] group-hover:text-[#5938F5] transition-colors leading-tight">
+                  <div className="min-w-0">
+                    <div className="text-[11.5px] font-semibold text-[#17172A] group-hover:text-[#5938F5] transition-colors leading-tight">
                       {item.title}
                     </div>
-                    <div className="text-[10.5px] text-[#667085] leading-tight mt-0.5">
+                    <div className="text-[10px] text-[#667085] leading-tight mt-0.5 line-clamp-1">
                       {item.description}
                     </div>
                   </div>
@@ -113,11 +170,11 @@ export function SolutionsMegaMenu({ onClose }: { onClose?: () => void }) {
         </div>
 
         {/* BY USE CASE */}
-        <div>
-          <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2.5">
+        <div className="solutions-column">
+          <div className="text-[9.5px] font-bold text-slate-400 uppercase tracking-wider mb-2 px-1">
             BY USE CASE
           </div>
-          <div className="space-y-1">
+          <div className="space-y-0.5">
             {BY_USE_CASE_ITEMS.map((item) => {
               const Icon = item.icon;
               return (
@@ -125,16 +182,16 @@ export function SolutionsMegaMenu({ onClose }: { onClose?: () => void }) {
                   key={item.title}
                   href={item.route}
                   onClick={onClose}
-                  className="flex items-start gap-2.5 p-2 rounded-lg hover:bg-slate-50 transition-colors group"
+                  className="solutions-item flex items-start gap-2 p-1.5 rounded-[8px] hover:bg-slate-50 transition-colors group"
                 >
-                  <div className="w-7 h-7 rounded-md bg-blue-50 text-[#3563E9] flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-[#3563E9] group-hover:text-white transition-colors">
+                  <div className="w-6.5 h-6.5 rounded-[6px] bg-blue-50 text-[#3563E9] flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-[#3563E9] group-hover:text-white transition-all duration-150 group-hover:scale-105">
                     <Icon className="h-3.5 w-3.5" />
                   </div>
-                  <div>
-                    <div className="text-xs font-semibold text-[#17172A] group-hover:text-[#3563E9] transition-colors leading-tight">
+                  <div className="min-w-0">
+                    <div className="text-[11.5px] font-semibold text-[#17172A] group-hover:text-[#3563E9] transition-colors leading-tight">
                       {item.title}
                     </div>
-                    <div className="text-[10.5px] text-[#667085] leading-tight mt-0.5">
+                    <div className="text-[10px] text-[#667085] leading-tight mt-0.5 line-clamp-1">
                       {item.description}
                     </div>
                   </div>
@@ -146,26 +203,26 @@ export function SolutionsMegaMenu({ onClose }: { onClose?: () => void }) {
       </div>
 
       {/* Featured Side Panel (4 cols) */}
-      <div className="col-span-4 bg-gradient-to-br from-[#F7F8FC] to-[#EFF4FF] border border-[#E5E7EB] rounded-xl p-4 flex flex-col justify-between">
+      <div className="solutions-featured-panel col-span-4 bg-gradient-to-br from-[#F8FAFC] to-[#EEF2FF] border border-[#E5E7EB] rounded-xl p-3.5 flex flex-col justify-between">
         <div>
-          <span className="inline-block px-2 py-0.5 rounded-full bg-blue-100 text-[#3563E9] text-[9.5px] font-bold uppercase tracking-wider mb-2">
-            Tailored Stack
+          <span className="inline-block px-2 py-0.5 rounded-full bg-blue-100 text-[#3563E9] text-[8.5px] font-bold uppercase tracking-wider mb-1.5">
+            Purpose Built
           </span>
-          <h4 className="text-xs font-bold text-[#17172A] leading-snug">
+          <h4 className="text-[11.5px] font-bold text-[#17172A] leading-snug">
             Less deployment complexity. More control.
           </h4>
-          <p className="text-[11px] text-[#667085] mt-1.5 leading-relaxed">
-            Standardize audits and deployments across your engineering organization.
+          <p className="text-[10px] text-[#667085] mt-1 leading-relaxed">
+            Tailored deployment pipelines and security automation for modern software teams.
           </p>
         </div>
 
         <Link
           href="/documentation"
           onClick={onClose}
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-[#3563E9] hover:text-[#264FC7] transition-colors mt-3 pt-3 border-t border-slate-200/60"
+          className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#3563E9] hover:text-blue-700 transition-colors mt-2.5 pt-2.5 border-t border-slate-200/60"
         >
           <span>Explore Solutions</span>
-          <ArrowRight className="h-3.5 w-3.5" />
+          <ArrowRight className="h-3 w-3" />
         </Link>
       </div>
     </div>
