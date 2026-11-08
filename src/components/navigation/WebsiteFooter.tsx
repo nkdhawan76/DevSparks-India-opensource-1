@@ -17,6 +17,7 @@ import { GitHubIcon } from "@/components/common/Icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { getCurrentYear } from "@/lib/formatters.js";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 
@@ -81,6 +82,7 @@ export function WebsiteFooter({ showCta = true }: WebsiteFooterProps) {
   const footerRef = useRef<HTMLElement>(null);
   const [newsletterEmail, setNewsletterEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
+  const currentYear = getCurrentYear();
 
   // GSAP Entrance Animations
   useGSAP(
@@ -487,7 +489,7 @@ export function WebsiteFooter({ showCta = true }: WebsiteFooterProps) {
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2.5 text-xs text-[#667085]">
           {/* Copyright & Attribution */}
           <div className="text-[11px] flex items-center gap-1.5">
-            <span>© 2026 DevSparks India. All rights reserved.</span>
+            <span>© {currentYear} DevSparks India. All rights reserved.</span>
             <span className="hidden md:inline">•</span>
             <span className="hidden md:inline-flex items-center gap-1 text-slate-500">
               Built with <Heart className="h-2.5 w-2.5 fill-rose-500 text-rose-500 inline" /> for developers worldwide

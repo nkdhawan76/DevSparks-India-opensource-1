@@ -91,3 +91,11 @@ export function formatDuration(ms) {
   return `${minutes}m ${remainingSeconds}s`;
 }
 
+/**
+ * Returns the current calendar year dynamically.
+ * @returns {number}
+ */
+export function getCurrentYear() {
+  return new Date().getFullYear();
+}
+
