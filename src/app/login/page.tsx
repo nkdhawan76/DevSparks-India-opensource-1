@@ -245,13 +245,13 @@ function LoginForm() {
           </div>
         </div>
 
-        {/* Main Login Form with Compact Proportions */}
+        {/* Main Login Form with Refined Spacing & Alignment */}
         <form onSubmit={handleSubmit} className="space-y-2.5">
           {/* Email Address */}
           <div className="login-input-row space-y-1">
-            <Label htmlFor="email">Email Address</Label>
-            <div className="relative">
-              <Mail className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
+            <Label htmlFor="email" className="text-xs font-medium text-[#17172A]">Email Address</Label>
+            <div className="relative flex items-center">
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 pointer-events-none" />
               <Input
                 id="email"
                 type="email"
@@ -263,7 +263,7 @@ function LoginForm() {
                 }}
                 required
                 autoComplete="email"
-                className="shadcn-auth-input pl-8.5 h-8.5 text-xs rounded-[8px]"
+                className="shadcn-auth-input pl-9 h-9 text-xs rounded-[8px] border-[#E5E7EB] bg-white focus-visible:border-[#5938F5] focus-visible:ring-1 focus-visible:ring-[#5938F5]/20 shadow-2xs"
               />
             </div>
           </div>
@@ -271,7 +271,7 @@ function LoginForm() {
           {/* Password */}
           <div className="login-input-row space-y-1">
             <div className="flex items-center justify-between">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password" className="text-xs font-medium text-[#17172A]">Password</Label>
               <Link
                 href="/forgot-password"
                 className="text-[10.5px] font-semibold text-[#5938F5] hover:underline"
@@ -279,8 +279,8 @@ function LoginForm() {
                 Forgot password?
               </Link>
             </div>
-            <div className="relative">
-              <Lock className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
+            <div className="relative flex items-center">
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 pointer-events-none" />
               <Input
                 id="password"
                 type={showPassword ? "text" : "password"}
@@ -292,12 +292,12 @@ function LoginForm() {
                 }}
                 required
                 autoComplete="current-password"
-                className="shadcn-auth-input pl-8.5 pr-8.5 h-8.5 text-xs rounded-[8px]"
+                className="shadcn-auth-input pl-9 pr-9 h-9 text-xs rounded-[8px] border-[#E5E7EB] bg-white focus-visible:border-[#5938F5] focus-visible:ring-1 focus-visible:ring-[#5938F5]/20 shadow-2xs"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-2.5 top-2 text-slate-400 hover:text-slate-700"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 transition-colors p-0.5"
                 title={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
@@ -314,15 +314,15 @@ function LoginForm() {
               className="rounded-[4px]"
             />
             <Label htmlFor="remember" className="font-normal text-[#667085] cursor-pointer text-[10.5px]">
-              Remember me
+              Remember me for 30 days
             </Label>
           </div>
 
-          {/* Primary Submit Button */}
+          {/* Primary Submit Button with Outer Double-Line Ring */}
           <Button
             type="submit"
             disabled={isLoading}
-            className="w-full h-9 rounded-[8px] bg-[#5938F5] hover:bg-[#4726DB] text-white text-xs font-semibold gap-1.5 mt-1 shadow-xs active:scale-[0.98] transition-all cursor-pointer"
+            className="w-full h-10 rounded-[8px] bg-[#5938F5] hover:bg-[#4726DB] text-white text-xs font-bold gap-2 mt-1 shadow-xs ring-2 ring-[#5938F5]/20 ring-offset-1 ring-offset-white active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center"
           >
             {isLoading ? (
               <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -337,12 +337,12 @@ function LoginForm() {
 
         {/* Or Continue With Social SSO */}
         <div className="login-sso-section">
-          <div className="relative my-2.5">
+          <div className="relative my-3">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-[#E5E7EB]" />
             </div>
-            <div className="relative flex justify-center text-[10px]">
-              <span className="bg-white px-2 text-[#667085] font-medium">
+            <div className="relative flex justify-center text-[10.5px]">
+              <span className="bg-white px-2.5 text-slate-400 font-medium">
                 Or continue with
               </span>
             </div>
@@ -357,7 +357,7 @@ function LoginForm() {
                 setEmail("nikhil@devsparksindia.com");
                 setPassword("DevSparks@2026!");
               }}
-              className="gap-2 h-8 rounded-[8px] border-[#E5E7EB] hover:bg-slate-50 text-xs"
+              className="gap-2 h-9 rounded-[8px] border-[#E5E7EB] hover:bg-slate-50 hover:border-slate-300 text-xs font-semibold shadow-2xs"
             >
               <GitHubIcon size={14} />
               <span>GitHub</span>
@@ -371,7 +371,7 @@ function LoginForm() {
                 setEmail("admin.test@acs-solar.local");
                 setPassword("ChangeMe_Admin_2026!");
               }}
-              className="gap-2 h-8 rounded-[8px] border-[#E5E7EB] hover:bg-slate-50 text-xs"
+              className="gap-2 h-9 rounded-[8px] border-[#E5E7EB] hover:bg-slate-50 hover:border-slate-300 text-xs font-semibold shadow-2xs"
             >
               <GoogleIcon size={14} />
               <span>Google</span>
@@ -380,9 +380,9 @@ function LoginForm() {
         </div>
 
         {/* Bottom Switcher */}
-        <div className="login-footer-row mt-3 text-center text-[10.5px] text-[#667085]">
-          <span>Don&apos;t have an account? </span>
-          <Link href="/signup" className="font-bold text-[#5938F5] hover:underline">
+        <div className="login-footer-row mt-3 text-center text-xs text-[#667085]">
+          <span>Don&apos;t have an account?</span>
+          <Link href="/signup" className="font-bold text-[#5938F5] hover:underline ml-1">
             Create Account
           </Link>
         </div>

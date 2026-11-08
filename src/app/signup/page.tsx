@@ -237,13 +237,13 @@ export default function SignupPage() {
           </div>
         )}
 
-        {/* Signup Form (Compact Height & Proportions) */}
+        {/* Signup Form (Refined Spacing & Alignment) */}
         <form onSubmit={handleSubmit} className="space-y-2 text-xs">
           {/* Full Name */}
           <div className="signup-input-row space-y-1">
-            <Label htmlFor="fullname">Full Name</Label>
-            <div className="relative">
-              <User className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
+            <Label htmlFor="fullname" className="text-xs font-medium text-[#17172A]">Full Name</Label>
+            <div className="relative flex items-center">
+              <User className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 pointer-events-none" />
               <Input
                 id="fullname"
                 type="text"
@@ -252,16 +252,16 @@ export default function SignupPage() {
                 onChange={(e) => setName(e.target.value)}
                 required
                 autoComplete="name"
-                className="shadcn-auth-input pl-8.5 h-8.5 text-xs rounded-[8px]"
+                className="shadcn-auth-input pl-9 h-9 text-xs rounded-[8px] border-[#E5E7EB] bg-white focus-visible:border-[#5938F5] focus-visible:ring-1 focus-visible:ring-[#5938F5]/20 shadow-2xs"
               />
             </div>
           </div>
 
           {/* Email Address */}
           <div className="signup-input-row space-y-1">
-            <Label htmlFor="email">Work Email Address</Label>
-            <div className="relative">
-              <Mail className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
+            <Label htmlFor="email" className="text-xs font-medium text-[#17172A]">Work Email Address</Label>
+            <div className="relative flex items-center">
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 pointer-events-none" />
               <Input
                 id="email"
                 type="email"
@@ -270,7 +270,7 @@ export default function SignupPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 autoComplete="email"
-                className="shadcn-auth-input pl-8.5 h-8.5 text-xs rounded-[8px]"
+                className="shadcn-auth-input pl-9 h-9 text-xs rounded-[8px] border-[#E5E7EB] bg-white focus-visible:border-[#5938F5] focus-visible:ring-1 focus-visible:ring-[#5938F5]/20 shadow-2xs"
               />
             </div>
           </div>
@@ -278,7 +278,7 @@ export default function SignupPage() {
           {/* Password */}
           <div className="signup-input-row space-y-1">
             <div className="flex items-center justify-between">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password" className="text-xs font-medium text-[#17172A]">Password</Label>
               {password.length > 0 && (
                 <Badge
                   variant={strengthScore >= 3 ? "success" : strengthScore === 2 ? "warning" : "destructive"}
@@ -288,8 +288,8 @@ export default function SignupPage() {
                 </Badge>
               )}
             </div>
-            <div className="relative">
-              <Lock className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
+            <div className="relative flex items-center">
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 pointer-events-none" />
               <Input
                 id="password"
                 type={showPassword ? "text" : "password"}
@@ -298,12 +298,12 @@ export default function SignupPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 autoComplete="new-password"
-                className="shadcn-auth-input pl-8.5 pr-8.5 h-8.5 text-xs rounded-[8px]"
+                className="shadcn-auth-input pl-9 pr-9 h-9 text-xs rounded-[8px] border-[#E5E7EB] bg-white focus-visible:border-[#5938F5] focus-visible:ring-1 focus-visible:ring-[#5938F5]/20 shadow-2xs"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-2.5 top-2 text-slate-400 hover:text-slate-700"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 transition-colors p-0.5"
                 title={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
@@ -324,9 +324,9 @@ export default function SignupPage() {
 
           {/* Confirm Password */}
           <div className="signup-input-row space-y-1">
-            <Label htmlFor="confirmPassword">Confirm Password</Label>
-            <div className="relative">
-              <Lock className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
+            <Label htmlFor="confirmPassword" className="text-xs font-medium text-[#17172A]">Confirm Password</Label>
+            <div className="relative flex items-center">
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 pointer-events-none" />
               <Input
                 id="confirmPassword"
                 type={showConfirmPassword ? "text" : "password"}
@@ -335,12 +335,12 @@ export default function SignupPage() {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
                 autoComplete="new-password"
-                className="shadcn-auth-input pl-8.5 pr-8.5 h-8.5 text-xs rounded-[8px]"
+                className="shadcn-auth-input pl-9 pr-9 h-9 text-xs rounded-[8px] border-[#E5E7EB] bg-white focus-visible:border-[#5938F5] focus-visible:ring-1 focus-visible:ring-[#5938F5]/20 shadow-2xs"
               />
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-2.5 top-2 text-slate-400 hover:text-slate-700"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 transition-colors p-0.5"
                 title={showConfirmPassword ? "Hide password" : "Show password"}
               >
                 {showConfirmPassword ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
@@ -369,11 +369,11 @@ export default function SignupPage() {
             </Label>
           </div>
 
-          {/* Submit Button */}
+          {/* Submit Button with Outer Double-Line Ring */}
           <Button
             type="submit"
             disabled={isLoading}
-            className="w-full h-9 rounded-[8px] bg-[#5938F5] hover:bg-[#4726DB] text-white text-xs font-semibold gap-1.5 mt-1 shadow-xs active:scale-[0.98] transition-all cursor-pointer"
+            className="w-full h-10 rounded-[8px] bg-[#5938F5] hover:bg-[#4726DB] text-white text-xs font-bold gap-2 mt-2 shadow-xs ring-2 ring-[#5938F5]/20 ring-offset-1 ring-offset-white active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center"
           >
             {isLoading ? (
               <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -388,12 +388,12 @@ export default function SignupPage() {
 
         {/* Or Sign Up With Social SSO */}
         <div className="signup-sso-section">
-          <div className="relative my-2.5">
+          <div className="relative my-3">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-[#E5E7EB]" />
             </div>
-            <div className="relative flex justify-center text-[10px]">
-              <span className="bg-white px-2 text-[#667085] font-medium">
+            <div className="relative flex justify-center text-[10.5px]">
+              <span className="bg-white px-2.5 text-slate-400 font-medium">
                 Or sign up with
               </span>
             </div>
@@ -405,7 +405,7 @@ export default function SignupPage() {
               variant="outline"
               size="sm"
               onClick={() => handleTestSSOFill("github")}
-              className="h-8 text-xs font-semibold gap-1.5 rounded-[8px] border-[#E5E7EB] hover:bg-slate-50"
+              className="h-9 text-xs font-semibold gap-2 rounded-[8px] border-[#E5E7EB] hover:bg-slate-50 hover:border-slate-300 shadow-2xs"
             >
               <GitHubIcon size={14} className="text-[#17172A]" />
               <span>GitHub</span>
@@ -416,7 +416,7 @@ export default function SignupPage() {
               variant="outline"
               size="sm"
               onClick={() => handleTestSSOFill("google")}
-              className="h-8 text-xs font-semibold gap-1.5 rounded-[8px] border-[#E5E7EB] hover:bg-slate-50"
+              className="h-9 text-xs font-semibold gap-2 rounded-[8px] border-[#E5E7EB] hover:bg-slate-50 hover:border-slate-300 shadow-2xs"
             >
               <GoogleIcon size={14} />
               <span>Google</span>
@@ -425,9 +425,9 @@ export default function SignupPage() {
         </div>
 
         {/* Bottom Switcher */}
-        <div className="signup-footer-row mt-3 text-center text-[10.5px] text-[#667085]">
-          <span>Already have an account? </span>
-          <Link href="/login" className="font-bold text-[#5938F5] hover:underline">
+        <div className="signup-footer-row mt-3 text-center text-xs text-[#667085]">
+          <span>Already have an account?</span>
+          <Link href="/login" className="font-bold text-[#5938F5] hover:underline ml-1">
             Sign In
           </Link>
         </div>

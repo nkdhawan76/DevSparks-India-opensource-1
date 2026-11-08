@@ -224,12 +224,12 @@ export function WebsiteHeader() {
         </nav>
 
         {/* Right Desktop Actions */}
-        <div className="hidden lg:flex items-center gap-1.5">
+        <div className="hidden lg:flex items-center gap-2">
           <Link
             href="/documentation"
-            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-[8px] text-[11.5px] font-medium text-slate-600 hover:text-[#17172A] hover:bg-slate-50 transition-colors"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-[8px] text-xs font-medium text-slate-600 hover:text-[#17172A] hover:bg-slate-50 transition-colors"
           >
-            <BookOpen className="h-3 w-3 text-slate-400" />
+            <BookOpen className="h-3.5 w-3.5 text-slate-400" />
             <span>Documentation</span>
           </Link>
 
@@ -237,7 +237,7 @@ export function WebsiteHeader() {
             variant="outline"
             size="sm"
             asChild
-            className="h-7.5 rounded-[7px] px-3 text-[11px] font-semibold border-[#E5E7EB] hover:bg-slate-50 text-[#17172A]"
+            className="h-8 rounded-[8px] px-3.5 text-xs font-semibold border-[#E5E7EB] hover:bg-slate-50 text-[#17172A] shadow-2xs"
           >
             <Link href="/login">Sign In</Link>
           </Button>
@@ -245,28 +245,28 @@ export function WebsiteHeader() {
           <Button
             size="sm"
             asChild
-            className="h-7.5 rounded-[7px] px-3 text-[11px] font-bold bg-[#5938F5] hover:bg-[#4726DB] text-white shadow-2xs gap-1"
+            className="h-8 rounded-[8px] px-3.5 text-xs font-bold bg-[#5938F5] hover:bg-[#4726DB] text-white shadow-2xs gap-1.5"
           >
             <Link href="/signup">
               <span>Get Started Free</span>
-              <ArrowRight className="h-3 w-3" />
+              <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </Button>
         </div>
 
         {/* Mobile Hamburger Button */}
-        <div className="lg:hidden flex items-center gap-1.5">
+        <div className="lg:hidden flex items-center gap-2">
           <Button
             size="sm"
             asChild
-            className="h-7 rounded-[7px] px-2.5 text-[10.5px] font-bold bg-[#5938F5] text-white"
+            className="h-8 rounded-[8px] px-3 text-xs font-bold bg-[#5938F5] text-white"
           >
             <Link href="/signup">Get Started</Link>
           </Button>
 
           <button
             onClick={() => setMobileDrawerOpen(true)}
-            className="p-1 rounded-[7px] text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+            className="p-1.5 rounded-[8px] text-slate-600 hover:text-[#17172A] hover:bg-slate-100 transition-colors"
             aria-label="Open navigation menu"
           >
             <Menu className="h-4.5 w-4.5" />

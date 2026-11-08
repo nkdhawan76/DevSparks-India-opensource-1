@@ -92,9 +92,9 @@ function ResetPasswordForm() {
 
       <form onSubmit={handleSubmit} className="space-y-2.5 text-xs">
         <div className="space-y-1">
-          <Label htmlFor="password">New Password</Label>
-          <div className="relative">
-            <Lock className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
+          <Label htmlFor="password" className="text-xs font-medium text-[#17172A]">New Password</Label>
+          <div className="relative flex items-center">
+            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 pointer-events-none" />
             <Input
               id="password"
               type="password"
@@ -102,15 +102,15 @@ function ResetPasswordForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="pl-8.5 h-8.5 text-xs rounded-[8px]"
+              className="pl-9 h-9 text-xs rounded-[8px] border-[#E5E7EB] bg-white focus-visible:border-[#5938F5] focus-visible:ring-1 focus-visible:ring-[#5938F5]/20 shadow-2xs"
             />
           </div>
         </div>
 
         <div className="space-y-1">
-          <Label htmlFor="confirmPassword">Confirm Password</Label>
-          <div className="relative">
-            <Lock className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
+          <Label htmlFor="confirmPassword" className="text-xs font-medium text-[#17172A]">Confirm Password</Label>
+          <div className="relative flex items-center">
+            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 pointer-events-none" />
             <Input
               id="confirmPassword"
               type="password"
@@ -118,7 +118,7 @@ function ResetPasswordForm() {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
-              className="pl-8.5 h-8.5 text-xs rounded-[8px]"
+              className="pl-9 h-9 text-xs rounded-[8px] border-[#E5E7EB] bg-white focus-visible:border-[#5938F5] focus-visible:ring-1 focus-visible:ring-[#5938F5]/20 shadow-2xs"
             />
           </div>
         </div>
@@ -126,7 +126,7 @@ function ResetPasswordForm() {
         <Button
           type="submit"
           disabled={isLoading}
-          className="w-full h-9 rounded-[8px] bg-[#5938F5] hover:bg-[#4726DB] text-white text-xs font-semibold gap-1.5 mt-1"
+          className="w-full h-10 rounded-[8px] bg-[#5938F5] hover:bg-[#4726DB] text-white text-xs font-bold gap-2 mt-2 shadow-xs ring-2 ring-[#5938F5]/20 ring-offset-1 ring-offset-white active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center"
         >
           {isLoading ? (
             <Loader2 className="h-3.5 w-3.5 animate-spin" />

@@ -97,15 +97,15 @@ export function AuthLayout({
   return (
     <div
       ref={containerRef}
-      className="min-h-screen bg-[#F7F8FC] flex flex-col justify-between p-3 sm:p-5 font-sans antialiased text-[#17172A] select-none"
+      className="min-h-screen bg-[#F7F8FC] flex flex-col justify-between p-2.5 sm:p-4 font-sans antialiased text-[#17172A] select-none"
     >
       {/* Top Website Header with Mega Menus */}
       <WebsiteHeader />
 
       {/* Main Container with Outer Double-Line Frame and Curv 32px (Compact Scale) */}
-      <main className="flex-1 flex items-center justify-center py-6 sm:py-8">
+      <main className="flex-1 flex items-center justify-center py-4 sm:py-6">
         {/* Outer Frame with Padding & Outer Border Line */}
-        <div className="auth-outer-frame w-full max-w-[760px] mx-auto p-2 sm:p-2.5 rounded-[36px] bg-slate-100/70 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-xs ring-1 ring-slate-200/50">
+        <div className="auth-outer-frame w-full max-w-[750px] mx-auto p-2 sm:p-2.5 rounded-[36px] bg-slate-100/70 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-xs ring-1 ring-slate-200/50">
           {/* Inner Card with Curv 32px & Inner Border Line */}
           <div className="auth-card w-full bg-white border border-[#E5E7EB] rounded-[32px] overflow-hidden grid grid-cols-1 md:grid-cols-12 shadow-xs">
             {/* Left Panel: Feature Showcase & Illustration */}

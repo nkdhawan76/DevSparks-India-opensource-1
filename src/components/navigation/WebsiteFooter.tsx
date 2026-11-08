@@ -79,9 +79,9 @@ export function WebsiteFooter() {
   );
 
   return (
-    <footer ref={footerRef} className="w-full bg-[#F7F8FC] border-t border-[#E5E7EB] font-sans select-none mt-8 will-change-transform">
+    <footer ref={footerRef} className="w-full bg-[#F7F8FC] border-t border-[#E5E7EB] font-sans select-none mt-6 will-change-transform">
       {/* 5-Column Content Section */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 lg:py-14">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 lg:py-10">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-10">
           {/* Brand Info Column (4 cols) */}
           <div className="footer-column md:col-span-4 space-y-3.5">
