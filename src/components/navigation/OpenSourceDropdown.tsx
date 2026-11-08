@@ -62,17 +62,6 @@ export function OpenSourceDropdown({ onClose }: { onClose?: () => void }) {
           clearProps: "all",
         }
       );
-
-      tl.from(
-        ".dropdown-item",
-        {
-          y: 3,
-          opacity: 0,
-          duration: 0.15,
-          stagger: 0.02,
-        },
-        "-=0.1"
-      );
     },
     { scope: containerRef }
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   X,
@@ -29,8 +29,6 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { GitHubIcon, DeployCheckLogo } from "@/components/common/Icons";
-import { gsap } from "gsap";
-import { useGSAP } from "@gsap/react";
 
 interface MobileNavigationDrawerProps {
   isOpen: boolean;
@@ -42,9 +40,6 @@ export function MobileNavigationDrawer({
   onClose,
 }: MobileNavigationDrawerProps) {
   const [expandedSection, setExpandedSection] = useState<string | null>("product");
-  const drawerRef = useRef<HTMLDivElement>(null);
-  const backdropRef = useRef<HTMLDivElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
 
   // Prevent background scrolling when open & handle Escape key
   useEffect(() => {
@@ -63,61 +58,30 @@ export function MobileNavigationDrawer({
     }
   }, [isOpen, onClose]);
 
-  // GSAP Drawer animation on open
-  useGSAP(
-    () => {
-      if (!isOpen) return;
-
-      if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        return;
-      }
-
-      if (backdropRef.current && drawerRef.current) {
-        gsap.fromTo(
-          backdropRef.current,
-          { opacity: 0 },
-          { opacity: 1, duration: 0.25, ease: "power2.out" }
-        );
-
-        gsap.fromTo(
-          drawerRef.current,
-          { x: "-100%" },
-          { x: "0%", duration: 0.32, ease: "power3.out" }
-        );
-
-        gsap.from(".mobile-drawer-item", {
-          opacity: 0,
-          x: -8,
-          duration: 0.2,
-          stagger: 0.03,
-          delay: 0.1,
-          ease: "power2.out",
-        });
-      }
-    },
-    { dependencies: [isOpen], scope: containerRef }
-  );
-
-  if (!isOpen) return null;
-
   const toggleSection = (section: string) => {
     setExpandedSection(expandedSection === section ? null : section);
   };
 
   return (
-    <div ref={containerRef} className="fixed inset-0 z-50 lg:hidden flex">
+    <div
+      className={`fixed inset-0 z-50 lg:hidden flex transition-all duration-300 ${
+        isOpen ? "pointer-events-auto visible" : "pointer-events-none invisible"
+      }`}
+    >
       {/* Backdrop */}
       <div
-        ref={backdropRef}
-        className="fixed inset-0 bg-slate-900/35 backdrop-blur-xs will-change-[opacity]"
+        className={`fixed inset-0 bg-slate-900/40 backdrop-blur-xs transition-opacity duration-300 ${
+          isOpen ? "opacity-100" : "opacity-0"
+        }`}
         onClick={onClose}
         aria-hidden="true"
       />
 
       {/* Drawer */}
       <div
-        ref={drawerRef}
-        className="relative w-full max-w-xs bg-white h-full shadow-2xl flex flex-col justify-between overflow-y-auto font-sans z-10 will-change-transform"
+        className={`relative w-full max-w-xs bg-white h-full shadow-2xl flex flex-col justify-between overflow-y-auto font-sans z-10 transition-transform duration-300 ease-out transform ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
       >
         {/* Top Header */}
         <div className="p-3.5 border-b border-[#E5E7EB] flex items-center justify-between">

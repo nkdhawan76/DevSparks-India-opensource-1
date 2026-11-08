@@ -104,38 +104,6 @@ export function ResourcesMegaMenu({ onClose }: { onClose?: () => void }) {
           clearProps: "all",
         }
       );
-
-      tl.from(
-        ".resources-column",
-        {
-          y: 6,
-          opacity: 0,
-          duration: 0.2,
-          stagger: 0.04,
-        },
-        "-=0.12"
-      );
-
-      tl.from(
-        ".resources-item",
-        {
-          y: 4,
-          opacity: 0,
-          duration: 0.16,
-          stagger: 0.015,
-        },
-        "-=0.12"
-      );
-
-      tl.from(
-        ".resources-bottom-bar",
-        {
-          y: 4,
-          opacity: 0,
-          duration: 0.18,
-        },
-        "-=0.1"
-      );
     },
     { scope: containerRef }
   );

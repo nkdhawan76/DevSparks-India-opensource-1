@@ -131,48 +131,6 @@ export function ProductMegaMenu({ onClose }: { onClose?: () => void }) {
           clearProps: "all",
         }
       );
-
-      tl.from(
-        ".product-column",
-        {
-          y: 6,
-          opacity: 0,
-          duration: 0.2,
-          stagger: 0.04,
-        },
-        "-=0.12"
-      );
-
-      tl.from(
-        ".product-item",
-        {
-          y: 4,
-          opacity: 0,
-          duration: 0.16,
-          stagger: 0.015,
-        },
-        "-=0.12"
-      );
-
-      tl.from(
-        ".product-featured-panel",
-        {
-          x: 6,
-          opacity: 0,
-          duration: 0.2,
-        },
-        "-=0.15"
-      );
-
-      tl.from(
-        ".product-bottom-bar",
-        {
-          y: 4,
-          opacity: 0,
-          duration: 0.18,
-        },
-        "-=0.1"
-      );
     },
     { scope: containerRef }
   );

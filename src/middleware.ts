@@ -5,10 +5,9 @@ export function middleware(request: NextRequest) {
   const sessionToken = request.cookies.get("deploycheck_session")?.value;
   const hasSession = Boolean(sessionToken && sessionToken.length >= 32);
 
-  // 1. Root Route Redirect: If authenticated -> /app/dashboard, else -> /login
+  // 1. Public Marketing Website at root / is directly accessible
   if (pathname === "/") {
-    const target = hasSession ? "/app/dashboard" : "/login";
-    return NextResponse.redirect(new URL(target, request.url));
+    return NextResponse.next();
   }
 
   // 2. Protected Application Shell: /app/*
@@ -56,7 +55,6 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/",
     "/login",
     "/signup",
     "/forgot-password",

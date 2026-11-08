@@ -30,6 +30,14 @@ export function WebsiteHeader() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const toggleMenu = (menu: ActiveMenu) => {
+    if (leaveTimeoutRef.current) {
+      clearTimeout(leaveTimeoutRef.current);
+      leaveTimeoutRef.current = null;
+    }
+    setActiveMenu((prev) => (prev === menu ? null : menu));
+  };
+
   const handleMouseEnter = (menu: ActiveMenu) => {
     if (leaveTimeoutRef.current) {
       clearTimeout(leaveTimeoutRef.current);
@@ -41,7 +49,7 @@ export function WebsiteHeader() {
   const handleMouseLeave = () => {
     leaveTimeoutRef.current = setTimeout(() => {
       setActiveMenu(null);
-    }, 200);
+    }, 280);
   };
 
   const closeMenu = () => {
@@ -109,8 +117,12 @@ export function WebsiteHeader() {
             onMouseLeave={handleMouseLeave}
           >
             <button
-              onClick={() => setActiveMenu(activeMenu === "product" ? null : "product")}
-              className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-[8px] text-[11.5px] font-semibold transition-colors ${
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleMenu("product");
+              }}
+              className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-[8px] text-[11.5px] font-semibold transition-colors cursor-pointer ${
                 activeMenu === "product"
                   ? "bg-purple-50 text-[#5938F5]"
                   : "text-slate-700 hover:text-[#17172A] hover:bg-slate-50"
@@ -133,8 +145,12 @@ export function WebsiteHeader() {
             onMouseLeave={handleMouseLeave}
           >
             <button
-              onClick={() => setActiveMenu(activeMenu === "solutions" ? null : "solutions")}
-              className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-[8px] text-[11.5px] font-semibold transition-colors ${
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleMenu("solutions");
+              }}
+              className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-[8px] text-[11.5px] font-semibold transition-colors cursor-pointer ${
                 activeMenu === "solutions"
                   ? "bg-purple-50 text-[#5938F5]"
                   : "text-slate-700 hover:text-[#17172A] hover:bg-slate-50"
@@ -157,8 +173,12 @@ export function WebsiteHeader() {
             onMouseLeave={handleMouseLeave}
           >
             <button
-              onClick={() => setActiveMenu(activeMenu === "resources" ? null : "resources")}
-              className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-[8px] text-[11.5px] font-semibold transition-colors ${
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleMenu("resources");
+              }}
+              className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-[8px] text-[11.5px] font-semibold transition-colors cursor-pointer ${
                 activeMenu === "resources"
                   ? "bg-purple-50 text-[#5938F5]"
                   : "text-slate-700 hover:text-[#17172A] hover:bg-slate-50"
@@ -181,8 +201,12 @@ export function WebsiteHeader() {
             onMouseLeave={handleMouseLeave}
           >
             <button
-              onClick={() => setActiveMenu(activeMenu === "opensource" ? null : "opensource")}
-              className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-[8px] text-[11.5px] font-semibold transition-colors ${
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleMenu("opensource");
+              }}
+              className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-[8px] text-[11.5px] font-semibold transition-colors cursor-pointer ${
                 activeMenu === "opensource"
                   ? "bg-purple-50 text-[#5938F5]"
                   : "text-slate-700 hover:text-[#17172A] hover:bg-slate-50"
@@ -200,7 +224,7 @@ export function WebsiteHeader() {
             {/* Anchored Open Source Dropdown right below the trigger */}
             {activeMenu === "opensource" && (
               <div
-                className="absolute top-full left-0 pt-2 z-50 pointer-events-auto"
+                className="absolute top-full left-0 pt-2 z-50 pointer-events-auto before:absolute before:-top-3 before:left-0 before:right-0 before:h-4 before:content-['']"
                 onMouseEnter={() => {
                   if (leaveTimeoutRef.current) {
                     clearTimeout(leaveTimeoutRef.current);
@@ -282,7 +306,7 @@ export function WebsiteHeader() {
       {/* Centered Mega Menu Floating Layer (Product, Solutions, Resources) */}
       {activeMenu && activeMenu !== "opensource" && (
         <div
-          className="absolute top-full left-0 right-0 pt-2 flex justify-center z-50 pointer-events-auto"
+          className="absolute top-full left-0 right-0 pt-2 flex justify-center z-50 pointer-events-auto before:absolute before:-top-3 before:left-0 before:right-0 before:h-4 before:content-['']"
           onMouseEnter={() => {
             if (leaveTimeoutRef.current) {
               clearTimeout(leaveTimeoutRef.current);
