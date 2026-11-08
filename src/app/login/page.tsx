@@ -350,28 +350,30 @@ function LoginForm() {
               type="button"
               variant="outline"
               size="sm"
-              onClick={() => {
-                setEmail("nikhil@devsparksindia.com");
-                setPassword("DevSparks@2026!");
-              }}
-              className="gap-2 h-9 rounded-[8px] border-[#E5E7EB] hover:bg-slate-50 hover:border-slate-300 text-xs font-semibold shadow-2xs"
+              disabled
+              title="GitHub Single Sign-On coming soon"
+              className="h-9 text-xs font-semibold gap-1.5 rounded-[8px] border-[#E5E7EB] bg-slate-50/70 text-slate-500 opacity-80 cursor-not-allowed shadow-none"
             >
-              <GitHubIcon size={14} />
+              <GitHubIcon size={14} className="text-slate-500 shrink-0" />
               <span>GitHub</span>
+              <Badge variant="secondary" className="ml-1 text-[8.5px] py-0 px-1 bg-slate-200/90 text-slate-600 border-none font-medium">
+                Soon
+              </Badge>
             </Button>
 
             <Button
               type="button"
               variant="outline"
               size="sm"
-              onClick={() => {
-                setEmail("admin.test@acs-solar.local");
-                setPassword("ChangeMe_Admin_2026!");
-              }}
-              className="gap-2 h-9 rounded-[8px] border-[#E5E7EB] hover:bg-slate-50 hover:border-slate-300 text-xs font-semibold shadow-2xs"
+              disabled
+              title="Google Single Sign-On coming soon"
+              className="h-9 text-xs font-semibold gap-1.5 rounded-[8px] border-[#E5E7EB] bg-slate-50/70 text-slate-500 opacity-80 cursor-not-allowed shadow-none"
             >
-              <GoogleIcon size={14} />
+              <GoogleIcon size={14} className="grayscale opacity-70 shrink-0" />
               <span>Google</span>
+              <Badge variant="secondary" className="ml-1 text-[8.5px] py-0 px-1 bg-slate-200/90 text-slate-600 border-none font-medium">
+                Soon
+              </Badge>
             </Button>
           </div>
         </div>

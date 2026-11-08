@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - 8-point automated test suite covering motion utilities, skeleton variants, route loading boundaries, hero GSAP entrance, bento grid structure, and light theme invariants.
 
 ### Fixed
+- **Login Page Social SSO Parity (`src/app/login/page.tsx`):** Added disabled state and `Soon` badge indicators to GitHub and Google Single Sign-On buttons, establishing exact visual and functional parity with `/signup`.
 - **Card Hover Uniformity:** Eliminated static flat cards; applied polished micro-interactions (translate-y, shadow elevation, icon scaling) across Ecosystem Grid, Roadmap, and Feature sections.
 - **Accordion Micro-Interactions:** Enhanced `FAQAccordion` with smooth chevron rotation, active border rings, and fade-in answer transition.
 
