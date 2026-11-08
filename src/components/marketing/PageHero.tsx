@@ -77,6 +77,7 @@ export function PageHero({
                     href={activePrimary.href}
                     target={activePrimary.external ? "_blank" : undefined}
                     rel={activePrimary.external ? "noreferrer noopener" : undefined}
+                    className="inline-flex items-center justify-center gap-2"
                   >
                     <span>{activePrimary.label}</span>
                     <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
@@ -95,6 +96,7 @@ export function PageHero({
                     href={activeSecondary.href}
                     target={activeSecondary.external ? "_blank" : undefined}
                     rel={activeSecondary.external ? "noreferrer noopener" : undefined}
+                    className="inline-flex items-center justify-center gap-2"
                   >
                     {activeSecondary.label}
                   </Link>

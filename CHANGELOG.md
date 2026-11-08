@@ -7,6 +7,47 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.2.0] - 2026-11-08
+
+### Highlights
+- **International Market Routing & Regional Geo Pricing Engine:** Support for localized routes (`/in/*`, `/uk/*`, `/us/*`), edge geolocation auto-detection (`cf-ipcountry`, `x-vercel-ip-country`), regional currencies (INR `₹`, GBP `£`, USD `$`), and interactive `<MarketSelector />` component.
+- **Production Double Opt-In Newsletter Engine:** Real asynchronous subscription (`POST /api/v1/newsletter/subscribe`) with 10,000+ disposable email blocking, single-use 32-byte tokens (24h expiry), confirmation/unsubscribe routes, and DB persistence.
+- **Footer & Design System Cleanup:** Removed unnecessary Platform Health infrastructure card, removed subjective copyright tagline, removed redundant operational badge, and standardized square brand logo badge (`rounded-[7px]`) platform-wide.
+- **Spacious Semantic Breadcrumbs:** Global layout with 16px–24px top spacing, 20px–28px bottom spacing, unclickable current page (`aria-current="page"`), and schema.org `BreadcrumbList` JSON-LD.
+- **Button & CTA Standardization:** Full audit and standardization with `inline-flex items-center justify-center gap-2`, Lucide `ArrowRight`, vertically centered, and verified navigation routes.
+
+### Added
+- **Centralized Market Registry & Pricing Engine (`src/lib/markets.ts`):**
+  - Configured market definitions for India (`in`), United Kingdom (`uk`), and United States (`us`).
+  - Implemented regional pricing matrix:
+    - Community Core: ₹0 / £0 / $0 Free Forever.
+    - Pro Team: ₹999/mo (₹9,990/yr) in India; £9.99/mo (£99.90/yr) in UK; $12.99/mo ($129.90/yr) in US.
+    - Enterprise Sovereign: ₹4,999/mo (₹49,990/yr) in India; £49.99/mo (£499.90/yr) in UK; $69.99/mo ($699.90/yr) in US.
+  - Formatted regional tax disclosures: India (+18% GST), UK (VAT included), US (Excl. state sales tax).
+  - Implemented `detectMarketFromCountryCode`, `extractMarketFromPath`, and `buildRegionalUrl`.
+  - Added public API endpoint `GET /api/v1/markets`.
+- **Interactive Market Selector (`src/components/marketing/MarketSelector.tsx`):**
+  - Multi-variant selector (Footer, Header, Compact) with national flags, currency labels, and active selection indicator.
+  - Automatically syncs with `deploycheck_market` cookie (365 days max-age).
+- **Interactive Regional Pricing Table (`src/components/marketing/PricingTable.tsx`):**
+  - Integrated in `/pricing` page with dynamic region selection, billing cycle switcher (Monthly / Annual with 17% savings badge), and functional CTAs.
+- **Double Opt-In Newsletter Subsystem:**
+  - Route handlers: `POST /api/v1/newsletter/subscribe`, `GET /api/v1/newsletter/confirm`, and `POST /api/v1/newsletter/unsubscribe`.
+  - Sub-millisecond disposable email protection (`checkEmailDomain`) rejecting temporary addresses (`DISPOSABLE_EMAIL_REJECTED`).
+  - Database schema migration `migrations/0003_newsletter_and_markets.sql` with tables `newsletter_subscriptions`, `markets`, and `regional_plan_prices`.
+  - Database client repository methods: `subscribeNewsletter`, `getNewsletterSubscription`, `confirmNewsletterSubscription`, `unsubscribeNewsletter`.
+- **Automated Verification Suite (`scripts/verify-newsletter-and-geo-pricing.mjs`):**
+  - 8-point automated test suite covering logo square shapes, footer cleanups, breadcrumb spacing, market registry, migration integrity, and git markdown tracking.
+
+### Fixed
+- **Brand Logo Shape Invariant:** Replaced circular SVG badge with square badge with 7px rounded corners (`<rect width="32" height="32" rx="7" fill="#5938F5" />`) across Header, Footer, Sidebar, and AuthLayout.
+- **Footer Clutter Removal:** Removed "Platform Health" Mumbai Core telemetry card and "Built with ❤️ for developers worldwide" tagline per product specifications.
+- **Breadcrumbs Vertical Spacing:** Applied comfortable `pt-4 sm:pt-5 pb-5 sm:pb-6 px-4 sm:px-6` padding ensuring alignment with page title containers.
+- **CI Workflow Compatibility:** Updated `.github/workflows/ci.yml` matrix to active Node LTS versions `[20, 22]`.
+- **Button Alignment:** Replaced absolute-positioned arrows with standardized `inline-flex items-center justify-center gap-2` flex layout across Hero, CTA, and Navigation components.
+
+---
+
 ## [0.1.0] - 2026-11-08
 
 ### Highlights

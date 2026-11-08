@@ -40,7 +40,7 @@ export function Breadcrumbs({ items, className = "" }: BreadcrumbsProps) {
       />
       <nav
         aria-label="Breadcrumb"
-        className={`w-full py-2.5 px-4 text-xs font-sans select-none ${className}`}
+        className={`w-full pt-4 sm:pt-5 pb-5 sm:pb-6 px-4 sm:px-6 text-xs font-sans select-none ${className}`}
       >
         <ol className="max-w-6xl mx-auto flex items-center flex-wrap gap-1.5 text-slate-500">
           {items.map((item, index) => {

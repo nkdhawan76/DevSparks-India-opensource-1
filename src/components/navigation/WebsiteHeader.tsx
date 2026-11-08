@@ -276,9 +276,9 @@ export function WebsiteHeader() {
             asChild
             className="h-8 rounded-[8px] px-3.5 text-xs font-bold bg-[#5938F5] hover:bg-[#4726DB] text-white shadow-2xs gap-1.5 group"
           >
-            <Link href="/signup">
+            <Link href="/signup" className="inline-flex items-center justify-center gap-1.5">
               <span>Get Started Free</span>
-              <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
+              <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform shrink-0" />
             </Link>
           </Button>
         </div>

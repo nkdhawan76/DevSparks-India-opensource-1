@@ -48,9 +48,9 @@ export function CTASection({
             asChild
             className="h-11 rounded-[8px] px-6 text-xs font-bold bg-[#5938F5] hover:bg-[#4726DB] text-white shadow-xs gap-2 active:scale-[0.98] transition-all group"
           >
-            <Link href={primaryCtaHref}>
+            <Link href={primaryCtaHref} className="inline-flex items-center justify-center gap-2">
               <span>{primaryCtaText}</span>
-              <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
+              <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform shrink-0" />
             </Link>
           </Button>
 

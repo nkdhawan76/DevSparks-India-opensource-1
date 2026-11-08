@@ -8,12 +8,12 @@ import {
   ArrowRight,
   CheckCircle2,
   Send,
-  ShieldCheck,
-  Server,
   Activity,
-  Heart,
+  Loader2,
+  AlertCircle,
 } from "lucide-react";
 import { GitHubIcon, DeployCheckLogo } from "@/components/common/Icons";
+import { MarketSelector } from "@/components/marketing/MarketSelector";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -82,6 +82,9 @@ export function WebsiteFooter({ showCta = true }: WebsiteFooterProps) {
   const footerRef = useRef<HTMLElement>(null);
   const [newsletterEmail, setNewsletterEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const currentYear = getCurrentYear();
 
   // GSAP Entrance Animations
@@ -135,17 +138,41 @@ export function WebsiteFooter({ showCta = true }: WebsiteFooterProps) {
     { scope: footerRef, dependencies: [showCta] }
   );
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newsletterEmail || !newsletterEmail.includes("@")) return;
+    setErrorMessage(null);
+    if (!newsletterEmail || !newsletterEmail.includes("@")) {
+      setErrorMessage("Please enter a valid email address.");
+      return;
+    }
 
-    setSubscribed(true);
-    if (footerRef.current) {
-      gsap.fromTo(
-        ".newsletter-success-badge",
-        { scale: 0.9, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(1.5)" }
-      );
+    try {
+      setSubmitting(true);
+      const res = await fetch("/api/v1/newsletter/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: newsletterEmail }),
+      });
+
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data?.success) {
+        setErrorMessage(data?.error || "Subscription failed. Please check your email.");
+        return;
+      }
+
+      setSubscribed(true);
+      setSuccessMessage(data.data?.message || "Subscribed! You will receive our security releases.");
+      if (footerRef.current) {
+        gsap.fromTo(
+          ".newsletter-success-badge",
+          { scale: 0.9, opacity: 0 },
+          { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(1.5)" }
+        );
+      }
+    } catch {
+      setErrorMessage("Network error while subscribing. Please try again.");
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -235,30 +262,6 @@ export function WebsiteFooter({ showCta = true }: WebsiteFooterProps) {
             <p className="text-[11.5px] text-[#667085] leading-relaxed max-w-sm">
               Open-source developer operations platform for automated security auditing, AI-assisted patch generation, guided VPS deployment, and website uptime telemetry.
             </p>
-
-            {/* Live Infrastructure Telemetry Card */}
-            <div className="p-2.5 rounded-xl bg-white border border-[#E5E7EB] shadow-2xs space-y-1.5 max-w-xs">
-              <div className="flex items-center justify-between text-[10px]">
-                <span className="text-slate-400 font-bold uppercase tracking-wider flex items-center gap-1">
-                  <Activity className="h-3 w-3 text-emerald-500" />
-                  <span>Platform Health</span>
-                </span>
-                <Badge variant="outline" className="text-[9px] py-0 px-1.5 h-4 bg-emerald-50 text-emerald-700 border-emerald-200 font-semibold gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  <span>Operational</span>
-                </Badge>
-              </div>
-              <div className="grid grid-cols-2 gap-1.5 text-[9.5px] text-slate-500 font-mono pt-0.5">
-                <div className="flex items-center gap-1">
-                  <Server className="h-2.5 w-2.5 text-slate-400" />
-                  <span>Mumbai Core</span>
-                </div>
-                <div className="flex items-center gap-1 justify-end">
-                  <ShieldCheck className="h-2.5 w-2.5 text-slate-400" />
-                  <span>99.98% Uptime</span>
-                </div>
-              </div>
-            </div>
 
             {/* Social Links with Hover GSAP Lift */}
             <div className="flex items-center gap-2 pt-1">
@@ -459,28 +462,50 @@ export function WebsiteFooter({ showCta = true }: WebsiteFooterProps) {
           <div className="w-full md:w-auto">
             {subscribed ? (
               <div className="newsletter-success-badge inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[8px] bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold">
-                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
-                <span>Subscribed! You&apos;ll receive our next changelog.</span>
+                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
+                <span>{successMessage || "Subscribed! You will receive our next security release."}</span>
               </div>
             ) : (
-              <form onSubmit={handleSubscribe} className="flex items-center gap-1.5 max-w-sm w-full">
-                <Input
-                  type="email"
-                  placeholder="developer@company.com"
-                  value={newsletterEmail}
-                  onChange={(e) => setNewsletterEmail(e.target.value)}
-                  required
-                  className="h-8.5 text-xs rounded-[8px] bg-white border-[#E5E7EB] w-56 sm:w-64"
-                />
-                <Button
-                  type="submit"
-                  size="sm"
-                  className="h-8.5 rounded-[8px] px-3 text-xs font-bold bg-[#5938F5] hover:bg-[#4726DB] text-white gap-1"
-                >
-                  <span>Subscribe</span>
-                  <Send className="h-3 w-3" />
-                </Button>
-              </form>
+              <div className="flex flex-col items-start md:items-end">
+                <form onSubmit={handleSubscribe} className="flex items-center gap-1.5 max-w-sm w-full">
+                  <Input
+                    type="email"
+                    placeholder="developer@company.com"
+                    value={newsletterEmail}
+                    onChange={(e) => {
+                      setNewsletterEmail(e.target.value);
+                      if (errorMessage) setErrorMessage(null);
+                    }}
+                    disabled={submitting}
+                    required
+                    className="h-8.5 text-xs rounded-[8px] bg-white border-[#E5E7EB] w-56 sm:w-64"
+                  />
+                  <Button
+                    type="submit"
+                    size="sm"
+                    disabled={submitting}
+                    className="h-8.5 rounded-[8px] px-3 text-xs font-bold bg-[#5938F5] hover:bg-[#4726DB] text-white gap-1"
+                  >
+                    {submitting ? (
+                      <>
+                        <Loader2 className="h-3 w-3 animate-spin" />
+                        <span>Sending...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Subscribe</span>
+                        <Send className="h-3 w-3" />
+                      </>
+                    )}
+                  </Button>
+                </form>
+                {errorMessage && (
+                  <div className="flex items-center gap-1 text-[11px] text-rose-600 mt-1.5 font-medium">
+                    <AlertCircle className="h-3 w-3 shrink-0" />
+                    <span>{errorMessage}</span>
+                  </div>
+                )}
+              </div>
             )}
           </div>
         </div>
@@ -489,16 +514,12 @@ export function WebsiteFooter({ showCta = true }: WebsiteFooterProps) {
       {/* Bottom Sub-Bar */}
       <div className="mega-footer-bottom border-t border-[#E5E7EB] bg-white py-3.5 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2.5 text-xs text-[#667085]">
-          {/* Copyright & Attribution */}
+          {/* Copyright */}
           <div className="text-[11px] flex items-center gap-1.5">
             <span>© {currentYear} DevSparks India. All rights reserved.</span>
-            <span className="hidden md:inline">•</span>
-            <span className="hidden md:inline-flex items-center gap-1 text-slate-500">
-              Built with <Heart className="h-2.5 w-2.5 fill-rose-500 text-rose-500 inline" /> for developers worldwide
-            </span>
           </div>
 
-          {/* Quick Policy Links & Live Status */}
+          {/* Quick Policy Links & Market Selector */}
           <div className="flex items-center gap-3 text-[11px]">
             <Link href="/privacy" className="hover:text-[#17172A] transition-colors">
               Privacy
@@ -512,13 +533,7 @@ export function WebsiteFooter({ showCta = true }: WebsiteFooterProps) {
               Security
             </Link>
             <span>•</span>
-            <Link
-              href="/status"
-              className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 font-semibold hover:bg-emerald-100 transition-colors"
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span>Operational</span>
-            </Link>
+            <MarketSelector variant="footer" />
           </div>
         </div>
       </div>
