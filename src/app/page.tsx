@@ -1,30 +1,16 @@
 import React from "react";
-import Link from "next/link";
 import { Metadata } from "next";
-import { ArrowRight, CheckCircle2, Shield, Lock, Key } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { GitHubIcon } from "@/components/common/Icons";
+import { Shield, Lock, Key } from "lucide-react";
 import { WebsiteHeader } from "@/components/navigation/WebsiteHeader";
 import { WebsiteFooter } from "@/components/navigation/WebsiteFooter";
-import { HeroDashboardPreview } from "@/components/marketing/HeroDashboardPreview";
-import { FeatureSection, FeatureCardData } from "@/components/marketing/FeatureSection";
+import { HeroContent } from "@/components/marketing/HeroContent";
+import { BentoFeatureGrid } from "@/components/marketing/BentoFeatureGrid";
 import { WorkflowTimeline } from "@/components/marketing/WorkflowTimeline";
 import { IntegrationGrid } from "@/components/marketing/IntegrationGrid";
 import { RoadmapSection } from "@/components/marketing/RoadmapSection";
 import { FAQAccordion } from "@/components/marketing/FAQAccordion";
 import { CTASection } from "@/components/marketing/CTASection";
 import { StructuredData } from "@/components/marketing/StructuredData";
-import {
-  ShieldCheck,
-  Sparkles,
-  Server,
-  Rocket,
-  Activity,
-  Wrench,
-  Box,
-  Globe,
-  Cloud,
-} from "lucide-react";
 
 export const metadata: Metadata = {
   title: "DeployCheck — Developer Operations Platform | By DevSparks India",
@@ -41,81 +27,6 @@ export const metadata: Metadata = {
     type: "website",
   },
 };
-
-const HOMEPAGE_CAPABILITIES: FeatureCardData[] = [
-  {
-    title: "Pre-deployment Audit",
-    description: "Scan code dependencies, detect unencrypted secrets, validate env configs, and verify Docker files before production dispatch.",
-    icon: ShieldCheck,
-    status: "Live",
-    route: "/features/pre-deployment-audit",
-    details: ["Package.json static checks", "Regex secret detection", "Stack detection (Next.js, Node, Docker)"],
-  },
-  {
-    title: "AI Assistant (BYOK)",
-    description: "Analyze code errors and review suggested patches using your own OpenRouter key. Every change requires explicit human approval.",
-    icon: Sparkles,
-    status: "BYOK",
-    route: "/features/ai-assistant",
-    details: ["OpenRouter integration", "Interactive diff review", "Zero unrestricted shell execution"],
-  },
-  {
-    title: "VPS Management",
-    description: "Connect and monitor your Linux VPS nodes over SSH with host key verification. Inspect real-time CPU, RAM, and disk utilization.",
-    icon: Server,
-    status: "Live",
-    route: "/features/vps-management",
-    details: ["SSH host key fingerprinting", "Hardware telemetry", "Approval-based diagnostics"],
-  },
-  {
-    title: "Guided Deployment",
-    description: "Deploy supported Node.js, Next.js, and static web apps with preflight verification, build pipelines, and verified rollbacks.",
-    icon: Rocket,
-    status: "Live",
-    route: "/features/guided-deployment",
-    details: ["Preflight verification", "Automated rollbacks", "Release history logs"],
-  },
-  {
-    title: "Website Monitoring",
-    description: "Track live HTTP response latency, SSL certificate expiration dates, and DNS health with instant incident alerting.",
-    icon: Activity,
-    status: "Live",
-    route: "/features/website-monitoring",
-    details: ["Synthetic HTTP/HTTPS pings", "SSL cert expiry watcher", "Incident alert webhooks"],
-  },
-  {
-    title: "Scheduled Maintenance",
-    description: "Manage automated log rotation, temp directory cleanups, package updates, and backups with risk-gated execution.",
-    icon: Wrench,
-    status: "Live",
-    route: "/features/maintenance",
-    details: ["Log rotation runbooks", "System package sweeps", "Confirmation for risky ops"],
-  },
-  {
-    title: "Container Registry Scanning",
-    description: "Scan Docker container base images, dependencies, and CVE vulnerabilities prior to cluster dispatch.",
-    icon: Box,
-    status: "Planned",
-    route: "/features/container-scanning",
-    details: ["Planned for Milestone 7", "Dockerfile linting", "Container CVE registry alerts"],
-  },
-  {
-    title: "Multi-Region Probes",
-    description: "Distributed synthetic monitoring probes across North America, Europe, and Asia-Pacific edge locations.",
-    icon: Globe,
-    status: "Planned",
-    route: "/features/multi-region-monitoring",
-    details: ["Planned for Milestone 8", "Global latency matrix", "Edge outage triangulation"],
-  },
-  {
-    title: "DevSparks Cloud Managed SaaS",
-    description: "Zero-maintenance multi-tenant managed hosting with automated backups and cloud scaling.",
-    icon: Cloud,
-    status: "Planned",
-    route: "/pricing",
-    details: ["Planned for Milestone 9", "Fully managed PostgreSQL", "Team collaboration tiers"],
-  },
-];
 
 export default function HomePage() {
   return (
@@ -134,73 +45,7 @@ export default function HomePage() {
           <div className="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-blue-100/40 rounded-full blur-3xl pointer-events-none" />
 
           <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-              {/* Left Column: Headline & Value Proposition */}
-              <div className="lg:col-span-7 text-center lg:text-left space-y-5">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-50 border border-purple-200/80 text-[#5938F5] text-xs font-bold uppercase tracking-wider">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#5938F5] animate-pulse" />
-                  <span>Open Source · Self-Hosted · Cloud SaaS</span>
-                </div>
-
-                <h1 className="text-3xl sm:text-5xl lg:text-5xl font-extrabold tracking-tight text-[#17172A] leading-[1.12]">
-                  Audit, Fix, Deploy and <span className="text-[#5938F5]">Monitor</span> Your Applications
-                </h1>
-
-                <p className="text-sm sm:text-base text-[#667085] leading-relaxed max-w-xl mx-auto lg:mx-0">
-                  Open-source developer operations platform for automated pre-deployment audits, AI-assisted code patch reviews, guided Linux VPS deployments, and production uptime monitoring.
-                </p>
-
-                {/* CTAs */}
-                <div className="pt-2 flex flex-wrap items-center justify-center lg:justify-start gap-3">
-                  <Button
-                    size="lg"
-                    asChild
-                    className="h-11 rounded-[8px] px-6 text-xs font-bold bg-[#5938F5] hover:bg-[#4726DB] text-white shadow-xs gap-2 active:scale-[0.98] transition-all group"
-                  >
-                    <Link href="/signup" className="inline-flex items-center justify-center gap-2">
-                      <span>Get Started Free</span>
-                      <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform shrink-0" />
-                    </Link>
-                  </Button>
-
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    asChild
-                    className="h-11 rounded-[8px] px-5 text-xs font-semibold border-[#E5E7EB] hover:bg-slate-50 text-[#17172A] gap-2 active:scale-[0.98] transition-all shadow-2xs"
-                  >
-                    <a
-                      href="https://github.com/nkdhawan76/DevSparks-India-opensource-1"
-                      target="_blank"
-                      rel="noreferrer noopener"
-                    >
-                      <GitHubIcon size={15} className="text-[#17172A]" />
-                      <span>Star on GitHub</span>
-                    </a>
-                  </Button>
-                </div>
-
-                {/* 4 Feature Bullet Points */}
-                <div className="pt-3 grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs text-slate-700 font-medium">
-                  {[
-                    "Pre-deployment audit",
-                    "AI-powered assistance",
-                    "Secure deployment",
-                    "Uptime monitoring",
-                  ].map((feat) => (
-                    <div key={feat} className="flex items-center gap-1.5 justify-center lg:justify-start">
-                      <CheckCircle2 className="h-3.5 w-3.5 text-[#5938F5] shrink-0" />
-                      <span>{feat}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Right Column: Interactive Product Preview */}
-              <div className="lg:col-span-5 w-full">
-                <HeroDashboardPreview />
-              </div>
-            </div>
+            <HeroContent />
           </div>
         </section>
 
@@ -228,14 +73,8 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* PLATFORM CAPABILITIES */}
-        <FeatureSection
-          eyebrow="PLATFORM CAPABILITIES"
-          title="Everything You Need to Deploy With Complete Confidence"
-          description="Explore our modular developer operations capabilities. Every feature is built with strict policy controls and deterministic test verification."
-          features={HOMEPAGE_CAPABILITIES}
-          columns={3}
-        />
+        {/* PLATFORM CAPABILITIES — ADVANCED BENTO GRID */}
+        <BentoFeatureGrid />
 
         {/* HOW IT WORKS TIMELINE */}
         <WorkflowTimeline />

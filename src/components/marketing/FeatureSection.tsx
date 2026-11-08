@@ -28,7 +28,7 @@ export function FeatureCard({
   }[status] as "default" | "secondary" | "outline" | "warning";
 
   const cardContent = (
-    <div className="p-5 sm:p-6 rounded-2xl bg-white border border-[#E5E7EB] hover:border-slate-300 hover:shadow-md shadow-2xs transition-all duration-200 flex flex-col justify-between h-full group">
+    <div className="p-5 sm:p-6 rounded-2xl bg-white border border-[#E5E7EB] hover:border-purple-300 hover:-translate-y-1 hover:shadow-lg shadow-2xs transition-all duration-200 flex flex-col justify-between h-full group">
       <div>
         <div className="flex items-center justify-between mb-3.5">
           <div className="w-9 h-9 rounded-xl bg-purple-50 text-[#5938F5] border border-purple-100/60 flex items-center justify-center shrink-0 group-hover:scale-105 group-hover:bg-purple-100 group-hover:text-[#4726DB] transition-all">

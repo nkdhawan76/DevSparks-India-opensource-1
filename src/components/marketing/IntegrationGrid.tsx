@@ -79,11 +79,11 @@ export function IntegrationGrid() {
           return (
             <div
               key={tool.name}
-              className="p-5 rounded-2xl bg-white border border-[#E5E7EB] hover:border-slate-300 shadow-2xs hover:shadow-sm transition-all flex flex-col justify-between"
+              className="p-5 rounded-2xl bg-white border border-[#E5E7EB] hover:border-purple-300 hover:-translate-y-1 shadow-2xs hover:shadow-md transition-all duration-200 flex flex-col justify-between group"
             >
               <div>
                 <div className="flex items-center justify-between mb-3">
-                  <div className="w-9 h-9 rounded-xl bg-slate-50 border border-slate-200 text-[#17172A] flex items-center justify-center">
+                  <div className="w-9 h-9 rounded-xl bg-slate-50 border border-slate-200 text-[#17172A] flex items-center justify-center group-hover:scale-105 group-hover:border-purple-200 group-hover:text-[#5938F5] transition-all">
                     <Icon className="h-4.5 w-4.5" size={18} />
                   </div>
                   <Badge

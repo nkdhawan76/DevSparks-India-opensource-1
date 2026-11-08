@@ -110,15 +110,23 @@ export function FAQAccordion({
           return (
             <div
               key={item.question}
-              className="rounded-xl border border-[#E5E7EB] bg-white overflow-hidden transition-all duration-200"
+              className={`rounded-xl border bg-white overflow-hidden transition-all duration-200 ${
+                isOpen
+                  ? "border-[#5938F5]/40 shadow-xs ring-1 ring-[#5938F5]/10"
+                  : "border-[#E5E7EB] hover:border-slate-300"
+              }`}
             >
               <button
                 type="button"
                 onClick={() => toggleItem(index)}
                 aria-expanded={isOpen}
-                className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-4 hover:bg-slate-50/70 transition-colors"
+                className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-4 hover:bg-slate-50/70 transition-colors cursor-pointer"
               >
-                <span className="text-sm font-bold text-[#17172A] leading-snug">
+                <span
+                  className={`text-sm font-bold leading-snug transition-colors ${
+                    isOpen ? "text-[#5938F5]" : "text-[#17172A]"
+                  }`}
+                >
                   {item.question}
                 </span>
                 <ChevronDown
@@ -129,7 +137,7 @@ export function FAQAccordion({
               </button>
 
               {isOpen && (
-                <div className="px-4 pb-4 sm:px-5 sm:pb-5 text-xs sm:text-sm text-[#667085] leading-relaxed border-t border-slate-100 pt-3">
+                <div className="px-4 pb-4 sm:px-5 sm:pb-5 text-xs sm:text-sm text-[#667085] leading-relaxed border-t border-slate-100 pt-3 animate-in fade-in-50 duration-200">
                   {item.answer}
                 </div>
               )}

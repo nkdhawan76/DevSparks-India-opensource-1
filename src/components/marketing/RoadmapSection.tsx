@@ -35,10 +35,10 @@ export function RoadmapSection() {
 
           <Link
             href="/roadmap"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#5938F5] hover:text-[#4726DB] transition-colors shrink-0"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#5938F5] hover:text-[#4726DB] transition-colors shrink-0 group"
           >
             <span>View Full Roadmap</span>
-            <ArrowRight className="h-3.5 w-3.5" />
+            <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
 
@@ -49,7 +49,7 @@ export function RoadmapSection() {
             return (
               <div
                 key={item.id}
-                className="p-4 sm:p-5 rounded-xl bg-white border border-[#E5E7EB] hover:border-slate-300 shadow-2xs transition-all flex flex-col justify-between"
+                className="p-4 sm:p-5 rounded-xl bg-white border border-[#E5E7EB] hover:border-purple-300 hover:-translate-y-1 hover:shadow-md shadow-2xs transition-all duration-200 flex flex-col justify-between group"
               >
                 <div>
                   <div className="flex items-center justify-between mb-2">

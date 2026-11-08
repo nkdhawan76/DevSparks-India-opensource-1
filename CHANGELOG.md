@@ -7,6 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.2.1] - 2026-11-08
+
+### Highlights
+- **Advanced Visual Design & Motion Engineering:** Transformed the public SaaS experience from flat cards into a distinctive developer platform with GSAP entrance reveals, bento-grid compositions, and interactive product workflow previews.
+- **GSAP Asymmetric Split Hero:** Staggered entrance animation for headline, value proposition, CTAs, and interactive product preview with `useGSAP` context scoping and `prefers-reduced-motion` guards.
+- **Bento Feature Grid:** Replaced repetitive 3x3 flat cards with a varied 12-column bento grid featuring embedded micro-UIs (Audit score gauge, AI patch code diff, VPS hardware utilization meters, release stepper, and synthetic probe indicators).
+- **Interactive Connected Workflow Timeline:** Added 5-stage interactive selector with connected desktop timeline, stage metrics pills, and realistic terminal runtime outputs.
+- **Complete Skeleton Loading System:** Implemented 11 proportion-matched skeleton primitives (`src/components/common/Skeletons.tsx`) and Next.js route loading screens (`loading.tsx`) with subtle shimmer animation and zero layout shift.
+
+### Added
+- **Motion Engineering Architecture (`src/lib/motion.ts`):**
+  - Centralized GSAP easing curves (`power2.out`, `power3.out`, `back.out(1.4)`), duration constants, and `usePrefersReducedMotion` hook.
+  - Safe browser registration for `ScrollTrigger` avoiding SSR hydration errors.
+- **Bento Feature Showcase (`src/components/marketing/BentoFeatureGrid.tsx`):**
+  - Varied 12-column bento card system with 3-5px hover lift, border glow transition, icon micro-movements, and functional navigation routes.
+- **Interactive Multi-Tab Hero Preview (`src/components/marketing/HeroDashboardPreview.tsx`):**
+  - Live simulated tabs for Static Audit Engine (100/100 score), AI Patch Proposal (interactive diff), VPS Fleet (CPU/RAM telemetry), Deployment Stepper, and Synthetic Uptime (42ms ping).
+- **Reusable Skeleton Component Suite (`src/components/common/Skeletons.tsx`):**
+  - `PageSkeleton`, `HeroPreviewSkeleton`, `FeatureCardSkeleton`, `ProjectListSkeleton`, `AuditReportSkeleton`, `DashboardSkeleton`, `ChartSkeleton`, `TableSkeleton`, `DocumentationSkeleton`, `PricingSkeleton`, `NotificationSkeleton`.
+  - Next.js route loading boundaries: `src/app/loading.tsx`, `src/app/pricing/loading.tsx`, `src/app/docs/loading.tsx`, `src/app/changelog/loading.tsx`.
+- **Automated Verification Suite (`scripts/verify-visual-and-motion.mjs`):**
+  - 8-point automated test suite covering motion utilities, skeleton variants, route loading boundaries, hero GSAP entrance, bento grid structure, and light theme invariants.
+
+### Fixed
+- **Card Hover Uniformity:** Eliminated static flat cards; applied polished micro-interactions (translate-y, shadow elevation, icon scaling) across Ecosystem Grid, Roadmap, and Feature sections.
+- **Accordion Micro-Interactions:** Enhanced `FAQAccordion` with smooth chevron rotation, active border rings, and fade-in answer transition.
+
+---
+
 ## [0.2.0] - 2026-11-08
 
 ### Highlights
