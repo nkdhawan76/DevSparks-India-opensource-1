@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.2.2] - 2026-11-08
+
+### Highlights
+- **Premium Footer Redesign & Modular Refactoring:** Re-architected `WebsiteFooter` into clean, domain-specific modular subcomponents (`FooterBrand`, `FooterNavColumns`, `FooterNewsletter`, `FooterBottomBar`) with GSAP ScrollTrigger reveals, micro-interactions, and accessible loading states.
+- **GSAP ScrollTrigger Reveal Line & Column Stagger:** Coordinated viewport entrance revealing top border line (`scaleX: 0 -> 1`), fading in brand identity, and staggering 5 navigation columns with automatic `prefers-reduced-motion` guards.
+- **Reusable Footer Skeleton Primitive:** Exported `FooterSkeleton` in `src/components/common/Skeletons.tsx` featuring proportion-matched shimmer blocks and `aria-busy="true"`.
+- **Newsletter Micro-Interactions & Loading State:** Implemented smooth arrow glide on hover (`group-hover:translate-x-0.5`), subtle skeleton shimmer overlay during active async requests, and spring entrance for subscription confirmation badge.
+
+### Added
+- **Modular Subcomponents (`src/components/navigation/footer/`):**
+  - `FooterBrand.tsx`: Logo badge, brand typography, platform summary, and social links (GitHub, LinkedIn, X, Status).
+  - `FooterNavColumns.tsx`: 5 navigation columns (Product, Solutions, Resources, Company, Legal) with hover transitions and feature badges.
+  - `FooterNewsletter.tsx`: Double opt-in newsletter form with loading skeleton, error alerts, and GSAP success badge.
+  - `FooterBottomBar.tsx`: Copyright statement, legal links, and localized `<MarketSelector />`.
+- **Footer Skeleton Component (`src/components/common/Skeletons.tsx`):**
+  - Added `FooterSkeleton` placeholder for async loading scenarios.
+- **Automated Verification Suite (`scripts/verify-footer-redesign.mjs`):**
+  - 8-point automated test verifying modular architecture, banned element absence, 5-column link preservation, social links, newsletter async loading, GSAP ScrollTrigger entrance, and accessibility attributes.
+
+---
+
 ## [0.2.1] - 2026-11-08
 
 ### Highlights

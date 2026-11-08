@@ -304,6 +304,79 @@ export function NotificationSkeleton({ count = 4 }: { count?: number }) {
 }
 
 /**
+ * Reusable Footer Skeleton
+ */
+export function FooterSkeleton({ className = "" }: SkeletonProps) {
+  return (
+    <footer
+      role="status"
+      aria-busy="true"
+      aria-label="Loading footer..."
+      className={`w-full bg-[#F7F8FC] border-t border-[#E5E7EB] py-10 px-4 sm:px-6 select-none ${className}`}
+    >
+      <div className="max-w-6xl mx-auto space-y-10">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+          {/* Brand Column Skeleton */}
+          <div className="md:col-span-4 space-y-3.5">
+            <div className="flex items-center gap-2.5">
+              <Skeleton className="w-8 h-8 rounded-[7px]" />
+              <div className="space-y-1">
+                <Skeleton className="w-24 h-4 rounded" />
+                <Skeleton className="w-16 h-2.5 rounded" />
+              </div>
+            </div>
+            <Skeleton className="w-5/6 h-3.5 rounded" />
+            <Skeleton className="w-2/3 h-3.5 rounded" />
+            <div className="flex gap-2 pt-1">
+              <Skeleton className="w-8 h-8 rounded-[8px]" />
+              <Skeleton className="w-8 h-8 rounded-[8px]" />
+              <Skeleton className="w-8 h-8 rounded-[8px]" />
+              <Skeleton className="w-8 h-8 rounded-[8px]" />
+            </div>
+          </div>
+
+          {/* 5-Column Navigation Skeleton */}
+          <div className="md:col-span-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-5">
+            {Array.from({ length: 5 }).map((_, colIndex) => (
+              <div key={colIndex} className="space-y-2.5">
+                <Skeleton className="w-16 h-3 rounded mb-3" />
+                <Skeleton className="w-20 h-2.5 rounded" />
+                <Skeleton className="w-24 h-2.5 rounded" />
+                <Skeleton className="w-18 h-2.5 rounded" />
+                <Skeleton className="w-22 h-2.5 rounded" />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Newsletter Strip Skeleton */}
+        <div className="pt-6 border-t border-[#E5E7EB] flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="space-y-1.5 w-full md:w-auto">
+            <Skeleton className="w-64 h-3.5 rounded" />
+            <Skeleton className="w-80 h-2.5 rounded" />
+          </div>
+          <div className="flex gap-2 w-full md:w-auto">
+            <Skeleton className="w-56 h-8.5 rounded-[8px]" />
+            <Skeleton className="w-24 h-8.5 rounded-[8px]" />
+          </div>
+        </div>
+
+        {/* Bottom Sub-Bar Skeleton */}
+        <div className="pt-4 border-t border-[#E5E7EB] flex flex-col sm:flex-row items-center justify-between gap-3">
+          <Skeleton className="w-48 h-3 rounded" />
+          <div className="flex gap-3">
+            <Skeleton className="w-12 h-3 rounded" />
+            <Skeleton className="w-12 h-3 rounded" />
+            <Skeleton className="w-12 h-3 rounded" />
+            <Skeleton className="w-16 h-3 rounded" />
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+/**
  * Full Page Skeleton
  */
 export function PageSkeleton() {

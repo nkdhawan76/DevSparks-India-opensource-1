@@ -55,7 +55,10 @@ runTest("WebsiteFooter removes 'Built with ❤️ for developers worldwide' tagl
 
 runTest("WebsiteFooter bottom sub-bar includes MarketSelector and removes Operational badge", () => {
   const footerPath = path.join(projectRoot, "src", "components", "navigation", "WebsiteFooter.tsx");
-  const content = fs.readFileSync(footerPath, "utf-8");
+  const bottomBarPath = path.join(projectRoot, "src", "components", "navigation", "footer", "FooterBottomBar.tsx");
+  const content = fs.existsSync(bottomBarPath)
+    ? fs.readFileSync(footerPath, "utf-8") + "\n" + fs.readFileSync(bottomBarPath, "utf-8")
+    : fs.readFileSync(footerPath, "utf-8");
   assert.ok(content.includes("<MarketSelector"), "Must contain MarketSelector in footer");
   assert.ok(!content.includes('href="/status"\n              className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-50'), "Must not contain operational pill in sub-bar");
 });
