@@ -21,6 +21,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { GitHubIcon, GoogleIcon } from "@/components/common/Icons";
+import { getTestCredentials } from "@/lib/auth-logic.js";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 
@@ -146,13 +147,9 @@ function LoginForm() {
 
   const handleQuickFill = (accType: "super" | "admin") => {
     setActiveTestFill(accType);
-    if (accType === "super") {
-      setEmail("nikhil@devsparksindia.com");
-      setPassword("DevSparks@2026!");
-    } else {
-      setEmail("admin.test@acs-solar.local");
-      setPassword("ChangeMe_Admin_2026!");
-    }
+    const creds = getTestCredentials(accType);
+    setEmail(creds.email);
+    setPassword(creds.password);
 
     if (formScopeRef.current) {
       gsap.fromTo(

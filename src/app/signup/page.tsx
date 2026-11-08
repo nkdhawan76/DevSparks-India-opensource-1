@@ -21,6 +21,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { GitHubIcon, GoogleIcon } from "@/components/common/Icons";
+import { calculatePasswordStrength, validateSignupInput, getTestCredentials } from "@/lib/auth-logic.js";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 
@@ -43,12 +44,8 @@ export default function SignupPage() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
-  // Password strength calculations
-  const hasMinLength = password.length >= 8;
-  const hasUppercase = /[A-Z]/.test(password);
-  const hasLowercase = /[a-z]/.test(password);
-  const hasNumberOrSymbol = /[0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password);
-  const strengthScore = [hasMinLength, hasUppercase, hasLowercase, hasNumberOrSymbol].filter(Boolean).length;
+  // Password strength calculations from .js logic
+  const { score: strengthScore, color: strengthColor, percentage: strengthPercentage } = calculatePasswordStrength(password);
 
   // GSAP Entrance Animations
   useGSAP(
@@ -92,24 +89,14 @@ export default function SignupPage() {
   // GSAP Animation when strengthScore changes
   useEffect(() => {
     if (strengthBarRef.current) {
-      const percentage = password.length === 0 ? 0 : Math.min(100, Math.max(15, strengthScore * 25));
-      const color =
-        strengthScore >= 4
-          ? "#16A34A" // emerald
-          : strengthScore === 3
-          ? "#5938F5" // purple
-          : strengthScore === 2
-          ? "#EAB308" // yellow
-          : "#EF4444"; // red
-
       gsap.to(strengthBarRef.current, {
-        width: `${percentage}%`,
-        backgroundColor: color,
+        width: password.length === 0 ? "0%" : `${strengthPercentage}%`,
+        backgroundColor: strengthColor,
         duration: 0.35,
         ease: "power2.out",
       });
     }
-  }, [password, strengthScore]);
+  }, [password, strengthPercentage, strengthColor]);
 
   // GSAP Animation when errorMsg changes
   useEffect(() => {
@@ -137,18 +124,9 @@ export default function SignupPage() {
     e.preventDefault();
     setErrorMsg(null);
 
-    if (password !== confirmPassword) {
-      setErrorMsg("Passwords do not match.");
-      return;
-    }
-
-    if (strengthScore < 3) {
-      setErrorMsg("Please choose a stronger password (at least 8 chars, mixed case, and numbers/symbols).");
-      return;
-    }
-
-    if (!acceptTerms) {
-      setErrorMsg("You must agree to the Terms of Use and Privacy Policy to proceed.");
+    const validation = validateSignupInput({ name, email, password, confirmPassword, acceptTerms });
+    if (!validation.valid) {
+      setErrorMsg(validation.error || "Please check your inputs.");
       return;
     }
 
@@ -180,19 +158,12 @@ export default function SignupPage() {
   };
 
   const handleTestSSOFill = (type: "github" | "google") => {
-    if (type === "github") {
-      setName("Nikhil Dhawan");
-      setEmail("nikhil@devsparksindia.com");
-      setPassword("DevSparks@2026!");
-      setConfirmPassword("DevSparks@2026!");
-      setAcceptTerms(true);
-    } else {
-      setName("ACS Administrator");
-      setEmail("admin.test@acs-solar.local");
-      setPassword("ChangeMe_Admin_2026!");
-      setConfirmPassword("ChangeMe_Admin_2026!");
-      setAcceptTerms(true);
-    }
+    const creds = getTestCredentials(type === "github" ? "super" : "admin");
+    setName(creds.name || "");
+    setEmail(creds.email);
+    setPassword(creds.password);
+    setConfirmPassword(creds.password);
+    setAcceptTerms(true);
 
     if (formScopeRef.current) {
       gsap.fromTo(
