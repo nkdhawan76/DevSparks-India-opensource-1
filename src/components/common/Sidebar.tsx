@@ -161,9 +161,8 @@ export function Sidebar({
               <Zap size={20} className="text-white fill-white" />
             </div>
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-1.5 leading-none whitespace-nowrap">
-                <span className="font-extrabold text-[15px] text-[#17172A] tracking-tight">DevSparks</span>
-                <span className="font-semibold text-[15px] text-[#5938F5]">DeployCheck</span>
+              <div className="leading-none whitespace-nowrap">
+                <span className="font-extrabold text-[15px] text-[#17172A] tracking-tight">DeployCheck</span>
               </div>
               <div className="text-[11px] text-[#667085] font-medium mt-1 whitespace-nowrap">By DevSparks India</div>
             </div>

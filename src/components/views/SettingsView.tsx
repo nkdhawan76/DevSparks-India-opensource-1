@@ -20,7 +20,7 @@ export function SettingsView({ initialTab = "profile" }: SettingsViewProps) {
   const [customDomain, setCustomDomain] = useState("deploycheck.devsparksindia.com");
   const [sslAutoRenew, setSslAutoRenew] = useState(true);
   const [proxyPort, setProxyPort] = useState("3000");
-  const [metaTitle, setMetaTitle] = useState("DevSparks DeployCheck — Developer Operations Platform");
+  const [metaTitle, setMetaTitle] = useState("DeployCheck — Developer Operations Platform | By DevSparks India");
 
   // AI Provider State
   const [openRouterKey, setOpenRouterKey] = useState("sk-or-v1-9876543210zyxwvutsrq");

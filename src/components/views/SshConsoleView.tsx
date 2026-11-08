@@ -124,7 +124,7 @@ export function SshConsoleView() {
         {/* Terminal Body */}
         <div className="flex-1 p-4 font-mono text-xs overflow-y-auto space-y-4">
           <div className="text-slate-500 text-[11px]">
-            Welcome to DevSparks DeployCheck Policy-Controlled Terminal.<br />
+            Welcome to DeployCheck Policy-Controlled Terminal.<br />
             Invariant: Destructive commands (rm -rf, format, raw disk overwrite) are blocked server-side.<br />
             --------------------------------------------------------------------------------
           </div>

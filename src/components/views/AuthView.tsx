@@ -28,7 +28,7 @@ export function AuthView() {
             {authMode === "signin" ? "Developer Sign In" : "Create Developer Account"}
           </h2>
           <p className="text-xs text-[#667085]">
-            DevSparks DeployCheck • Open-Source Developer Operations
+            DeployCheck • By DevSparks India
           </p>
         </div>
 

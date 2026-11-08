@@ -50,7 +50,7 @@ export default function SignupPage() {
   const hasNumberOrSymbol = /[0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password);
   const strengthScore = [hasMinLength, hasUppercase, hasLowercase, hasNumberOrSymbol].filter(Boolean).length;
 
-  // GSAP Entrance Animations (Safe from stuck opacity)
+  // GSAP Entrance Animations
   useGSAP(
     () => {
       if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
@@ -60,18 +60,18 @@ export default function SignupPage() {
       const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
 
       tl.from(".signup-header", {
-        y: 10,
+        y: 8,
         opacity: 0,
-        duration: 0.35,
+        duration: 0.3,
       });
 
       tl.from(
         ".signup-input-row",
         {
-          y: 10,
+          y: 8,
           opacity: 0,
-          duration: 0.3,
-          stagger: 0.04,
+          duration: 0.25,
+          stagger: 0.03,
         },
         "-=0.15"
       );
@@ -79,9 +79,9 @@ export default function SignupPage() {
       tl.from(
         ".signup-sso-section",
         {
-          y: 8,
+          y: 6,
           opacity: 0,
-          duration: 0.3,
+          duration: 0.25,
         },
         "-=0.1"
       );
@@ -116,8 +116,8 @@ export default function SignupPage() {
     if (errorMsg && errorRef.current) {
       gsap.fromTo(
         errorRef.current,
-        { y: -6, opacity: 0, scale: 0.98 },
-        { y: 0, opacity: 1, scale: 1, duration: 0.35, ease: "back.out(1.5)" }
+        { y: -4, opacity: 0, scale: 0.98 },
+        { y: 0, opacity: 1, scale: 1, duration: 0.3, ease: "back.out(1.5)" }
       );
     }
   }, [errorMsg]);
@@ -127,8 +127,8 @@ export default function SignupPage() {
     if (successMsg && successRef.current) {
       gsap.fromTo(
         successRef.current,
-        { y: -6, opacity: 0, scale: 0.98 },
-        { y: 0, opacity: 1, scale: 1, duration: 0.35, ease: "power2.out" }
+        { y: -4, opacity: 0, scale: 0.98 },
+        { y: 0, opacity: 1, scale: 1, duration: 0.3, ease: "power2.out" }
       );
     }
   }, [successMsg]);
@@ -207,12 +207,12 @@ export default function SignupPage() {
     <AuthLayout mode="signup">
       <div ref={formScopeRef}>
         {/* Form Header */}
-        <div className="signup-header mb-4">
-          <h1 className="text-2xl font-bold tracking-tight text-[#17172A]">
+        <div className="signup-header mb-3">
+          <h1 className="text-xl font-bold tracking-tight text-[#17172A]">
             Create an Account
           </h1>
-          <p className="text-xs text-[#667085] mt-1">
-            Get started with DevSparks DeployCheck developer workspace
+          <p className="text-[10.5px] text-[#667085] mt-0.5">
+            Get started with DeployCheck developer workspace
           </p>
         </div>
 
@@ -220,9 +220,9 @@ export default function SignupPage() {
         {errorMsg && (
           <div
             ref={errorRef}
-            className="mb-3.5 p-3 rounded-[8px] bg-rose-50 border border-rose-200 text-xs text-[#DC2626] flex items-center gap-2 will-change-transform"
+            className="mb-2.5 p-2 rounded-[8px] bg-rose-50 border border-rose-200 text-[11px] text-[#DC2626] flex items-center gap-1.5 will-change-transform"
           >
-            <AlertCircle className="h-4 w-4 shrink-0" />
+            <AlertCircle className="h-3.5 w-3.5 shrink-0" />
             <span>{errorMsg}</span>
           </div>
         )}
@@ -230,20 +230,20 @@ export default function SignupPage() {
         {successMsg && (
           <div
             ref={successRef}
-            className="mb-3.5 p-3 rounded-[8px] bg-emerald-50 border border-emerald-200 text-xs text-[#16A34A] flex items-center gap-2 will-change-transform"
+            className="mb-2.5 p-2 rounded-[8px] bg-emerald-50 border border-emerald-200 text-[11px] text-[#16A34A] flex items-center gap-1.5 will-change-transform"
           >
-            <CheckCircle2 className="h-4 w-4 shrink-0" />
+            <CheckCircle2 className="h-3.5 w-3.5 shrink-0" />
             <span>{successMsg}</span>
           </div>
         )}
 
-        {/* Signup Form with Spacing & Radius 8px */}
-        <form onSubmit={handleSubmit} className="space-y-3.5 text-xs">
+        {/* Signup Form (Compact Height & Proportions) */}
+        <form onSubmit={handleSubmit} className="space-y-2 text-xs">
           {/* Full Name */}
-          <div className="signup-input-row space-y-1.5">
+          <div className="signup-input-row space-y-1">
             <Label htmlFor="fullname">Full Name</Label>
             <div className="relative">
-              <User className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
+              <User className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
               <Input
                 id="fullname"
                 type="text"
@@ -252,16 +252,16 @@ export default function SignupPage() {
                 onChange={(e) => setName(e.target.value)}
                 required
                 autoComplete="name"
-                className="shadcn-auth-input pl-10 h-10 rounded-[8px]"
+                className="shadcn-auth-input pl-8.5 h-8.5 text-xs rounded-[8px]"
               />
             </div>
           </div>
 
           {/* Email Address */}
-          <div className="signup-input-row space-y-1.5">
+          <div className="signup-input-row space-y-1">
             <Label htmlFor="email">Work Email Address</Label>
             <div className="relative">
-              <Mail className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
+              <Mail className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
               <Input
                 id="email"
                 type="email"
@@ -270,49 +270,49 @@ export default function SignupPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 autoComplete="email"
-                className="shadcn-auth-input pl-10 h-10 rounded-[8px]"
+                className="shadcn-auth-input pl-8.5 h-8.5 text-xs rounded-[8px]"
               />
             </div>
           </div>
 
           {/* Password */}
-          <div className="signup-input-row space-y-1.5">
+          <div className="signup-input-row space-y-1">
             <div className="flex items-center justify-between">
               <Label htmlFor="password">Password</Label>
               {password.length > 0 && (
                 <Badge
                   variant={strengthScore >= 3 ? "success" : strengthScore === 2 ? "warning" : "destructive"}
-                  className="text-[9px] py-0 px-1.5 h-4 rounded-[6px]"
+                  className="text-[9px] py-0 px-1.5 h-3.5 rounded-[4px]"
                 >
                   {strengthScore >= 4 ? "Strong" : strengthScore === 3 ? "Medium" : "Weak"}
                 </Badge>
               )}
             </div>
             <div className="relative">
-              <Lock className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
+              <Lock className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
               <Input
                 id="password"
                 type={showPassword ? "text" : "password"}
-                placeholder="Create a secure password"
+                placeholder="Create a password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 autoComplete="new-password"
-                className="shadcn-auth-input pl-10 pr-10 h-10 rounded-[8px]"
+                className="shadcn-auth-input pl-8.5 pr-8.5 h-8.5 text-xs rounded-[8px]"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-3 text-slate-400 hover:text-slate-700"
+                className="absolute right-2.5 top-2 text-slate-400 hover:text-slate-700"
                 title={showPassword ? "Hide password" : "Show password"}
               >
-                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                {showPassword ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
               </button>
             </div>
 
-            {/* GSAP-animated Password Strength Bar */}
+            {/* GSAP Password Strength Bar */}
             {password.length > 0 && (
-              <div className="w-full bg-slate-100 rounded-full h-1 overflow-hidden mt-1">
+              <div className="w-full bg-slate-100 rounded-full h-1 overflow-hidden mt-0.5">
                 <div
                   ref={strengthBarRef}
                   className="h-full rounded-full transition-all will-change-[width,background-color]"
@@ -323,27 +323,27 @@ export default function SignupPage() {
           </div>
 
           {/* Confirm Password */}
-          <div className="signup-input-row space-y-1.5">
+          <div className="signup-input-row space-y-1">
             <Label htmlFor="confirmPassword">Confirm Password</Label>
             <div className="relative">
-              <Lock className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
+              <Lock className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
               <Input
                 id="confirmPassword"
                 type={showConfirmPassword ? "text" : "password"}
-                placeholder="Confirm your password"
+                placeholder="Confirm password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
                 autoComplete="new-password"
-                className="shadcn-auth-input pl-10 pr-10 h-10 rounded-[8px]"
+                className="shadcn-auth-input pl-8.5 pr-8.5 h-8.5 text-xs rounded-[8px]"
               />
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3 top-3 text-slate-400 hover:text-slate-700"
+                className="absolute right-2.5 top-2 text-slate-400 hover:text-slate-700"
                 title={showConfirmPassword ? "Hide password" : "Show password"}
               >
-                {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                {showConfirmPassword ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
               </button>
             </div>
           </div>
@@ -356,10 +356,10 @@ export default function SignupPage() {
               onCheckedChange={(checked) => setAcceptTerms(!!checked)}
               className="mt-0.5 rounded-[4px]"
             />
-            <Label htmlFor="terms" className="text-xs text-[#667085] leading-snug cursor-pointer font-normal">
+            <Label htmlFor="terms" className="text-[10.5px] text-[#667085] leading-tight cursor-pointer font-normal">
               I agree to the{" "}
               <Link href="/docs/terms" className="font-semibold text-[#5938F5] hover:underline">
-                Terms of Use
+                Terms
               </Link>{" "}
               and{" "}
               <Link href="/docs/security" className="font-semibold text-[#5938F5] hover:underline">
@@ -369,18 +369,18 @@ export default function SignupPage() {
             </Label>
           </div>
 
-          {/* Prominent Primary Submit Button (Radius 8px) */}
+          {/* Submit Button */}
           <Button
             type="submit"
             disabled={isLoading}
-            className="w-full h-10.5 rounded-[8px] bg-[#5938F5] hover:bg-[#4726DB] text-white text-xs font-bold gap-2 mt-2 shadow-md shadow-[#5938F5]/25 active:scale-[0.98] transition-all cursor-pointer"
+            className="w-full h-9 rounded-[8px] bg-[#5938F5] hover:bg-[#4726DB] text-white text-xs font-semibold gap-1.5 mt-1 shadow-xs active:scale-[0.98] transition-all cursor-pointer"
           >
             {isLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
             ) : (
               <>
                 <span>Create Developer Account</span>
-                <ArrowRight className="h-4 w-4" />
+                <ArrowRight className="h-3.5 w-3.5" />
               </>
             )}
           </Button>
@@ -388,42 +388,44 @@ export default function SignupPage() {
 
         {/* Or Sign Up With Social SSO */}
         <div className="signup-sso-section">
-          <div className="relative my-4">
+          <div className="relative my-2.5">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-[#E5E7EB]" />
             </div>
-            <div className="relative flex justify-center text-xs">
-              <span className="bg-white px-3 text-[#667085] font-medium">
+            <div className="relative flex justify-center text-[10px]">
+              <span className="bg-white px-2 text-[#667085] font-medium">
                 Or sign up with
               </span>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-2.5">
+          <div className="grid grid-cols-2 gap-2">
             <Button
               type="button"
               variant="outline"
+              size="sm"
               onClick={() => handleTestSSOFill("github")}
-              className="h-9.5 text-xs font-semibold gap-2 rounded-[8px] border-[#E5E7EB] hover:bg-slate-50"
+              className="h-8 text-xs font-semibold gap-1.5 rounded-[8px] border-[#E5E7EB] hover:bg-slate-50"
             >
-              <GitHubIcon size={15} className="text-[#17172A]" />
+              <GitHubIcon size={14} className="text-[#17172A]" />
               <span>GitHub</span>
             </Button>
 
             <Button
               type="button"
               variant="outline"
+              size="sm"
               onClick={() => handleTestSSOFill("google")}
-              className="h-9.5 text-xs font-semibold gap-2 rounded-[8px] border-[#E5E7EB] hover:bg-slate-50"
+              className="h-8 text-xs font-semibold gap-1.5 rounded-[8px] border-[#E5E7EB] hover:bg-slate-50"
             >
-              <GoogleIcon size={15} />
+              <GoogleIcon size={14} />
               <span>Google</span>
             </Button>
           </div>
         </div>
 
-        {/* Bottom Footer Switcher */}
-        <div className="signup-footer-row mt-5 text-center text-xs text-[#667085]">
+        {/* Bottom Switcher */}
+        <div className="signup-footer-row mt-3 text-center text-[10.5px] text-[#667085]">
           <span>Already have an account? </span>
           <Link href="/login" className="font-bold text-[#5938F5] hover:underline">
             Sign In

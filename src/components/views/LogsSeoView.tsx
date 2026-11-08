@@ -95,7 +95,7 @@ export function LogsSeoView() {
           {/* Log Terminal Viewer */}
           <div className="bg-slate-950 border border-slate-800 rounded-2xl p-4 text-xs font-mono text-slate-200 shadow-xl max-h-[500px] overflow-y-auto space-y-2">
             <div className="text-slate-500 text-[10px] pb-2 border-b border-slate-800 flex items-center justify-between">
-              <span>DevSparks DeployCheck Structured JSON Log Stream</span>
+              <span>DeployCheck Structured JSON Log Stream</span>
               <span>Filter: {levelFilter}</span>
             </div>
             {filteredLogs.map((log) => (

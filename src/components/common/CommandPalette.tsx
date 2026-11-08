@@ -187,7 +187,7 @@ export function CommandPalette({
         {/* Footer */}
         <div className="p-3 border-t border-[#E5E7EB] bg-slate-50/80 flex items-center justify-between text-[11px] text-[#667085]">
           <div className="flex items-center gap-2">
-            <span>DevSparks DeployCheck Quick Launcher</span>
+            <span>DeployCheck Quick Launcher</span>
           </div>
           <span>Strict Light Theme Enforced</span>
         </div>
