@@ -264,7 +264,7 @@ export function WebsiteHeader() {
           <Button
             size="sm"
             asChild
-            className="h-8 rounded-[8px] px-3 text-xs font-bold bg-[#5938F5] text-white"
+            className="h-8 rounded-[8px] px-3 text-xs font-bold bg-[#5938F5] text-white hidden sm:inline-flex"
           >
             <Link href="/signup">Get Started</Link>
           </Button>

@@ -102,14 +102,14 @@ export function AuthLayout({
       {/* Top Website Header with Mega Menus */}
       <WebsiteHeader />
 
-      {/* Main Container with Outer Double-Line Frame and Curv 32px (Compact Scale) */}
-      <main className="flex-1 flex items-center justify-center py-4 sm:py-6">
+      {/* Main Container with Outer Double-Line Frame and Curv 32px (Fully Responsive) */}
+      <main className="flex-1 flex items-center justify-center py-3 sm:py-6 w-full">
         {/* Outer Frame with Padding & Outer Border Line */}
-        <div className="auth-outer-frame w-full max-w-[750px] mx-auto p-2 sm:p-2.5 rounded-[36px] bg-slate-100/70 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-xs ring-1 ring-slate-200/50">
+        <div className="auth-outer-frame w-full max-w-[750px] mx-auto p-1.5 sm:p-2.5 rounded-[24px] sm:rounded-[36px] bg-slate-100/70 border border-slate-200/80 shadow-lg shadow-slate-200/60 backdrop-blur-xs ring-1 ring-slate-200/50">
           {/* Inner Card with Curv 32px & Inner Border Line */}
-          <div className="auth-card w-full bg-white border border-[#E5E7EB] rounded-[32px] overflow-hidden grid grid-cols-1 md:grid-cols-12 shadow-xs">
-            {/* Left Panel: Feature Showcase & Illustration */}
-            <div className="md:col-span-5 bg-gradient-to-br from-[#EEF4FF] via-[#F4F1FF] to-[#FAF8FF] p-5 sm:p-6 flex flex-col justify-between border-b md:border-b-0 md:border-r border-[#E5E7EB] relative overflow-hidden">
+          <div className="auth-card w-full bg-white border border-[#E5E7EB] rounded-[20px] sm:rounded-[32px] overflow-hidden grid grid-cols-1 md:grid-cols-12 shadow-xs">
+            {/* Left Panel: Feature Showcase & Illustration (Desktop/Tablet) */}
+            <div className="hidden md:flex md:col-span-5 bg-gradient-to-br from-[#EEF4FF] via-[#F4F1FF] to-[#FAF8FF] p-5 sm:p-6 flex-col justify-between border-b md:border-b-0 md:border-r border-[#E5E7EB] relative overflow-hidden">
               {/* Decorative Curves */}
               <div className="absolute top-0 right-0 w-44 h-44 bg-purple-200/25 rounded-full blur-2xl pointer-events-none" />
               <div className="absolute bottom-0 left-0 w-44 h-44 bg-blue-200/25 rounded-full blur-2xl pointer-events-none" />
@@ -191,8 +191,8 @@ export function AuthLayout({
               </div>
             </div>
 
-            {/* Right Panel: The Authentication Form (Compact Proportions) */}
-            <div className="auth-pane-content md:col-span-7 bg-white p-5 sm:p-6 flex flex-col justify-center">
+            {/* Right Panel: The Authentication Form (Fully Responsive) */}
+            <div className="auth-pane-content col-span-12 md:col-span-7 bg-white p-4 sm:p-6 flex flex-col justify-center">
               {/* Brand Header Inside Right Pane: strictly "DeployCheck" by "DevSparks India" */}
               <div className="mb-3.5">
                 <Link href="/" className="inline-flex items-center gap-2 group mb-2">
