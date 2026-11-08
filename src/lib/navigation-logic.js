@@ -28,3 +28,4 @@ export function evaluateRoute(route) {
   const isExternal = route.startsWith("http://") || route.startsWith("https://");
   return { isExternal, safeUrl: route };
 }
+

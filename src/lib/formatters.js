@@ -90,3 +90,4 @@ export function formatDuration(ms) {
   const remainingSeconds = seconds % 60;
   return `${minutes}m ${remainingSeconds}s`;
 }
+

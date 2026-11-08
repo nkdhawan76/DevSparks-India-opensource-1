@@ -78,3 +78,4 @@ export function animateAlert(target) {
     { y: 0, opacity: 1, scale: 1, duration: 0.3, ease: "back.out(1.5)" }
   );
 }
+

@@ -2,8 +2,9 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { Zap, ChevronDown, Menu, ArrowRight, BookOpen } from "lucide-react";
+import { Zap, ChevronDown, Menu, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { GitHubIcon } from "@/components/common/Icons";
 import { ProductMegaMenu } from "./ProductMegaMenu";
 import { SolutionsMegaMenu } from "./SolutionsMegaMenu";
 import { ResourcesMegaMenu } from "./ResourcesMegaMenu";
@@ -225,13 +226,17 @@ export function WebsiteHeader() {
 
         {/* Right Desktop Actions */}
         <div className="hidden lg:flex items-center gap-2">
-          <Link
-            href="/documentation"
-            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-[8px] text-xs font-medium text-slate-600 hover:text-[#17172A] hover:bg-slate-50 transition-colors"
+          <a
+            href="https://github.com/nkdhawan76/DevSparks-India-opensource-1"
+            target="_blank"
+            rel="noreferrer noopener"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-[8px] text-xs font-semibold text-slate-700 hover:text-[#17172A] hover:bg-slate-50 transition-colors"
+            title="DeployCheck on GitHub"
+            aria-label="GitHub Repository"
           >
-            <BookOpen className="h-3.5 w-3.5 text-slate-400" />
-            <span>Documentation</span>
-          </Link>
+            <GitHubIcon size={14} className="text-[#17172A]" />
+            <span>GitHub</span>
+          </a>
 
           <Button
             variant="outline"
