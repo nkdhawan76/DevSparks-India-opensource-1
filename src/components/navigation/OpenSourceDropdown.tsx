@@ -91,8 +91,8 @@ export function OpenSourceDropdown({ onClose }: { onClose?: () => void }) {
                 className="dropdown-item flex items-center justify-between p-1.5 rounded-[7px] text-[11.5px] font-semibold text-[#17172A] hover:bg-slate-50 hover:text-[#5938F5] transition-colors group"
               >
                 <div className="flex items-center gap-2">
-                  <div className="w-5.5 h-5.5 rounded-[5px] bg-slate-50 text-slate-700 flex items-center justify-center group-hover:bg-purple-50 group-hover:text-[#5938F5] transition-colors">
-                    <Icon className="h-3 w-3" size={12} />
+                  <div className="w-5.5 h-5.5 rounded-[5px] bg-slate-50 text-slate-700 border border-slate-200/50 flex items-center justify-center group-hover:bg-purple-50 group-hover:text-[#5938F5] group-hover:border-purple-200 transition-all duration-150">
+                    <Icon className="h-3 w-3 shrink-0 group-hover:scale-110 transition-transform duration-150" size={12} />
                   </div>
                   <span>{item.title}</span>
                 </div>
@@ -107,8 +107,8 @@ export function OpenSourceDropdown({ onClose }: { onClose?: () => void }) {
               onClick={onClose}
               className="dropdown-item flex items-center gap-2 p-1.5 rounded-[7px] text-[11.5px] font-semibold text-[#17172A] hover:bg-slate-50 hover:text-[#5938F5] transition-colors group"
             >
-              <div className="w-5.5 h-5.5 rounded-[5px] bg-slate-50 text-slate-700 flex items-center justify-center group-hover:bg-purple-50 group-hover:text-[#5938F5] transition-colors">
-                <Icon className="h-3 w-3" size={12} />
+              <div className="w-5.5 h-5.5 rounded-[5px] bg-slate-50 text-slate-700 border border-slate-200/50 flex items-center justify-center group-hover:bg-purple-50 group-hover:text-[#5938F5] group-hover:border-purple-200 transition-all duration-150">
+                <Icon className="h-3 w-3 shrink-0 group-hover:scale-110 transition-transform duration-150" size={12} />
               </div>
               <span>{item.title}</span>
             </Link>

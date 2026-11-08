@@ -291,13 +291,13 @@ export function MobileNavigationDrawer({
               target="_blank"
               rel="noreferrer noopener"
               onClick={onClose}
-              className="flex items-center justify-between text-xs font-bold text-[#17172A] hover:text-[#5938F5]"
+              className="flex items-center justify-between text-xs font-bold text-[#17172A] hover:text-[#5938F5] group transition-colors"
             >
               <div className="flex items-center gap-2">
-                <GitHubIcon size={14} className="text-slate-800" />
+                <GitHubIcon size={14} className="text-slate-800 group-hover:text-[#5938F5] transition-colors" />
                 <span>Open Source on GitHub</span>
               </div>
-              <ExternalLink className="h-3 w-3 text-slate-400" />
+              <ExternalLink className="h-3 w-3 text-slate-400 group-hover:text-[#5938F5] transition-colors" />
             </a>
           </div>
 
@@ -306,10 +306,10 @@ export function MobileNavigationDrawer({
             <Link
               href="/documentation"
               onClick={onClose}
-              className="flex items-center justify-between text-xs font-bold text-[#17172A] hover:text-[#5938F5]"
+              className="flex items-center justify-between text-xs font-bold text-[#17172A] hover:text-[#5938F5] group transition-colors"
             >
               <span>Pricing</span>
-              <ArrowRight className="h-3 w-3 text-slate-400" />
+              <ArrowRight className="h-3 w-3 text-slate-400 group-hover:text-[#5938F5] group-hover:translate-x-0.5 transition-all" />
             </Link>
           </div>
         </div>

@@ -250,11 +250,11 @@ export function WebsiteHeader() {
             href="https://github.com/nkdhawan76/DevSparks-India-opensource-1"
             target="_blank"
             rel="noreferrer noopener"
-            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-[8px] text-xs font-semibold text-slate-700 hover:text-[#17172A] hover:bg-slate-50 transition-colors"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-[8px] text-xs font-semibold text-slate-700 hover:text-[#17172A] hover:bg-slate-50 transition-colors group"
             title="DeployCheck on GitHub"
             aria-label="GitHub Repository"
           >
-            <GitHubIcon size={14} className="text-[#17172A]" />
+            <GitHubIcon size={14} className="text-[#17172A] group-hover:scale-110 transition-transform duration-150" />
             <span>GitHub</span>
           </a>
 
@@ -270,11 +270,11 @@ export function WebsiteHeader() {
           <Button
             size="sm"
             asChild
-            className="h-8 rounded-[8px] px-3.5 text-xs font-bold bg-[#5938F5] hover:bg-[#4726DB] text-white shadow-2xs gap-1.5"
+            className="h-8 rounded-[8px] px-3.5 text-xs font-bold bg-[#5938F5] hover:bg-[#4726DB] text-white shadow-2xs gap-1.5 group"
           >
             <Link href="/signup">
               <span>Get Started Free</span>
-              <ArrowRight className="h-3.5 w-3.5" />
+              <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
             </Link>
           </Button>
         </div>

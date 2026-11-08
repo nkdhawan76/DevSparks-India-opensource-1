@@ -143,8 +143,8 @@ export function ResourcesMegaMenu({ onClose }: { onClose?: () => void }) {
                 onClick={onClose}
                 className="resources-item flex items-start gap-2 p-1.5 rounded-[8px] hover:bg-slate-50 transition-colors group"
               >
-                <div className="w-6.5 h-6.5 rounded-[6px] bg-purple-50 text-[#5938F5] flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-[#5938F5] group-hover:text-white transition-all duration-150 group-hover:scale-105">
-                  <Icon className="h-3.5 w-3.5" />
+                <div className="w-6.5 h-6.5 rounded-[6px] bg-purple-50 text-[#5938F5] border border-purple-100/60 flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-purple-100 group-hover:text-[#4726DB] group-hover:border-purple-200 transition-all duration-150 group-hover:scale-110 shadow-2xs">
+                  <Icon className="h-3.5 w-3.5 shrink-0 transition-transform duration-150" />
                 </div>
                 <div className="min-w-0">
                   <div className="text-[11.5px] font-semibold text-[#17172A] group-hover:text-[#5938F5] transition-colors leading-tight">
@@ -178,8 +178,8 @@ export function ResourcesMegaMenu({ onClose }: { onClose?: () => void }) {
                   onClick={onClose}
                   className="resources-item flex items-start gap-2 p-1.5 rounded-[8px] hover:bg-slate-50 transition-colors group"
                 >
-                  <div className="w-6.5 h-6.5 rounded-[6px] bg-slate-100 text-slate-700 flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-[#17172A] group-hover:text-white transition-all duration-150 group-hover:scale-105">
-                    <Icon className="h-3.5 w-3.5" size={13} />
+                  <div className="w-6.5 h-6.5 rounded-[6px] bg-slate-100 text-slate-700 border border-slate-200/60 flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-purple-50 group-hover:text-[#5938F5] group-hover:border-purple-200 transition-all duration-150 group-hover:scale-110 shadow-2xs">
+                    <Icon className="h-3.5 w-3.5 shrink-0 transition-transform duration-150" size={13} />
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="text-[11.5px] font-semibold text-[#17172A] group-hover:text-[#5938F5] transition-colors flex items-center justify-between leading-tight">
@@ -201,8 +201,8 @@ export function ResourcesMegaMenu({ onClose }: { onClose?: () => void }) {
                 onClick={onClose}
                 className="resources-item flex items-start gap-2 p-1.5 rounded-[8px] hover:bg-slate-50 transition-colors group"
               >
-                <div className="w-6.5 h-6.5 rounded-[6px] bg-slate-100 text-slate-700 flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-[#17172A] group-hover:text-white transition-all duration-150 group-hover:scale-105">
-                  <Icon className="h-3.5 w-3.5" size={13} />
+                <div className="w-6.5 h-6.5 rounded-[6px] bg-slate-100 text-slate-700 border border-slate-200/60 flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-purple-50 group-hover:text-[#5938F5] group-hover:border-purple-200 transition-all duration-150 group-hover:scale-110 shadow-2xs">
+                  <Icon className="h-3.5 w-3.5 shrink-0 transition-transform duration-150" size={13} />
                 </div>
                 <div className="min-w-0">
                   <div className="text-[11.5px] font-semibold text-[#17172A] group-hover:text-[#5938F5] transition-colors leading-tight">
