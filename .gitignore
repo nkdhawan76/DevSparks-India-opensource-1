@@ -56,3 +56,12 @@ Thumbs.db
 # Antigravity artifacts and scratch logs
 .antigravity/
 
+# Internal specifications, agent skills, prompts & UI designs (Keep local only)
+/.md Files/
+/.agents/
+/UI Design/
+/docs/
+ANTIGRAVITY_GITHUB_CICD_PROMPT.md
+AGENTS.md
+DESIGN.md
+

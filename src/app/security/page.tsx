@@ -114,3 +114,4 @@ export default function SecurityPolicyPage() {
     </MarketingLayout>
   );
 }
+

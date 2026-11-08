@@ -290,3 +290,4 @@ export function getRouteMetadata(pathname: string): RouteMetadata {
     }
   );
 }
+

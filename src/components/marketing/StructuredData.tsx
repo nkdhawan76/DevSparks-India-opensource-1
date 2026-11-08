@@ -71,3 +71,4 @@ export function StructuredData({ type = "website" }: StructuredDataProps) {
     </>
   );
 }
+

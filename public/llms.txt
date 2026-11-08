@@ -30,3 +30,4 @@
 - Design Standard: Strict Light Theme Only (#F7F8FC, #FFFFFF, #17172A, #5938F5)
 - Open Source License: MIT License
 - Maintainer: DevSparks India
+
