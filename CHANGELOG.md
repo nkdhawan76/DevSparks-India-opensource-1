@@ -9,6 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Developer Signup System & 10,000+ Disposable Email Blocking:**
+  - Integrated 10,167 verified disposable email domains (`src/data/disposable-domains.json`) with sub-millisecond in-memory lookup.
+  - Implemented domain extraction, subdomain peeling, and inviolable allowlist for legitimate consumer/business email providers (`src/modules/auth/disposable-domains.ts`).
+  - Added intelligent client-side email-domain autocomplete component (`src/components/auth/EmailAutocompleteInput.tsx`) offering popular domain suggestions (`gmail.com`, `outlook.com`, `yahoo.com`, `zoho.com`, `proton.me`, etc.) on `@` input with zero third-party latency.
+  - Added 5-stage NIST 800-63B passphrase strength meter component (`src/components/auth/PasswordStrengthMeter.tsx`) requiring $\ge 15$ characters and rewarding natural passphrases with spaces.
+  - Integrated Have I Been Pwned k-Anonymity API (`src/modules/auth/pwned-password.ts`) with local SHA-1 prefix comparison, 1,500ms timeout guard, and offline fallback cache.
+  - Hardened registration route (`POST /api/v1/auth/signup`) with anti-bot honeypot check, client IP extraction, and typed error responses (`DISPOSABLE_EMAIL_NOT_ALLOWED`, `WEAK_PASSWORD`, `COMPROMISED_PASSWORD`).
+  - Added Social Login "Coming Soon" indicators on signup page for GitHub and Google with disabled states.
+  - Created Admin Email Protection Management UI (`/app/settings/email-protection`) featuring live statistics, interactive domain test sandbox, and manual allowlist/blocklist override controls.
+  - Added PostgreSQL migration `migrations/0002_disposable_email_protection.sql` and database client repository methods.
+  - Added upstream blocklist sync script (`scripts/sync-disposable-domains.mjs`) and weekly GitHub Actions workflow (`.github/workflows/disposable-domains-sync.yml`).
+  - Added comprehensive documentation: `docs/AUTHENTICATION.md`, `docs/EMAIL_PROTECTION.md`, and `docs/PASSWORD_SECURITY.md`.
+  - Added automated test suite `scripts/verify-signup-security.mjs` verifying all 10 security invariants.
+
 ---
 
 ## [0.1.0-alpha.1] - 2026-11-08

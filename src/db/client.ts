@@ -11,6 +11,8 @@ import {
   DbUser,
   DbSession,
   DbWorkspaceMember,
+  DbEmailDomainOverride,
+  DbEmailBlocklistSyncLog,
 } from "./schema";
 
 export interface DatabaseConfig {
@@ -31,6 +33,29 @@ export class DatabaseClient {
   private users: Map<string, DbUser> = new Map();
   private sessions: Map<string, DbSession> = new Map();
   private members: Map<string, DbWorkspaceMember> = new Map(); // key: `${workspaceId}:${userId}`
+  private emailAllowlist: Set<string> = new Set([
+    "gmail.com",
+    "googlemail.com",
+    "outlook.com",
+    "hotmail.com",
+    "live.com",
+    "msn.com",
+    "yahoo.com",
+    "yahoo.co.in",
+    "icloud.com",
+    "me.com",
+    "proton.me",
+    "protonmail.com",
+    "tuta.com",
+    "tutanota.com",
+    "zoho.com",
+    "rediffmail.com",
+    "fastmail.com",
+    "devsparks.in",
+    "devsparksindia.com",
+  ]);
+  private emailOverrides: Map<string, DbEmailDomainOverride> = new Map();
+  private syncLogs: DbEmailBlocklistSyncLog[] = [];
 
   constructor(config?: DatabaseConfig) {
     this.connectionString = config?.connectionString || process.env.DATABASE_URL;
@@ -421,6 +446,73 @@ export class DatabaseClient {
     for (const s of initialServers) {
       this.servers.set(s.id, s);
     }
+  }
+
+  // --- Email Domain Protection & Overrides Repository Methods ---
+  public async isDomainAllowlisted(domain: string): Promise<boolean> {
+    return this.emailAllowlist.has(domain.toLowerCase().trim());
+  }
+
+  public async getDomainOverride(domain: string): Promise<DbEmailDomainOverride | null> {
+    return this.emailOverrides.get(domain.toLowerCase().trim()) || null;
+  }
+
+  public async addDomainOverride(
+    override: Omit<DbEmailDomainOverride, "id" | "createdAt" | "updatedAt">
+  ): Promise<DbEmailDomainOverride> {
+    const normalized = override.domain.toLowerCase().trim();
+    const now = new Date();
+    const record: DbEmailDomainOverride = {
+      id: `ovr-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+      domain: normalized,
+      status: override.status,
+      reason: override.reason,
+      createdBy: override.createdBy || "admin",
+      createdAt: now,
+      updatedAt: now,
+    };
+    this.emailOverrides.set(normalized, record);
+    return record;
+  }
+
+  public async removeDomainOverride(domain: string): Promise<boolean> {
+    return this.emailOverrides.delete(domain.toLowerCase().trim());
+  }
+
+  public async listDomainOverrides(): Promise<DbEmailDomainOverride[]> {
+    return Array.from(this.emailOverrides.values());
+  }
+
+  public async getEmailProtectionStats(): Promise<{
+    totalBlocked: number;
+    totalAllowlisted: number;
+    totalOverrides: number;
+    lastSyncAt: string | null;
+  }> {
+    const lastSync = this.syncLogs[this.syncLogs.length - 1];
+    return {
+      totalBlocked: 10167 + Array.from(this.emailOverrides.values()).filter((o) => o.status === "BLOCK").length,
+      totalAllowlisted: this.emailAllowlist.size,
+      totalOverrides: this.emailOverrides.size,
+      lastSyncAt: lastSync ? lastSync.syncedAt.toISOString() : null,
+    };
+  }
+
+  public async recordSyncLog(
+    log: Omit<DbEmailBlocklistSyncLog, "id" | "syncedAt">
+  ): Promise<DbEmailBlocklistSyncLog> {
+    const record: DbEmailBlocklistSyncLog = {
+      id: `sync-${Date.now()}`,
+      source: log.source,
+      previousVersion: log.previousVersion,
+      currentVersion: log.currentVersion,
+      domainsAdded: log.domainsAdded,
+      domainsRemoved: log.domainsRemoved,
+      syncStatus: log.syncStatus,
+      syncedAt: new Date(),
+    };
+    this.syncLogs.push(record);
+    return record;
   }
 }
 

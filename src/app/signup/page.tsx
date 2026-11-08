@@ -10,7 +10,6 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import {
-  Mail,
   Lock,
   User,
   ArrowRight,
@@ -21,7 +20,9 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { GitHubIcon, GoogleIcon } from "@/components/common/Icons";
-import { calculatePasswordStrength, validateSignupInput, getTestCredentials } from "@/lib/auth-logic.js";
+import { EmailAutocompleteInput } from "@/components/auth/EmailAutocompleteInput";
+import { PasswordStrengthMeter } from "@/components/auth/PasswordStrengthMeter";
+import { validateSignupInput } from "@/lib/auth-logic";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 
@@ -31,7 +32,6 @@ export default function SignupPage() {
   const formScopeRef = useRef<HTMLDivElement>(null);
   const errorRef = useRef<HTMLDivElement>(null);
   const successRef = useRef<HTMLDivElement>(null);
-  const strengthBarRef = useRef<HTMLDivElement>(null);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -40,12 +40,11 @@ export default function SignupPage() {
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [honeypot, setHoneypot] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [pwnedWarning, setPwnedWarning] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
-
-  // Password strength calculations from .js logic
-  const { score: strengthScore, color: strengthColor, percentage: strengthPercentage } = calculatePasswordStrength(password);
 
   // GSAP Entrance Animations
   useGSAP(
@@ -86,18 +85,6 @@ export default function SignupPage() {
     { scope: formScopeRef }
   );
 
-  // GSAP Animation when strengthScore changes
-  useEffect(() => {
-    if (strengthBarRef.current) {
-      gsap.to(strengthBarRef.current, {
-        width: password.length === 0 ? "0%" : `${strengthPercentage}%`,
-        backgroundColor: strengthColor,
-        duration: 0.35,
-        ease: "power2.out",
-      });
-    }
-  }, [password, strengthPercentage, strengthColor]);
-
   // GSAP Animation when errorMsg changes
   useEffect(() => {
     if (errorMsg && errorRef.current) {
@@ -123,6 +110,13 @@ export default function SignupPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg(null);
+    setPwnedWarning(null);
+
+    // Bot honeypot check
+    if (honeypot) {
+      setErrorMsg("Automated request detected.");
+      return;
+    }
 
     const validation = validateSignupInput({ name, email, password, confirmPassword, acceptTerms });
     if (!validation.valid) {
@@ -136,11 +130,20 @@ export default function SignupPage() {
       const res = await fetch("/api/v1/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password, acceptTerms }),
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+          acceptTerms,
+          company_hp: honeypot,
+        }),
       });
 
       const data = await res.json();
       if (!res.ok) {
+        if (data.code === "COMPROMISED_PASSWORD") {
+          setPwnedWarning(data.error);
+        }
         setErrorMsg(data.error || "Failed to create developer account.");
         setIsLoading(false);
         return;
@@ -154,23 +157,6 @@ export default function SignupPage() {
     } catch (_err) {
       setErrorMsg("Network error. Unable to connect to registration service.");
       setIsLoading(false);
-    }
-  };
-
-  const handleTestSSOFill = (type: "github" | "google") => {
-    const creds = getTestCredentials(type === "github" ? "super" : "admin");
-    setName(creds.name || "");
-    setEmail(creds.email);
-    setPassword(creds.password);
-    setConfirmPassword(creds.password);
-    setAcceptTerms(true);
-
-    if (formScopeRef.current) {
-      gsap.fromTo(
-        formScopeRef.current.querySelectorAll(".shadcn-auth-input"),
-        { borderColor: "#5938F5", backgroundColor: "rgba(89, 56, 245, 0.05)" },
-        { borderColor: "#E5E7EB", backgroundColor: "#ffffff", duration: 0.45, ease: "power2.out" }
-      );
     }
   };
 
@@ -208,13 +194,28 @@ export default function SignupPage() {
           </div>
         )}
 
-        {/* Signup Form (Refined Spacing & Alignment) */}
+        {/* Signup Form */}
         <form onSubmit={handleSubmit} className="space-y-2 text-xs">
+          {/* Honeypot hidden input for anti-bot protection */}
+          <input
+            type="text"
+            name="company_hp"
+            id="company_hp"
+            value={honeypot}
+            onChange={(e) => setHoneypot(e.target.value)}
+            tabIndex={-1}
+            autoComplete="off"
+            className="hidden"
+            aria-hidden="true"
+          />
+
           {/* Full Name */}
           <div className="signup-input-row space-y-1">
-            <Label htmlFor="fullname" className="text-xs font-medium text-[#17172A]">Full Name</Label>
+            <Label htmlFor="fullname" className="text-xs font-medium text-[#17172A]">
+              Full Name
+            </Label>
             <div className="relative flex items-center">
-              <User className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 pointer-events-none" />
+              <User className="absolute left-3.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 pointer-events-none" />
               <Input
                 id="fullname"
                 type="text"
@@ -228,45 +229,46 @@ export default function SignupPage() {
             </div>
           </div>
 
-          {/* Email Address */}
-          <div className="signup-input-row space-y-1">
-            <Label htmlFor="email" className="text-xs font-medium text-[#17172A]">Work Email Address</Label>
-            <div className="relative flex items-center">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 pointer-events-none" />
-              <Input
-                id="email"
-                type="email"
-                placeholder="developer@company.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                autoComplete="email"
-                className="shadcn-auth-input pl-10 pr-3.5 h-9 text-xs rounded-[8px] border-[#E5E7EB] bg-white focus-visible:border-[#5938F5] focus-visible:ring-1 focus-visible:ring-[#5938F5]/20 shadow-2xs"
-              />
-            </div>
-          </div>
-
-          {/* Password */}
+          {/* Email Address with Intelligent Autocomplete */}
           <div className="signup-input-row space-y-1">
             <div className="flex items-center justify-between">
-              <Label htmlFor="password" className="text-xs font-medium text-[#17172A]">Password</Label>
-              {password.length > 0 && (
-                <Badge
-                  variant={strengthScore >= 3 ? "success" : strengthScore === 2 ? "warning" : "destructive"}
-                  className="text-[9px] py-0 px-1.5 h-3.5 rounded-[4px]"
-                >
-                  {strengthScore >= 4 ? "Strong" : strengthScore === 3 ? "Medium" : "Weak"}
-                </Badge>
-              )}
+              <Label htmlFor="email" className="text-xs font-medium text-[#17172A]">
+                Work Email Address
+              </Label>
+              <span className="text-[10px] text-slate-400">
+                Disposable emails blocked
+              </span>
             </div>
+            <EmailAutocompleteInput
+              id="email"
+              name="email"
+              value={email}
+              onChange={(newEmail) => {
+                setEmail(newEmail);
+                if (errorMsg && errorMsg.includes("email")) setErrorMsg(null);
+              }}
+              placeholder="developer@company.com"
+              hasError={!!errorMsg && errorMsg.toLowerCase().includes("email")}
+            />
+          </div>
+
+          {/* Password with 5-stage strength meter & NIST guidance */}
+          <div className="signup-input-row space-y-1">
+            <Label htmlFor="password" className="text-xs font-medium text-[#17172A]">
+              Passphrase
+            </Label>
             <div className="relative flex items-center">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 pointer-events-none" />
+              <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 pointer-events-none" />
               <Input
                 id="password"
                 type={showPassword ? "text" : "password"}
-                placeholder="Create a password"
+                placeholder="Minimum 15 characters (e.g. four random words)"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setPwnedWarning(null);
+                  if (errorMsg && errorMsg.includes("password")) setErrorMsg(null);
+                }}
                 required
                 autoComplete="new-password"
                 className="shadcn-auth-input pl-10 pr-10 h-9 text-xs rounded-[8px] border-[#E5E7EB] bg-white focus-visible:border-[#5938F5] focus-visible:ring-1 focus-visible:ring-[#5938F5]/20 shadow-2xs"
@@ -281,27 +283,21 @@ export default function SignupPage() {
               </button>
             </div>
 
-            {/* GSAP Password Strength Bar */}
-            {password.length > 0 && (
-              <div className="w-full bg-slate-100 rounded-full h-1 overflow-hidden mt-0.5">
-                <div
-                  ref={strengthBarRef}
-                  className="h-full rounded-full transition-all will-change-[width,background-color]"
-                  style={{ width: "0%", backgroundColor: "#EF4444" }}
-                />
-              </div>
-            )}
+            {/* NIST 800-63B Password Strength Meter */}
+            <PasswordStrengthMeter password={password} pwnedWarning={pwnedWarning} />
           </div>
 
           {/* Confirm Password */}
           <div className="signup-input-row space-y-1">
-            <Label htmlFor="confirmPassword" className="text-xs font-medium text-[#17172A]">Confirm Password</Label>
+            <Label htmlFor="confirmPassword" className="text-xs font-medium text-[#17172A]">
+              Confirm Passphrase
+            </Label>
             <div className="relative flex items-center">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 pointer-events-none" />
+              <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 pointer-events-none" />
               <Input
                 id="confirmPassword"
                 type={showConfirmPassword ? "text" : "password"}
-                placeholder="Confirm password"
+                placeholder="Re-enter passphrase"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
@@ -329,11 +325,11 @@ export default function SignupPage() {
             />
             <Label htmlFor="terms" className="text-[10.5px] text-[#667085] leading-tight cursor-pointer font-normal">
               I agree to the{" "}
-              <Link href="/docs/terms" className="font-semibold text-[#5938F5] hover:underline">
+              <Link href="/terms" className="font-semibold text-[#5938F5] hover:underline">
                 Terms
               </Link>{" "}
               and{" "}
-              <Link href="/docs/security" className="font-semibold text-[#5938F5] hover:underline">
+              <Link href="/privacy" className="font-semibold text-[#5938F5] hover:underline">
                 Privacy Policy
               </Link>
               .
@@ -357,7 +353,7 @@ export default function SignupPage() {
           </Button>
         </form>
 
-        {/* Or Sign Up With Social SSO */}
+        {/* Social SSO: Coming Soon Indicators */}
         <div className="signup-sso-section">
           <div className="relative my-3">
             <div className="absolute inset-0 flex items-center">
@@ -375,22 +371,30 @@ export default function SignupPage() {
               type="button"
               variant="outline"
               size="sm"
-              onClick={() => handleTestSSOFill("github")}
-              className="h-9 text-xs font-semibold gap-2 rounded-[8px] border-[#E5E7EB] hover:bg-slate-50 hover:border-slate-300 shadow-2xs"
+              disabled
+              title="GitHub Single Sign-On coming soon in v0.2.0"
+              className="h-9 text-xs font-semibold gap-1.5 rounded-[8px] border-[#E5E7EB] bg-slate-50/70 text-slate-500 opacity-80 cursor-not-allowed shadow-none"
             >
-              <GitHubIcon size={14} className="text-[#17172A]" />
+              <GitHubIcon size={14} className="text-slate-500 shrink-0" />
               <span>GitHub</span>
+              <Badge variant="secondary" className="ml-1 text-[8.5px] py-0 px-1 bg-slate-200/90 text-slate-600 border-none font-medium">
+                Soon
+              </Badge>
             </Button>
 
             <Button
               type="button"
               variant="outline"
               size="sm"
-              onClick={() => handleTestSSOFill("google")}
-              className="h-9 text-xs font-semibold gap-2 rounded-[8px] border-[#E5E7EB] hover:bg-slate-50 hover:border-slate-300 shadow-2xs"
+              disabled
+              title="Google Single Sign-On coming soon in v0.2.0"
+              className="h-9 text-xs font-semibold gap-1.5 rounded-[8px] border-[#E5E7EB] bg-slate-50/70 text-slate-500 opacity-80 cursor-not-allowed shadow-none"
             >
-              <GoogleIcon size={14} />
+              <GoogleIcon size={14} className="grayscale opacity-70 shrink-0" />
               <span>Google</span>
+              <Badge variant="secondary" className="ml-1 text-[8.5px] py-0 px-1 bg-slate-200/90 text-slate-600 border-none font-medium">
+                Soon
+              </Badge>
             </Button>
           </div>
         </div>

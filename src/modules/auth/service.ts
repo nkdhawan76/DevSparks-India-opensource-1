@@ -7,6 +7,8 @@ import crypto from "node:crypto";
 import { dbClient } from "../../db/client";
 import { DbUser, DbSession, DbWorkspace, DbWorkspaceMember } from "../../db/schema";
 import { secureLogger } from "../../core/logger";
+import { checkEmailDomain } from "./disposable-domains";
+import { checkPwnedPassword } from "./pwned-password";
 
 const SCRYPT_KEYLEN = 64;
 const DEFAULT_SALT_BYTES = 16;
@@ -69,20 +71,16 @@ export function verifyPassword(password: string, storedHash: string): boolean {
 }
 
 /**
- * Validate password complexity: min 8 characters, mixed case, number or symbol
+ * Validate password complexity adhering to NIST 800-63B:
+ * Requires minimum 15 characters, maximum 128 characters.
+ * Allows passphrases with spaces and avoids arbitrary character composition rules.
  */
 export function validatePasswordStrength(password: string): { valid: boolean; reason?: string } {
-  if (!password || password.length < 8) {
-    return { valid: false, reason: "Password must be at least 8 characters long." };
+  if (!password || password.length < 15) {
+    return { valid: false, reason: "Password must be at least 15 characters long (passphrases welcome)." };
   }
-  if (!/[A-Z]/.test(password)) {
-    return { valid: false, reason: "Password must contain at least one uppercase letter." };
-  }
-  if (!/[a-z]/.test(password)) {
-    return { valid: false, reason: "Password must contain at least one lowercase letter." };
-  }
-  if (!/[0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password)) {
-    return { valid: false, reason: "Password must contain at least one number or special symbol." };
+  if (password.length > 128) {
+    return { valid: false, reason: "Password must not exceed 128 characters." };
   }
   return { valid: true };
 }
@@ -364,30 +362,64 @@ export class AuthService {
   /**
    * Register a new developer account.
    * INVARIANT: Never allows privileged role assignment on self-signup.
+   * Enforces disposable email blocking, NIST 800-63B password policy, and breached password detection.
    */
   public async register(
     email: string,
     passwordPlain: string,
-    name: string
-  ): Promise<{ success: boolean; data?: AuthSessionResult; error?: string; status: number }> {
+    name: string,
+    options?: { honeypot?: string; clientIp?: string }
+  ): Promise<{ success: boolean; data?: AuthSessionResult; error?: string; code?: string; status: number }> {
+    // 0. Anti-bot honeypot check
+    if (options?.honeypot && options.honeypot.trim().length > 0) {
+      return {
+        success: false,
+        error: "Automated submission rejected.",
+        code: "BOT_DETECTED",
+        status: 400,
+      };
+    }
+
     await this.initialize();
 
     // 1. Validate Email (Strict bounded RFC 5321 check, CodeQL ReDoS remediation)
     const normalizedEmail = email.toLowerCase().trim();
     if (!isValidEmail(normalizedEmail)) {
-      return { success: false, error: "Please provide a valid email address.", status: 400 };
+      return { success: false, error: "Please provide a valid email address.", code: "INVALID_EMAIL", status: 400 };
     }
 
-    // 2. Validate Password Strength
+    // 2. Validate Disposable / Throwaway Email Domain
+    const domainCheck = await checkEmailDomain(normalizedEmail);
+    if (domainCheck.isDisposable) {
+      return {
+        success: false,
+        error: domainCheck.reason || "Temporary or disposable email addresses are not allowed. Please use a permanent email address.",
+        code: "DISPOSABLE_EMAIL_NOT_ALLOWED",
+        status: 400,
+      };
+    }
+
+    // 3. Validate Password Strength (NIST 800-63B: 15-128 chars)
     const strength = validatePasswordStrength(passwordPlain);
     if (!strength.valid) {
-      return { success: false, error: strength.reason || "Weak password.", status: 400 };
+      return { success: false, error: strength.reason || "Weak password.", code: "WEAK_PASSWORD", status: 400 };
     }
 
-    // 3. Duplicate Account Prevention
+    // 4. Check for known compromised breached password (HIBP k-Anonymity)
+    const pwnedResult = await checkPwnedPassword(passwordPlain);
+    if (pwnedResult.isPwned) {
+      return {
+        success: false,
+        error: pwnedResult.warning || "This password has appeared in public data breaches. Please choose a different passphrase.",
+        code: "COMPROMISED_PASSWORD",
+        status: 400,
+      };
+    }
+
+    // 5. Duplicate Account Prevention
     const existing = await dbClient.getUserByEmail(normalizedEmail);
     if (existing) {
-      return { success: false, error: "An account with this email address already exists.", status: 409 };
+      return { success: false, error: "An account with this email address already exists.", code: "EMAIL_EXISTS", status: 409 };
     }
 
     // 4. Create User (Lowest permitted initial role: DEVELOPER)
@@ -567,8 +599,5 @@ export class AuthService {
   }
 }
 
-export const authService = globalForAuth.authService ?? new AuthService();
-
-if (process.env.NODE_ENV !== "production") {
-  globalForAuth.authService = authService;
-}
+export const authService = new AuthService();
+globalForAuth.authService = authService;

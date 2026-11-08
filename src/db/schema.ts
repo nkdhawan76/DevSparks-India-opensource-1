@@ -108,3 +108,43 @@ export interface DbAuditEvent {
   createdAt: Date;
 }
 
+export interface DbDisposableEmailDomain {
+  id: string;
+  domain: string;
+  source: string;
+  sourceVersion?: string;
+  createdAt: Date;
+  updatedAt: Date;
+  lastVerifiedAt?: Date;
+}
+
+export interface DbEmailDomainAllowlist {
+  id: string;
+  domain: string;
+  reason?: string;
+  createdBy: string;
+  createdAt: Date;
+}
+
+export interface DbEmailDomainOverride {
+  id: string;
+  domain: string;
+  status: "ALLOW" | "BLOCK";
+  reason?: string;
+  createdBy: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface DbEmailBlocklistSyncLog {
+  id: string;
+  source: string;
+  previousVersion?: string;
+  currentVersion?: string;
+  domainsAdded: number;
+  domainsRemoved: number;
+  syncStatus: "SUCCESS" | "FAILED" | "PARTIAL";
+  syncedAt: Date;
+}
+
+

@@ -1,0 +1,54 @@
+name: Sync Disposable Domains
+
+on:
+  schedule:
+    - cron: '0 4 * * 1' # Runs every Monday at 04:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync-domains:
+    name: Sync Upstream Blocklist
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci || npm install --no-audit
+
+      - name: Run disposable domains sync script
+        run: node scripts/sync-disposable-domains.mjs
+
+      - name: Verify signup security suite
+        run: node scripts/verify-signup-security.mjs
+
+      - name: Check for git changes
+        id: git-check
+        run: |
+          git status --porcelain
+          if [ -n "$(git status --porcelain src/data/disposable-domains.json)" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit and push changes
+        if: steps.git-check.outputs.changed == 'true'
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/data/disposable-domains.json
+          git commit -m "chore(security): sync disposable email domains upstream"
+          git push origin main
