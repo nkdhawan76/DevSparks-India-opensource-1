@@ -612,3 +612,27 @@ export function GoogleIcon({ size = 16, className = "", ...props }: IconProps) {
     </svg>
   );
 }
+
+export function DeployCheckLogo({ size = 32, className = "", ...props }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      {...props}
+    >
+      <circle cx="16" cy="16" r="16" fill="#5938F5" />
+      <polygon
+        points="18 7 8 19 17 19 16 27 26 15 17 15 18 7"
+        fill="#FFFFFF"
+        stroke="#FFFFFF"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}

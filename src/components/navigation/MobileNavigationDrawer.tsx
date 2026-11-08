@@ -5,7 +5,6 @@ import Link from "next/link";
 import {
   X,
   ChevronDown,
-  Zap,
   FolderKanban,
   ShieldCheck,
   Bot,
@@ -29,7 +28,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { GitHubIcon } from "@/components/common/Icons";
+import { GitHubIcon, DeployCheckLogo } from "@/components/common/Icons";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 
@@ -122,10 +121,8 @@ export function MobileNavigationDrawer({
       >
         {/* Top Header */}
         <div className="p-3.5 border-b border-[#E5E7EB] flex items-center justify-between">
-          <Link href="/" onClick={onClose} className="inline-flex items-center gap-2">
-            <div className="w-7 h-7 rounded-[8px] bg-[#5938F5] text-white flex items-center justify-center font-bold">
-              <Zap className="h-3.5 w-3.5 fill-white" />
-            </div>
+          <Link href="/" onClick={onClose} className="inline-flex items-center gap-2.5">
+            <DeployCheckLogo size={28} className="w-7 h-7 shrink-0 shadow-xs" aria-hidden="true" />
             <div className="flex flex-col">
               <span className="font-bold text-xs text-[#17172A] leading-tight">
                 DeployCheck

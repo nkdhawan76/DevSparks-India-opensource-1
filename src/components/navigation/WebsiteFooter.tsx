@@ -13,7 +13,7 @@ import {
   Activity,
   Heart,
 } from "lucide-react";
-import { GitHubIcon } from "@/components/common/Icons";
+import { GitHubIcon, DeployCheckLogo } from "@/components/common/Icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -217,9 +217,11 @@ export function WebsiteFooter({ showCta = true }: WebsiteFooterProps) {
           <div className="mega-footer-brand md:col-span-4 space-y-4">
             {/* Logo */}
             <Link href="/" className="inline-flex items-center gap-2.5 group">
-              <div className="w-8 h-8 rounded-[8px] bg-[#5938F5] text-white flex items-center justify-center font-bold shadow-xs group-hover:bg-[#4726DB] group-hover:scale-105 active:scale-95 transition-all">
-                <Zap className="h-4 w-4 fill-white" />
-              </div>
+              <DeployCheckLogo
+                size={32}
+                className="w-8 h-8 shrink-0 shadow-xs transition-transform duration-150 group-hover:scale-105 active:scale-95"
+                aria-hidden="true"
+              />
               <div className="flex flex-col">
                 <span className="font-extrabold text-sm text-[#17172A] tracking-tight leading-none group-hover:text-[#5938F5] transition-colors">
                   DeployCheck

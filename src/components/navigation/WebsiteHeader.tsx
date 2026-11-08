@@ -2,9 +2,9 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { Zap, ChevronDown, Menu, ArrowRight } from "lucide-react";
+import { ChevronDown, Menu, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { GitHubIcon } from "@/components/common/Icons";
+import { GitHubIcon, DeployCheckLogo } from "@/components/common/Icons";
 import { ProductMegaMenu } from "./ProductMegaMenu";
 import { SolutionsMegaMenu } from "./SolutionsMegaMenu";
 import { ResourcesMegaMenu } from "./ResourcesMegaMenu";
@@ -106,15 +106,17 @@ export function WebsiteHeader() {
         }`}
       >
         {/* Left: Brand Identity (DeployCheck By DevSparks India) */}
-        <Link href="/" onClick={closeMenu} className="inline-flex items-center gap-2 group shrink-0 py-0.5">
-          <div className="w-7.5 h-7.5 rounded-[8px] bg-[#5938F5] text-white flex items-center justify-center font-bold shadow-xs group-hover:bg-[#4726DB] group-hover:scale-105 active:scale-95 transition-all">
-            <Zap className="h-3.5 w-3.5 fill-white" />
-          </div>
+        <Link href="/" onClick={closeMenu} className="inline-flex items-center gap-2.5 group shrink-0 py-0.5">
+          <DeployCheckLogo
+            size={32}
+            className="w-8 h-8 shrink-0 shadow-xs transition-transform duration-150 group-hover:scale-105 active:scale-95"
+            aria-hidden="true"
+          />
           <div className="flex flex-col">
-            <span className="font-extrabold text-[13px] text-[#17172A] tracking-tight leading-none group-hover:text-[#5938F5] transition-colors">
+            <span className="font-extrabold text-[13.5px] text-[#17172A] tracking-tight leading-none group-hover:text-[#5938F5] transition-colors">
               DeployCheck
             </span>
-            <span className="text-[9px] text-slate-400 font-medium leading-tight mt-0.5">
+            <span className="text-[9.5px] text-slate-400 font-medium leading-tight mt-0.5">
               By DevSparks India
             </span>
           </div>
