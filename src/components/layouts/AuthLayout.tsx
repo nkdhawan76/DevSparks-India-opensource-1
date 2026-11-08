@@ -217,8 +217,8 @@ export function AuthLayout({
         </div>
       </main>
 
-      {/* Global Marketing Website Footer */}
-      <WebsiteFooter />
+      {/* Global Marketing Modern Mega Footer (Clean Auth Mode) */}
+      <WebsiteFooter showCta={false} />
     </div>
   );
 }
