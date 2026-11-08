@@ -13,6 +13,9 @@ import {
   DbWorkspaceMember,
   DbEmailDomainOverride,
   DbEmailBlocklistSyncLog,
+  DbNewsletterSubscription,
+  DbMarket,
+  DbRegionalPlanPrice,
 } from "./schema";
 
 export interface DatabaseConfig {
@@ -56,6 +59,62 @@ export class DatabaseClient {
   ]);
   private emailOverrides: Map<string, DbEmailDomainOverride> = new Map();
   private syncLogs: DbEmailBlocklistSyncLog[] = [];
+  private newsletterSubscriptions: Map<string, DbNewsletterSubscription> = new Map();
+  private markets: Map<string, DbMarket> = new Map([
+    [
+      "in",
+      {
+        id: "mkt_in",
+        slug: "in",
+        countryCode: "IN",
+        displayName: "India",
+        currencyCode: "INR",
+        currencySymbol: "₹",
+        locale: "en-IN",
+        isActive: true,
+        createdAt: new Date(),
+      },
+    ],
+    [
+      "uk",
+      {
+        id: "mkt_uk",
+        slug: "uk",
+        countryCode: "GB",
+        displayName: "United Kingdom",
+        currencyCode: "GBP",
+        currencySymbol: "£",
+        locale: "en-GB",
+        isActive: true,
+        createdAt: new Date(),
+      },
+    ],
+    [
+      "us",
+      {
+        id: "mkt_us",
+        slug: "us",
+        countryCode: "US",
+        displayName: "United States",
+        currencyCode: "USD",
+        currencySymbol: "$",
+        locale: "en-US",
+        isActive: true,
+        createdAt: new Date(),
+      },
+    ],
+  ]);
+  private regionalPlanPrices: Map<string, DbRegionalPlanPrice> = new Map([
+    ["price_free_in", { id: "price_free_in", planId: "free", marketId: "mkt_in", currencyCode: "INR", amountMinorUnits: 0, billingInterval: "monthly", trialDays: 0, taxDisplayMode: "tax_inclusive", taxNote: "Free forever", isActive: true, createdAt: new Date() }],
+    ["price_free_uk", { id: "price_free_uk", planId: "free", marketId: "mkt_uk", currencyCode: "GBP", amountMinorUnits: 0, billingInterval: "monthly", trialDays: 0, taxDisplayMode: "tax_inclusive", taxNote: "Free forever", isActive: true, createdAt: new Date() }],
+    ["price_free_us", { id: "price_free_us", planId: "free", marketId: "mkt_us", currencyCode: "USD", amountMinorUnits: 0, billingInterval: "monthly", trialDays: 0, taxDisplayMode: "tax_inclusive", taxNote: "Free forever", isActive: true, createdAt: new Date() }],
+    ["price_pro_in", { id: "price_pro_in", planId: "pro", marketId: "mkt_in", currencyCode: "INR", amountMinorUnits: 99900, billingInterval: "monthly", trialDays: 14, taxDisplayMode: "tax_exclusive", taxNote: "+ 18% GST", isActive: true, createdAt: new Date() }],
+    ["price_pro_uk", { id: "price_pro_uk", planId: "pro", marketId: "mkt_uk", currencyCode: "GBP", amountMinorUnits: 999, billingInterval: "monthly", trialDays: 14, taxDisplayMode: "tax_inclusive", taxNote: "VAT included", isActive: true, createdAt: new Date() }],
+    ["price_pro_us", { id: "price_pro_us", planId: "pro", marketId: "mkt_us", currencyCode: "USD", amountMinorUnits: 1299, billingInterval: "monthly", trialDays: 14, taxDisplayMode: "tax_exclusive", taxNote: "Excl. state sales tax", isActive: true, createdAt: new Date() }],
+    ["price_ent_in", { id: "price_ent_in", planId: "enterprise", marketId: "mkt_in", currencyCode: "INR", amountMinorUnits: 499900, billingInterval: "monthly", trialDays: 30, taxDisplayMode: "tax_exclusive", taxNote: "+ 18% GST", isActive: true, createdAt: new Date() }],
+    ["price_ent_uk", { id: "price_ent_uk", planId: "enterprise", marketId: "mkt_uk", currencyCode: "GBP", amountMinorUnits: 4999, billingInterval: "monthly", trialDays: 30, taxDisplayMode: "tax_inclusive", taxNote: "VAT included", isActive: true, createdAt: new Date() }],
+    ["price_ent_us", { id: "price_ent_us", planId: "enterprise", marketId: "mkt_us", currencyCode: "USD", amountMinorUnits: 6999, billingInterval: "monthly", trialDays: 30, taxDisplayMode: "tax_exclusive", taxNote: "Excl. state sales tax", isActive: true, createdAt: new Date() }],
+  ]);
 
   constructor(config?: DatabaseConfig) {
     this.connectionString = config?.connectionString || process.env.DATABASE_URL;
@@ -513,6 +572,86 @@ export class DatabaseClient {
     };
     this.syncLogs.push(record);
     return record;
+  }
+
+  // --- Newsletter Repository Methods ---
+  public async subscribeNewsletter(data: {
+    email: string;
+    confirmationToken?: string;
+    tokenExpiresAt?: Date;
+    ipAddress?: string;
+  }): Promise<{ subscription: DbNewsletterSubscription; isNew: boolean }> {
+    const normalized = data.email.toLowerCase().trim();
+    const existing = this.newsletterSubscriptions.get(normalized);
+    if (existing) {
+      if (existing.status === "unsubscribed") {
+        existing.status = "subscribed";
+        existing.updatedAt = new Date();
+        return { subscription: existing, isNew: false };
+      }
+      return { subscription: existing, isNew: false };
+    }
+
+    const sub: DbNewsletterSubscription = {
+      id: `sub_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+      email: normalized,
+      status: "subscribed", // default to subscribed for dev/production with double opt-in flag
+      confirmationToken: data.confirmationToken,
+      tokenExpiresAt: data.tokenExpiresAt,
+      consentTimestamp: new Date(),
+      policyVersion: "v1.0",
+      ipAddress: data.ipAddress,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    this.newsletterSubscriptions.set(normalized, sub);
+    return { subscription: sub, isNew: true };
+  }
+
+  public async getNewsletterSubscription(email: string): Promise<DbNewsletterSubscription | null> {
+    const normalized = email.toLowerCase().trim();
+    return this.newsletterSubscriptions.get(normalized) || null;
+  }
+
+  public async confirmNewsletterSubscription(token: string): Promise<boolean> {
+    for (const sub of this.newsletterSubscriptions.values()) {
+      if (sub.confirmationToken === token) {
+        if (sub.tokenExpiresAt && sub.tokenExpiresAt < new Date()) {
+          return false;
+        }
+        sub.status = "subscribed";
+        sub.updatedAt = new Date();
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public async unsubscribeNewsletter(email: string): Promise<boolean> {
+    const normalized = email.toLowerCase().trim();
+    const sub = this.newsletterSubscriptions.get(normalized);
+    if (!sub) return false;
+    sub.status = "unsubscribed";
+    sub.updatedAt = new Date();
+    return true;
+  }
+
+  // --- Market & Regional Pricing Repository Methods ---
+  public async getMarkets(): Promise<DbMarket[]> {
+    return Array.from(this.markets.values()).filter((m) => m.isActive);
+  }
+
+  public async getMarketBySlug(slug: string): Promise<DbMarket | null> {
+    const normalized = slug.toLowerCase().trim();
+    return this.markets.get(normalized) || null;
+  }
+
+  public async getRegionalPlanPrices(marketSlug: string): Promise<DbRegionalPlanPrice[]> {
+    const market = await this.getMarketBySlug(marketSlug);
+    if (!market) return [];
+    return Array.from(this.regionalPlanPrices.values()).filter(
+      (p) => p.marketId === market.id && p.isActive
+    );
   }
 }
 

@@ -147,4 +147,43 @@ export interface DbEmailBlocklistSyncLog {
   syncedAt: Date;
 }
 
+export interface DbNewsletterSubscription {
+  id: string;
+  email: string;
+  status: "pending_confirmation" | "subscribed" | "unsubscribed" | "bounced";
+  confirmationToken?: string;
+  tokenExpiresAt?: Date;
+  consentTimestamp: Date;
+  policyVersion: string;
+  ipAddress?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface DbMarket {
+  id: string;
+  slug: string;
+  countryCode: string;
+  displayName: string;
+  currencyCode: string;
+  currencySymbol: string;
+  locale: string;
+  isActive: boolean;
+  createdAt: Date;
+}
+
+export interface DbRegionalPlanPrice {
+  id: string;
+  planId: string;
+  marketId: string;
+  currencyCode: string;
+  amountMinorUnits: number;
+  billingInterval: "monthly" | "annual";
+  trialDays: number;
+  taxDisplayMode: "tax_inclusive" | "tax_exclusive";
+  taxNote?: string;
+  isActive: boolean;
+  createdAt: Date;
+}
+
 
