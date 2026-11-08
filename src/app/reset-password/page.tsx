@@ -67,34 +67,34 @@ function ResetPasswordForm() {
 
   return (
     <AuthLayout mode="recovery">
-      <div className="mb-6">
-        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#17172A]">
+      <div className="mb-3.5">
+        <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#17172A]">
           Create New Password
         </h1>
-        <p className="text-xs text-[#667085] mt-1.5">
+        <p className="text-[11px] text-[#667085] mt-0.5">
           Enter a strong new password for your account
         </p>
       </div>
 
       {errorMsg && (
-        <div className="mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-[#DC2626] flex items-center gap-2">
-          <AlertCircle className="h-4 w-4 shrink-0" />
+        <div className="mb-3 p-2.5 rounded-lg bg-rose-50 border border-rose-200 text-[11px] text-[#DC2626] flex items-center gap-2">
+          <AlertCircle className="h-3.5 w-3.5 shrink-0" />
           <span>{errorMsg}</span>
         </div>
       )}
 
       {successMsg && (
-        <div className="mb-4 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-[#16A34A] flex items-center gap-2">
-          <CheckCircle2 className="h-4 w-4 shrink-0" />
+        <div className="mb-3 p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-[11px] text-[#16A34A] flex items-center gap-2">
+          <CheckCircle2 className="h-3.5 w-3.5 shrink-0" />
           <span>{successMsg}</span>
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4 text-xs">
-        <div className="space-y-1.5">
+      <form onSubmit={handleSubmit} className="space-y-3 text-xs">
+        <div className="space-y-1">
           <Label htmlFor="password">New Password</Label>
           <div className="relative">
-            <Lock className="absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
+            <Lock className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
             <Input
               id="password"
               type="password"
@@ -102,15 +102,15 @@ function ResetPasswordForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="pl-10"
+              className="pl-8.5 h-9"
             />
           </div>
         </div>
 
-        <div className="space-y-1.5">
+        <div className="space-y-1">
           <Label htmlFor="confirmPassword">Confirm Password</Label>
           <div className="relative">
-            <Lock className="absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
+            <Lock className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
             <Input
               id="confirmPassword"
               type="password"
@@ -118,7 +118,7 @@ function ResetPasswordForm() {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
-              className="pl-10"
+              className="pl-8.5 h-9"
             />
           </div>
         </div>
@@ -126,14 +126,14 @@ function ResetPasswordForm() {
         <Button
           type="submit"
           disabled={isLoading}
-          className="w-full h-11 text-xs font-bold gap-2 mt-2 shadow-md shadow-[#5938F5]/20"
+          className="w-full h-9 text-xs font-semibold gap-1.5 mt-1"
         >
           {isLoading ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
+            <Loader2 className="h-3.5 w-3.5 animate-spin" />
           ) : (
             <>
               <span>Save & Sign In</span>
-              <ArrowRight className="h-4 w-4" />
+              <ArrowRight className="h-3.5 w-3.5" />
             </>
           )}
         </Button>
@@ -147,7 +147,7 @@ export default function ResetPasswordPage() {
     <Suspense
       fallback={
         <div className="min-h-screen bg-[#F7F8FC] flex items-center justify-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#5938F5]" />
+          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#5938F5]" />
         </div>
       }
     >

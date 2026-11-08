@@ -60,27 +60,27 @@ export default function SignupPage() {
       const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
 
       tl.from(".signup-header", {
-        y: 12,
+        y: 10,
         opacity: 0,
-        duration: 0.4,
+        duration: 0.35,
       });
 
       tl.from(
         ".signup-input-row",
         {
-          y: 12,
+          y: 10,
           opacity: 0,
-          duration: 0.35,
-          stagger: 0.05,
+          duration: 0.3,
+          stagger: 0.04,
         },
-        "-=0.2"
+        "-=0.15"
       );
 
       tl.from(
         ".signup-terms-row",
         {
           opacity: 0,
-          duration: 0.3,
+          duration: 0.25,
         },
         "-=0.1"
       );
@@ -88,9 +88,9 @@ export default function SignupPage() {
       tl.from(
         ".signup-submit-btn",
         {
-          scale: 0.97,
+          scale: 0.98,
           opacity: 0,
-          duration: 0.35,
+          duration: 0.3,
         },
         "-=0.1"
       );
@@ -98,18 +98,18 @@ export default function SignupPage() {
       tl.from(
         ".signup-sso-section",
         {
-          y: 10,
+          y: 8,
           opacity: 0,
-          duration: 0.35,
+          duration: 0.3,
         },
-        "-=0.15"
+        "-=0.1"
       );
 
       tl.from(
         ".signup-footer-row",
         {
           opacity: 0,
-          duration: 0.3,
+          duration: 0.25,
         },
         "-=0.1"
       );
@@ -133,7 +133,7 @@ export default function SignupPage() {
       gsap.to(strengthBarRef.current, {
         width: `${percentage}%`,
         backgroundColor: color,
-        duration: 0.35,
+        duration: 0.3,
         ease: "power2.out",
       });
     }
@@ -226,7 +226,7 @@ export default function SignupPage() {
       gsap.fromTo(
         formScopeRef.current.querySelectorAll(".shadcn-auth-input"),
         { borderColor: "#5938F5", backgroundColor: "rgba(89, 56, 245, 0.05)" },
-        { borderColor: "#E5E7EB", backgroundColor: "#ffffff", duration: 0.5, ease: "power2.out" }
+        { borderColor: "#E5E7EB", backgroundColor: "#ffffff", duration: 0.45, ease: "power2.out" }
       );
     }
   };
@@ -235,11 +235,11 @@ export default function SignupPage() {
     <AuthLayout mode="signup">
       <div ref={formScopeRef}>
         {/* Form Header */}
-        <div className="signup-header mb-6">
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#17172A]">
+        <div className="signup-header mb-3">
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#17172A]">
             Create an Account
           </h1>
-          <p className="text-xs text-[#667085] mt-1.5">
+          <p className="text-[11px] text-[#667085] mt-0.5">
             Get started with DevSparks DeployCheck developer workspace
           </p>
         </div>
@@ -248,9 +248,9 @@ export default function SignupPage() {
         {errorMsg && (
           <div
             ref={errorRef}
-            className="mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-[#DC2626] flex items-center gap-2 will-change-transform"
+            className="mb-3 p-2.5 rounded-lg bg-rose-50 border border-rose-200 text-[11px] text-[#DC2626] flex items-center gap-2 will-change-transform"
           >
-            <AlertCircle className="h-4 w-4 shrink-0" />
+            <AlertCircle className="h-3.5 w-3.5 shrink-0" />
             <span>{errorMsg}</span>
           </div>
         )}
@@ -258,20 +258,20 @@ export default function SignupPage() {
         {successMsg && (
           <div
             ref={successRef}
-            className="mb-4 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-[#16A34A] flex items-center gap-2 will-change-transform"
+            className="mb-3 p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-[11px] text-[#16A34A] flex items-center gap-2 will-change-transform"
           >
-            <CheckCircle2 className="h-4 w-4 shrink-0" />
+            <CheckCircle2 className="h-3.5 w-3.5 shrink-0" />
             <span>{successMsg}</span>
           </div>
         )}
 
         {/* Signup Form with shadcn UI Primitives */}
-        <form onSubmit={handleSubmit} className="space-y-3.5 text-xs">
+        <form onSubmit={handleSubmit} className="space-y-2.5 text-xs">
           {/* Full Name */}
-          <div className="signup-input-row space-y-1.5">
+          <div className="signup-input-row space-y-1">
             <Label htmlFor="fullname">Full Name</Label>
             <div className="relative">
-              <User className="absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
+              <User className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
               <Input
                 id="fullname"
                 type="text"
@@ -280,16 +280,16 @@ export default function SignupPage() {
                 onChange={(e) => setName(e.target.value)}
                 required
                 autoComplete="name"
-                className="shadcn-auth-input pl-10"
+                className="shadcn-auth-input pl-8.5 h-9"
               />
             </div>
           </div>
 
           {/* Email Address */}
-          <div className="signup-input-row space-y-1.5">
+          <div className="signup-input-row space-y-1">
             <Label htmlFor="email">Work Email Address</Label>
             <div className="relative">
-              <Mail className="absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
+              <Mail className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
               <Input
                 id="email"
                 type="email"
@@ -298,26 +298,26 @@ export default function SignupPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 autoComplete="email"
-                className="shadcn-auth-input pl-10"
+                className="shadcn-auth-input pl-8.5 h-9"
               />
             </div>
           </div>
 
           {/* Password */}
-          <div className="signup-input-row space-y-1.5">
+          <div className="signup-input-row space-y-1">
             <div className="flex items-center justify-between">
               <Label htmlFor="password">Password</Label>
               {password.length > 0 && (
                 <Badge
                   variant={strengthScore >= 3 ? "success" : strengthScore === 2 ? "warning" : "destructive"}
-                  className="text-[10px] py-0 px-1.5 h-4 transition-all"
+                  className="text-[9px] py-0 px-1 h-3.5"
                 >
                   {strengthScore >= 4 ? "Strong" : strengthScore === 3 ? "Medium" : "Weak"}
                 </Badge>
               )}
             </div>
             <div className="relative">
-              <Lock className="absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
+              <Lock className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
               <Input
                 id="password"
                 type={showPassword ? "text" : "password"}
@@ -326,15 +326,15 @@ export default function SignupPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 autoComplete="new-password"
-                className="shadcn-auth-input pl-10 pr-11"
+                className="shadcn-auth-input pl-8.5 pr-8.5 h-9"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3.5 top-3 text-slate-400 hover:text-slate-700"
+                className="absolute right-2.5 top-2.5 text-slate-400 hover:text-slate-700"
                 title={showPassword ? "Hide password" : "Show password"}
               >
-                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                {showPassword ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
               </button>
             </div>
 
@@ -351,10 +351,10 @@ export default function SignupPage() {
           </div>
 
           {/* Confirm Password */}
-          <div className="signup-input-row space-y-1.5">
+          <div className="signup-input-row space-y-1">
             <Label htmlFor="confirmPassword">Confirm Password</Label>
             <div className="relative">
-              <Lock className="absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
+              <Lock className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
               <Input
                 id="confirmPassword"
                 type={showConfirmPassword ? "text" : "password"}
@@ -363,28 +363,28 @@ export default function SignupPage() {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
                 autoComplete="new-password"
-                className="shadcn-auth-input pl-10 pr-11"
+                className="shadcn-auth-input pl-8.5 pr-8.5 h-9"
               />
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3.5 top-3 text-slate-400 hover:text-slate-700"
+                className="absolute right-2.5 top-2.5 text-slate-400 hover:text-slate-700"
                 title={showConfirmPassword ? "Hide password" : "Show password"}
               >
-                {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                {showConfirmPassword ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
               </button>
             </div>
           </div>
 
           {/* Terms Agreement Checkbox */}
-          <div className="signup-terms-row flex items-start space-x-2 pt-1">
+          <div className="signup-terms-row flex items-start space-x-2 pt-0.5">
             <Checkbox
               id="terms"
               checked={acceptTerms}
               onCheckedChange={(checked) => setAcceptTerms(!!checked)}
               className="mt-0.5"
             />
-            <Label htmlFor="terms" className="text-[11px] text-[#667085] leading-snug cursor-pointer font-normal">
+            <Label htmlFor="terms" className="text-[10.5px] text-[#667085] leading-tight cursor-pointer font-normal">
               I agree to the{" "}
               <Link href="/docs/terms" className="font-semibold text-[#5938F5] hover:underline">
                 Terms of Use
@@ -401,14 +401,14 @@ export default function SignupPage() {
           <Button
             type="submit"
             disabled={isLoading}
-            className="signup-submit-btn w-full h-11 text-xs font-bold gap-2 mt-2 shadow-md shadow-[#5938F5]/20 active:scale-[0.99] transition-all"
+            className="signup-submit-btn w-full h-9 text-xs font-semibold gap-1.5 mt-1 shadow-xs"
           >
             {isLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
             ) : (
               <>
                 <span>Create Account</span>
-                <ArrowRight className="h-4 w-4" />
+                <ArrowRight className="h-3.5 w-3.5" />
               </>
             )}
           </Button>
@@ -416,44 +416,46 @@ export default function SignupPage() {
 
         {/* Or Sign Up With Social SSO */}
         <div className="signup-sso-section">
-          <div className="relative my-5">
+          <div className="relative my-3">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-[#E5E7EB]" />
             </div>
-            <div className="relative flex justify-center text-xs">
-              <span className="bg-white px-3 text-[#667085] font-medium">
+            <div className="relative flex justify-center text-[10px]">
+              <span className="bg-white px-2.5 text-[#667085] font-medium">
                 Or sign up with
               </span>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-2">
             <Button
               type="button"
               variant="outline"
+              size="sm"
               onClick={() => handleTestSSOFill("github")}
-              className="h-10 text-xs font-semibold gap-2 border-[#E5E7EB] hover:bg-slate-50 active:scale-[0.98] transition-transform"
+              className="h-8.5 text-xs font-semibold gap-2 border-[#E5E7EB] hover:bg-slate-50"
             >
-              <GitHubIcon size={16} className="text-[#17172A]" />
+              <GitHubIcon size={14} className="text-[#17172A]" />
               <span>GitHub</span>
             </Button>
 
             <Button
               type="button"
               variant="outline"
+              size="sm"
               onClick={() => handleTestSSOFill("google")}
-              className="h-10 text-xs font-semibold gap-2 border-[#E5E7EB] hover:bg-slate-50 active:scale-[0.98] transition-transform"
+              className="h-8.5 text-xs font-semibold gap-2 border-[#E5E7EB] hover:bg-slate-50"
             >
-              <GoogleIcon size={16} />
+              <GoogleIcon size={14} />
               <span>Google</span>
             </Button>
           </div>
         </div>
 
         {/* Bottom Footer Switcher */}
-        <div className="signup-footer-row mt-6 text-center text-xs text-[#667085]">
+        <div className="signup-footer-row mt-3.5 text-center text-[11px] text-[#667085]">
           <span>Already have an account? </span>
-          <Link href="/login" className="font-bold text-[#5938F5] hover:underline">
+          <Link href="/login" className="font-semibold text-[#5938F5] hover:underline">
             Sign In
           </Link>
         </div>

@@ -42,44 +42,44 @@ export default function ForgotPasswordPage() {
 
   return (
     <AuthLayout mode="recovery">
-      <div className="mb-6">
-        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#17172A]">
+      <div className="mb-3.5">
+        <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#17172A]">
           Reset Password
         </h1>
-        <p className="text-xs text-[#667085] mt-1.5">
+        <p className="text-[11px] text-[#667085] mt-0.5">
           Enter your work email to receive recovery instructions
         </p>
       </div>
 
       {errorMsg && (
-        <div className="mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-[#DC2626] flex items-center gap-2">
-          <AlertCircle className="h-4 w-4 shrink-0" />
+        <div className="mb-3 p-2.5 rounded-lg bg-rose-50 border border-rose-200 text-[11px] text-[#DC2626] flex items-center gap-2">
+          <AlertCircle className="h-3.5 w-3.5 shrink-0" />
           <span>{errorMsg}</span>
         </div>
       )}
 
       {submitted ? (
-        <div className="space-y-4 text-xs">
-          <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-[#16A34A] space-y-2">
-            <div className="flex items-center gap-2 font-bold text-sm">
-              <CheckCircle2 className="h-5 w-5" />
+        <div className="space-y-3 text-xs">
+          <div className="p-3.5 rounded-lg bg-emerald-50 border border-emerald-200 text-[#16A34A] space-y-1.5">
+            <div className="flex items-center gap-2 font-bold text-xs">
+              <CheckCircle2 className="h-4 w-4" />
               <span>Recovery Link Dispatched</span>
             </div>
             <p className="text-[11px] leading-relaxed text-[#17172A]">
-              If an account with <strong>{email}</strong> exists in our system, an encrypted password reset link has been dispatched.
+              If an account with <strong>{email}</strong> exists, a password reset link has been dispatched.
             </p>
           </div>
 
-          <Button asChild className="w-full h-11 text-xs font-bold mt-2 shadow-md shadow-[#5938F5]/20">
+          <Button asChild className="w-full h-9 text-xs font-semibold mt-1">
             <Link href="/login">Return to Sign In</Link>
           </Button>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="space-y-4 text-xs">
-          <div className="space-y-1.5">
+        <form onSubmit={handleSubmit} className="space-y-3 text-xs">
+          <div className="space-y-1">
             <Label htmlFor="email">Work Email Address</Label>
             <div className="relative">
-              <Mail className="absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
+              <Mail className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
               <Input
                 id="email"
                 type="email"
@@ -88,7 +88,7 @@ export default function ForgotPasswordPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 autoComplete="email"
-                className="pl-10"
+                className="pl-8.5 h-9"
               />
             </div>
           </div>
@@ -96,23 +96,23 @@ export default function ForgotPasswordPage() {
           <Button
             type="submit"
             disabled={isLoading}
-            className="w-full h-11 text-xs font-bold gap-2 mt-2 shadow-md shadow-[#5938F5]/20"
+            className="w-full h-9 text-xs font-semibold gap-1.5 mt-1"
           >
             {isLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
             ) : (
               <>
                 <span>Send Password Reset Link</span>
-                <ArrowRight className="h-4 w-4" />
+                <ArrowRight className="h-3.5 w-3.5" />
               </>
             )}
           </Button>
         </form>
       )}
 
-      <div className="mt-6 text-center text-xs text-[#667085]">
+      <div className="mt-4 text-center text-[11px] text-[#667085]">
         <span>Remember your password? </span>
-        <Link href="/login" className="font-bold text-[#5938F5] hover:underline">
+        <Link href="/login" className="font-semibold text-[#5938F5] hover:underline">
           Sign In
         </Link>
       </div>
