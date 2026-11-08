@@ -218,3 +218,4 @@ export function buildRegionalUrl(currentPath: string, targetMarketSlug: string):
   const cleanPath = pathnameWithoutMarket === "/" ? "" : pathnameWithoutMarket;
   return `/${targetMarketSlug}${cleanPath}`;
 }
+

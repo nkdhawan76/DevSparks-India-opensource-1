@@ -74,3 +74,4 @@ VALUES
   ('price_ent_uk', 'enterprise', 'mkt_uk', 'GBP', 4999, 'monthly', 30, 'tax_inclusive', 'VAT included'),
   ('price_ent_us', 'enterprise', 'mkt_us', 'USD', 6999, 'monthly', 30, 'tax_exclusive', 'Excl. state sales tax')
 ON CONFLICT (id) DO NOTHING;
+

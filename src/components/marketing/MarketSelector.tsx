@@ -151,3 +151,4 @@ export function MarketSelector({ variant = "footer", className = "" }: MarketSel
     </div>
   );
 }
+
