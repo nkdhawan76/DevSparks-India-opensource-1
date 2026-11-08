@@ -3,13 +3,21 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+interface CtaAction {
+  label: string;
+  href: string;
+  external?: boolean;
+}
+
 interface PageHeroProps {
   badge?: string;
-  badgeVariant?: "purple" | "blue" | "emerald" | "amber";
+  badgeVariant?: "purple" | "blue" | "emerald" | "amber" | "success";
   title: string;
   description: string;
-  primaryCta?: { label: string; href: string };
-  secondaryCta?: { label: string; href: string; external?: boolean };
+  primaryCta?: CtaAction;
+  primaryAction?: CtaAction;
+  secondaryCta?: CtaAction;
+  secondaryAction?: CtaAction;
   children?: React.ReactNode;
 }
 
@@ -19,13 +27,19 @@ export function PageHero({
   title,
   description,
   primaryCta,
+  primaryAction,
   secondaryCta,
+  secondaryAction,
   children,
 }: PageHeroProps) {
+  const activePrimary = primaryCta || primaryAction;
+  const activeSecondary = secondaryCta || secondaryAction;
+
   const badgeStyles = {
     purple: "bg-purple-100 text-[#5938F5]",
     blue: "bg-blue-100 text-[#3563E9]",
     emerald: "bg-emerald-100 text-[#16A34A]",
+    success: "bg-emerald-100 text-[#16A34A]",
     amber: "bg-amber-100 text-amber-800",
   }[badgeVariant];
 
@@ -51,46 +65,46 @@ export function PageHero({
             {description}
           </p>
 
-          {(primaryCta || secondaryCta) && (
-            <div className="mt-6 flex flex-wrap items-center justify-center sm:justify-start gap-3">
-              {primaryCta && (
+          {(activePrimary || activeSecondary) && (
+            <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-center gap-3">
+              {activePrimary && (
                 <Button
+                  size="lg"
                   asChild
-                  className="h-10 rounded-[8px] px-5 text-xs font-bold bg-[#5938F5] hover:bg-[#4726DB] text-white shadow-xs gap-1.5 active:scale-[0.98] transition-all"
+                  className="w-full sm:w-auto h-11 px-6 rounded-[8px] bg-[#5938F5] hover:bg-[#4726DB] text-white font-bold text-sm shadow-sm gap-2 group"
                 >
-                  <Link href={primaryCta.href}>
-                    <span>{primaryCta.label}</span>
-                    <ArrowRight className="h-3.5 w-3.5" />
+                  <Link
+                    href={activePrimary.href}
+                    target={activePrimary.external ? "_blank" : undefined}
+                    rel={activePrimary.external ? "noreferrer noopener" : undefined}
+                  >
+                    <span>{activePrimary.label}</span>
+                    <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
                   </Link>
                 </Button>
               )}
 
-              {secondaryCta && (
+              {activeSecondary && (
                 <Button
                   variant="outline"
+                  size="lg"
                   asChild
-                  className="h-10 rounded-[8px] px-4.5 text-xs font-semibold border-[#E5E7EB] hover:bg-slate-50 text-[#17172A]"
+                  className="w-full sm:w-auto h-11 px-6 rounded-[8px] border-[#E5E7EB] hover:bg-slate-50 text-[#17172A] font-semibold text-sm shadow-2xs"
                 >
-                  {secondaryCta.external ? (
-                    <a
-                      href={secondaryCta.href}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                    >
-                      {secondaryCta.label}
-                    </a>
-                  ) : (
-                    <Link href={secondaryCta.href}>
-                      {secondaryCta.label}
-                    </Link>
-                  )}
+                  <Link
+                    href={activeSecondary.href}
+                    target={activeSecondary.external ? "_blank" : undefined}
+                    rel={activeSecondary.external ? "noreferrer noopener" : undefined}
+                  >
+                    {activeSecondary.label}
+                  </Link>
                 </Button>
               )}
             </div>
           )}
-        </div>
 
-        {children && <div className="mt-8">{children}</div>}
+          {children && <div className="mt-8">{children}</div>}
+        </div>
       </div>
     </section>
   );
