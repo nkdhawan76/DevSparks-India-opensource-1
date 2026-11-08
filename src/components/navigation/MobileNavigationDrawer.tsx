@@ -304,7 +304,7 @@ export function MobileNavigationDrawer({
           {/* PRICING LINK */}
           <div className="mobile-drawer-item border border-[#E5E7EB] rounded-xl p-2.5">
             <Link
-              href="/documentation"
+              href="/pricing"
               onClick={onClose}
               className="flex items-center justify-between text-xs font-bold text-[#17172A] hover:text-[#5938F5] group transition-colors"
             >

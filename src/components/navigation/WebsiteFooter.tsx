@@ -30,48 +30,48 @@ interface FooterLinkItem {
 }
 
 const PRODUCT_LINKS: FooterLinkItem[] = [
-  { label: "Overview", route: "/features" },
-  { label: "Pre-deployment Audit", route: "/features/audit", badge: "Live", badgeVariant: "success" },
+  { label: "Overview", route: "/product" },
+  { label: "Pre-deployment Audit", route: "/features/pre-deployment-audit", badge: "Live", badgeVariant: "success" },
   { label: "AI Assistant", route: "/features/ai-assistant", badge: "BYOK", badgeVariant: "secondary" },
-  { label: "VPS Management", route: "/features/vps" },
-  { label: "Guided Deployment", route: "/features/deployment" },
-  { label: "Website Monitoring", route: "/features/monitoring" },
-  { label: "Maintenance Tasks", route: "/features/maintenance" },
+  { label: "VPS Management", route: "/features/vps-management" },
+  { label: "Guided Deployment", route: "/features/guided-deployment" },
+  { label: "Website Monitoring", route: "/features/website-monitoring" },
+  { label: "Maintenance", route: "/features/maintenance" },
 ];
 
 const SOLUTIONS_LINKS: FooterLinkItem[] = [
   { label: "For Developers", route: "/solutions/developers" },
-  { label: "For DevOps Teams", route: "/solutions/devops" },
+  { label: "For DevOps Teams", route: "/solutions/devops-teams" },
   { label: "For Agencies", route: "/solutions/agencies" },
   { label: "For Startups", route: "/solutions/startups" },
-  { label: "Security & Reliability", route: "/docs/security" },
+  { label: "Security & Reliability", route: "/solutions/security-reliability" },
 ];
 
 const RESOURCES_LINKS: FooterLinkItem[] = [
-  { label: "Documentation", route: "/documentation" },
+  { label: "Documentation", route: "/docs" },
   { label: "API Reference", route: "/docs/api" },
-  { label: "Getting Started", route: "/documentation" },
-  { label: "Tutorials & Guides", route: "/documentation" },
+  { label: "Getting Started", route: "/docs/getting-started" },
+  { label: "Tutorials", route: "/tutorials" },
   { label: "Changelog", route: "/changelog", badge: "v0.1.0", badgeVariant: "secondary" },
-  { label: "Public Roadmap", route: "/roadmap" },
+  { label: "Roadmap", route: "/roadmap" },
   { label: "GitHub Repository", route: "https://github.com/nkdhawan76/DevSparks-India-opensource-1", external: true },
 ];
 
 const COMPANY_LINKS: FooterLinkItem[] = [
   { label: "About DevSparks India", route: "/about" },
-  { label: "Contact Us", route: "/contact" },
-  { label: "Community Discussions", route: "https://github.com/nkdhawan76/DevSparks-India-opensource-1/discussions", external: true },
-  { label: "Contribute to Code", route: "https://github.com/nkdhawan76/DevSparks-India-opensource-1/blob/main/README.md", external: true },
-  { label: "Developer Support", route: "/support" },
+  { label: "Contact", route: "/contact" },
+  { label: "Community", route: "/community" },
+  { label: "Contribute", route: "/contribute" },
+  { label: "Support", route: "/support" },
 ];
 
 const LEGAL_LINKS: FooterLinkItem[] = [
-  { label: "Privacy Policy", route: "/docs/terms" },
-  { label: "Terms of Service", route: "/docs/terms" },
-  { label: "Cookie Policy", route: "/docs/terms" },
-  { label: "Acceptable Use Policy", route: "/docs/terms" },
-  { label: "Security Policy", route: "/docs/security" },
-  { label: "MIT License", route: "/docs/terms" },
+  { label: "Privacy Policy", route: "/privacy" },
+  { label: "Terms of Service", route: "/terms" },
+  { label: "Cookie Policy", route: "/cookies" },
+  { label: "Acceptable Use Policy", route: "/acceptable-use" },
+  { label: "Security Policy", route: "/security" },
+  { label: "License (MIT)", route: "/license" },
 ];
 
 interface WebsiteFooterProps {
@@ -498,15 +498,15 @@ export function WebsiteFooter({ showCta = true }: WebsiteFooterProps) {
 
           {/* Quick Policy Links & Live Status */}
           <div className="flex items-center gap-3 text-[11px]">
-            <Link href="/docs/terms" className="hover:text-[#17172A] transition-colors">
+            <Link href="/privacy" className="hover:text-[#17172A] transition-colors">
               Privacy
             </Link>
             <span>•</span>
-            <Link href="/docs/terms" className="hover:text-[#17172A] transition-colors">
+            <Link href="/terms" className="hover:text-[#17172A] transition-colors">
               Terms
             </Link>
             <span>•</span>
-            <Link href="/docs/security" className="hover:text-[#17172A] transition-colors">
+            <Link href="/security" className="hover:text-[#17172A] transition-colors">
               Security
             </Link>
             <span>•</span>

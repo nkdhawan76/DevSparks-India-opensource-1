@@ -236,7 +236,7 @@ export function WebsiteHeader() {
 
           {/* Pricing Direct Link */}
           <Link
-            href="/documentation"
+            href="/pricing"
             onClick={closeMenu}
             className="px-2.5 py-1.5 rounded-[8px] text-[11.5px] font-semibold text-slate-700 hover:text-[#17172A] hover:bg-slate-50 transition-colors"
           >

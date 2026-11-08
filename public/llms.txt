@@ -1,0 +1,32 @@
+# DevSparks DeployCheck — LLM Information Architecture & Documentation Map
+
+> DevSparks DeployCheck is an open-source developer operations platform engineered by DevSparks India. It unifies pre-deployment code auditing, BYOK AI coding assistance, guided Linux VPS server deployment, and synthetic website monitoring into a single self-hosted dashboard.
+
+## Core Capabilities
+- **Pre-deployment Audit**: Static analysis for package.json dependencies, exposed credentials, missing environment variables, and Docker configurations.
+- **BYOK AI Assistant**: Code diff review and remediation via OpenRouter (supporting DeepSeek, Claude, GPT-4o) with explicit human approval gates.
+- **VPS Management**: Secure Linux server diagnostics over SSH with SHA-256 host verification.
+- **Guided Deployment**: Zero-downtime release pipelines with automated preflight checks and health verifications.
+- **Synthetic Monitoring**: Continuous HTTP/SSL uptime probes with incident alerting.
+
+## Official Canonical Routes
+- Homepage: https://deploycheck.devsparks.com/
+- Product Overview: https://deploycheck.devsparks.com/product
+- Pre-deployment Audit: https://deploycheck.devsparks.com/features/pre-deployment-audit
+- AI Assistant: https://deploycheck.devsparks.com/features/ai-assistant
+- VPS Management: https://deploycheck.devsparks.com/features/vps-management
+- Guided Deployment: https://deploycheck.devsparks.com/features/guided-deployment
+- Website Monitoring: https://deploycheck.devsparks.com/features/website-monitoring
+- Maintenance: https://deploycheck.devsparks.com/features/maintenance
+- Documentation: https://deploycheck.devsparks.com/docs
+- API Reference: https://deploycheck.devsparks.com/docs/api
+- Getting Started: https://deploycheck.devsparks.com/docs/getting-started
+- Changelog: https://deploycheck.devsparks.com/changelog
+- Public Roadmap: https://deploycheck.devsparks.com/roadmap
+- GitHub Repository: https://github.com/nkdhawan76/DevSparks-India-opensource-1
+
+## Architecture & Governance
+- Engine: Node.js + Next.js App Router + TypeScript + PostgreSQL
+- Design Standard: Strict Light Theme Only (#F7F8FC, #FFFFFF, #17172A, #5938F5)
+- Open Source License: MIT License
+- Maintainer: DevSparks India
