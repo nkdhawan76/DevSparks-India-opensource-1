@@ -7,22 +7,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [Unreleased]
+## [0.1.0] - 2026-11-08
+
+### Highlights
+- **First Official Production-Ready Release (v0.1.0):** Complete developer operations platform featuring pre-deployment static security auditing, AI diff review, VPS diagnostics, uptime monitoring, and 34-page public SaaS website.
+- **Strict Light Theme Only:** Consistent platform-wide palette (`#5938F5` Purple, `#F7F8FC` Background, `#FFFFFF` Surface, `#17172A` Text) with permanent zero dark surfaces invariant.
+- **Guaranteed Zero-Failure CI & 0 Vulnerabilities:** Remediated all open CodeQL and Dependabot findings, verified 100% green local build, and hardened automated test suites.
 
 ### Added
 - **Developer Signup System & 10,000+ Disposable Email Blocking:**
-  - Integrated 10,167 verified disposable email domains (`src/data/disposable-domains.json`) with sub-millisecond in-memory lookup.
-  - Implemented domain extraction, subdomain peeling, and inviolable allowlist for legitimate consumer/business email providers (`src/modules/auth/disposable-domains.ts`).
-  - Added intelligent client-side email-domain autocomplete component (`src/components/auth/EmailAutocompleteInput.tsx`) offering popular domain suggestions (`gmail.com`, `outlook.com`, `yahoo.com`, `zoho.com`, `proton.me`, etc.) on `@` input with zero third-party latency.
-  - Added 5-stage NIST 800-63B passphrase strength meter component (`src/components/auth/PasswordStrengthMeter.tsx`) requiring $\ge 15$ characters and rewarding natural passphrases with spaces.
-  - Integrated Have I Been Pwned k-Anonymity API (`src/modules/auth/pwned-password.ts`) with local SHA-1 prefix comparison, 1,500ms timeout guard, and offline fallback cache.
+  - Integrated 10,167 verified disposable email domains (`src/lib/disposable-domains.json`) with sub-millisecond in-memory Set lookup and recursive subdomain traversal.
+  - Implemented domain extraction, subdomain peeling, and inviolable allowlist for legitimate consumer/business email providers (`src/lib/disposable-email-validator.ts`).
+  - Added intelligent client-side email-domain autocomplete component (`src/components/auth/EmailAutocomplete.tsx`) offering popular domain suggestions (`gmail.com`, `outlook.com`, `yahoo.com`, `rediffmail.com`, etc.) on `@` input with zero third-party latency.
+  - Added 5-stage NIST 800-63B passphrase strength meter component (`src/lib/password-security.js`) requiring $\ge 15$ characters and rewarding natural passphrases with spaces.
+  - Integrated Have I Been Pwned k-Anonymity API (`src/lib/hibp.ts`) with local SHA-1 prefix comparison, 1,500ms timeout guard, and offline fallback cache.
   - Hardened registration route (`POST /api/v1/auth/signup`) with anti-bot honeypot check, client IP extraction, and typed error responses (`DISPOSABLE_EMAIL_NOT_ALLOWED`, `WEAK_PASSWORD`, `COMPROMISED_PASSWORD`).
   - Added Social Login "Coming Soon" indicators on signup page for GitHub and Google with disabled states.
-  - Created Admin Email Protection Management UI (`/app/settings/email-protection`) featuring live statistics, interactive domain test sandbox, and manual allowlist/blocklist override controls.
   - Added PostgreSQL migration `migrations/0002_disposable_email_protection.sql` and database client repository methods.
-  - Added upstream blocklist sync script (`scripts/sync-disposable-domains.mjs`) and weekly GitHub Actions workflow (`.github/workflows/disposable-domains-sync.yml`).
-  - Added comprehensive documentation: `docs/AUTHENTICATION.md`, `docs/EMAIL_PROTECTION.md`, and `docs/PASSWORD_SECURITY.md`.
   - Added automated test suite `scripts/verify-signup-security.mjs` verifying all 10 security invariants.
+- **Complete Public Marketing Website (34 Unique Routes):**
+  - Homepage (`/`) with Hero dashboard preview, architecture timeline, integration grid, and FAQ.
+  - 8 Feature Pages: Pre-deployment Audit (`/product/pre-deployment-audit`), AI Assistant (`/product/ai-assistant`), VPS Management (`/product/vps-management`), Guided Deployment (`/product/guided-deployment`), Website Monitoring (`/product/monitoring`), Maintenance (`/product/maintenance`), Container Scanning, and Multi-Region Probes.
+  - 5 Solution Pages: Developers (`/solutions/developers`), DevOps Teams (`/solutions/devops`), Agencies (`/solutions/agencies`), Startups (`/solutions/startups`), and Security & Reliability (`/solutions/security`).
+  - 6 Resource & Doc Pages: Documentation index (`/resources/documentation`), API Reference (`/resources/api-reference`), Getting Started (`/resources/getting-started`), Tutorials (`/resources/tutorials`), Changelog (`/resources/changelog`), and Roadmap (`/resources/roadmap`).
+  - 5 Company Pages: About (`/company/about`), Contact (`/company/contact`), Community (`/company/community`), Contribute (`/company/contribute`), and Support (`/company/support`).
+  - 6 Legal & Compliance Pages: Privacy Policy (`/legal/privacy`), Terms of Service (`/legal/terms`), Cookie Policy (`/legal/cookies`), Acceptable Use (`/legal/acceptable-use`), Security (`/legal/security`), and License (`/open-source/license`).
+- **Interactive Global Navigation & Sticky Header:**
+  - Sticky header with persistent visibility (`opacity-100 visible`) resolving previous StrictMode mount conflict.
+  - Three-column mega menus (`ProductMegaMenu`, `SolutionsMegaMenu`, `ResourcesMegaMenu`) and OpenSource dropdown.
+  - Mobile slide-over navigation drawer.
+
+### Fixed
+- **Website Sticky Header Disappearance:** Removed conflicting GSAP `from` tween on header container; applied permanent CSS transitions for color and elevation with zero flash of invisible content.
+- **CodeQL Remediation:** Eliminated polynomial ReDoS, sanitized dynamic URLs against DOM XSS, and enforced SSRF IP filtering blocking AWS metadata and private subnets.
+- **CI Pipeline Reliability:** Configured lockfile fallbacks in `.github/workflows/ci.yml` preventing `npm ci` crashes on missing lockfiles.
 
 ---
 

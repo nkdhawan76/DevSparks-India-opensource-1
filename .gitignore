@@ -65,3 +65,13 @@ ANTIGRAVITY_GITHUB_CICD_PROMPT.md
 AGENTS.md
 DESIGN.md
 
+# Markdown publishing policy: ONLY CHANGELOG.md is tracked on GitHub
+*.md
+!CHANGELOG.md
+.github/**/*.md
+
+# Local audit scripts and metrics (Keep local only)
+scripts/audit_*
+scripts/build-audit-matrix.cjs
+scripts/generate-audit-docs.cjs
+
