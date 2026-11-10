@@ -9,6 +9,7 @@ import {
   Activity,
   CheckCircle2,
 } from "lucide-react";
+import { GlowCard } from "@/components/common/GlowCard";
 
 interface WorkflowStep {
   step: string;
@@ -205,7 +206,11 @@ export function WorkflowTimeline() {
         </div>
 
         {/* Selected Step Detailed Preview Box */}
-        <div className="rounded-2xl bg-[#F7F8FC] border border-[#E5E7EB] p-6 sm:p-8 shadow-xs">
+        <GlowCard
+          className="shadow-xs hover:shadow-md transition-all duration-300"
+          innerClassName="p-6 sm:p-8 bg-[#F7F8FC]"
+          glowColor="#5938F5"
+        >
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             {/* Left Content */}
             <div className="lg:col-span-6 space-y-4">
@@ -262,7 +267,7 @@ export function WorkflowTimeline() {
               </div>
             </div>
           </div>
-        </div>
+        </GlowCard>
       </div>
     </section>
   );
