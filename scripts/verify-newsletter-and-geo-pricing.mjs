@@ -74,7 +74,7 @@ runTest("Breadcrumbs component has spacious vertical padding (pt-4/pt-5 pb-5/pb-
 
 // 4. Verify Market Registry & Pricing Engine
 runTest("Centralized market registry correctly defines IN, UK, and US", async () => {
-  const { MARKETS, getMarket, getRegionalPricing, formatPrice } = await import("../src/lib/markets.ts");
+  const { getMarket, getRegionalPricing } = await import("../src/lib/markets.ts");
   
   const inMarket = getMarket("in");
   assert.equal(inMarket.currency, "INR");

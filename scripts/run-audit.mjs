@@ -35,15 +35,14 @@ function walk(dir, depth = 0) {
       const fullPath = path.join(dir, entry.name);
       const relativePath = path.relative(targetDir, fullPath).replace(/\\/g, "/");
 
-      // Only read text files under 500KB
-      const stats = fs.statSync(fullPath);
-      if (stats.size < 512 * 1024) {
-        try {
-          const content = fs.readFileSync(fullPath, "utf-8");
-          filesMap.set(relativePath, content);
-        } catch {
-          // Skip binary files
+      // Atomically read file without TOCTOU race condition
+      try {
+        const fileBuffer = fs.readFileSync(fullPath);
+        if (fileBuffer.byteLength < 512 * 1024) {
+          filesMap.set(relativePath, fileBuffer.toString("utf-8"));
         }
+      } catch {
+        // Skip unreadable or locked files
       }
     }
   }

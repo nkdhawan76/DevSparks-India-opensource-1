@@ -5,17 +5,33 @@ import { resolveClientIp } from "@/lib/ip-resolver.js";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { email, password, rememberMe } = body;
+    if (!body || typeof body !== "object" || Array.isArray(body)) {
+      return NextResponse.json(
+        { error: "Invalid request payload." },
+        { status: 400 }
+      );
+    }
 
-    if (!email || !password) {
+    const email = typeof body.email === "string" ? body.email.trim() : "";
+    const password = typeof body.password === "string" ? body.password : "";
+    const rememberMe = Boolean(body.rememberMe);
+
+    if (email.length === 0 || password.length === 0) {
       return NextResponse.json(
         { error: "Email address and password are required." },
         { status: 400 }
       );
     }
 
+    if (email.length > 255 || password.length > 1024) {
+      return NextResponse.json(
+        { error: "Payload exceeds permissible field length boundaries." },
+        { status: 400 }
+      );
+    }
+
     const ip = resolveClientIp(req);
-    const result = await authService.login(email, password, Boolean(rememberMe), ip);
+    const result = await authService.login(email, password, rememberMe, ip);
 
     if (!result.success || !result.data) {
       return NextResponse.json(

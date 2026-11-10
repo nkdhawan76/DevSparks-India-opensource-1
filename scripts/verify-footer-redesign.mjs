@@ -102,11 +102,16 @@ runTest("Social links exist with accessible labels (GitHub, LinkedIn, X, Status)
   const brandPath = path.join(projectRoot, "src", "components", "navigation", "footer", "FooterBrand.tsx");
   const content = fs.readFileSync(brandPath, "utf-8");
 
-  assert.ok(content.includes("https://github.com/nkdhawan76/DevSparks-India-opensource-1"), "GitHub link must exist");
-  assert.ok(content.includes("https://linkedin.com/company/devsparks-india"), "LinkedIn link must exist");
-  assert.ok(content.includes("https://x.com/devsparksindia"), "X link must exist");
-  assert.ok(content.includes('href="/status"'), "Status link must exist");
-  assert.ok(content.includes('aria-label="GitHub Repository"'), "Accessible aria-label for GitHub");
+  const requiredAttributes = [
+    'href="https://github.com/nkdhawan76/DevSparks-India-opensource-1"',
+    'href="https://linkedin.com/company/devsparks-india"',
+    'href="https://x.com/devsparksindia"',
+  ];
+  for (const attr of requiredAttributes) {
+    assert.ok(content.indexOf(attr) !== -1, `Required link attribute ${attr} must exist`);
+  }
+  assert.ok(content.indexOf('href="/status"') !== -1, "Status link must exist");
+  assert.ok(content.indexOf('aria-label="GitHub Repository"') !== -1, "Accessible aria-label for GitHub");
 });
 
 // 6. Verify Real Newsletter API & Loading State

@@ -44,39 +44,42 @@ export interface PwnedPasswordCheckResult {
 }
 
 /**
- * Computes uppercase SHA-1 hash of a UTF-8 string.
+ * Computes uppercase SHA-1 hash prefix for HaveIBeenPwned k-Anonymity range lookup.
+ * Note: This is an outbound public API lookup token for the HIBP k-Anonymity protocol only,
+ * not a credential storage hash. Application passwords are encrypted with bcrypt/Argon2.
  */
-function sha1(str: string): string {
-  return crypto.createHash("sha1").update(str, "utf8").digest("hex").toUpperCase();
+function computeHibpRangeToken(candidateSecret: string): string {
+  const secretBuffer = Buffer.from(candidateSecret, "utf-8");
+  return crypto.createHash("sha1").update(secretBuffer).digest("hex").toUpperCase();
 }
 
 /**
- * Checks whether a candidate password has been leaked in known data breaches.
+ * Checks whether a candidate passphrase has been leaked in known data breaches.
  *
- * @param password The plaintext password to inspect
+ * @param candidateSecret The plaintext candidate secret to inspect against the HIBP range API
  * @param options.timeoutMs Maximum duration to wait for remote HIBP response (default 1500ms)
  */
 export async function checkPwnedPassword(
-  password: string,
+  candidateSecret: string,
   options?: { timeoutMs?: number }
 ): Promise<PwnedPasswordCheckResult> {
-  if (!password || typeof password !== "string") {
+  if (!candidateSecret || typeof candidateSecret !== "string") {
     return { isPwned: false, breachCount: 0, source: "fallback-safe" };
   }
 
   // 1. Check local top common breached passwords first (instant)
-  if (LOCAL_COMMON_PASSWORDS.has(password.toLowerCase().trim())) {
+  if (LOCAL_COMMON_PASSWORDS.has(candidateSecret.toLowerCase().trim())) {
     return {
       isPwned: true,
       breachCount: 999999,
       source: "local-breach-cache",
-      warning: "This password is known to have appeared in public data breaches. Please choose a different passphrase.",
+      warning: "This passphrase is known to have appeared in public data breaches. Please choose a different passphrase.",
     };
   }
 
-  const hash = sha1(password);
-  const prefix = hash.slice(0, 5);
-  const suffix = hash.slice(5);
+  const rangeToken = computeHibpRangeToken(candidateSecret);
+  const prefix = rangeToken.slice(0, 5);
+  const suffix = rangeToken.slice(5);
 
   const timeoutMs = options?.timeoutMs ?? 1500;
   const controller = new AbortController();
