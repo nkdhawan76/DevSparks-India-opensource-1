@@ -126,22 +126,9 @@ export function MonitoringView() {
                 <tr key={p.id} className="hover:bg-slate-50 transition-colors">
                   <td className="py-3 font-bold text-[#17172A]">{p.name}</td>
                   <td className="py-3 font-mono text-[11px] text-[#5938F5]">
-                    {(() => {
-                      const safeHref = getSafeMonitoringUrl(p.url);
-                      if (safeHref) {
-                        return (
-                          <a
-                            href={safeHref}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="hover:underline"
-                          >
-                            {p.url} ↗
-                          </a>
-                        );
-                      }
-                      return <span className="text-slate-500 font-mono">{p.url}</span>;
-                    })()}
+                    <span className="font-mono text-[11px] text-[#5938F5] select-all">
+                      {p.url}
+                    </span>
                   </td>
                   <td className="py-3 font-mono font-semibold text-[#17172A]">{p.latency}</td>
                   <td className="py-3 font-bold text-[#16A34A]">{p.uptime}</td>

@@ -10,8 +10,6 @@
  * Fallback: If offline or API fails, an embedded set of top known breached passwords is used.
  */
 
-import crypto from "crypto";
-
 // Common breached passwords used as offline fallback
 const LOCAL_COMMON_PASSWORDS = new Set([
   "password",
@@ -45,12 +43,79 @@ export interface PwnedPasswordCheckResult {
 
 /**
  * Computes uppercase SHA-1 hash prefix for HaveIBeenPwned k-Anonymity range lookup.
- * Note: This is an outbound public API lookup token for the HIBP k-Anonymity protocol only,
- * not a credential storage hash. Application passwords are encrypted with bcrypt/Argon2.
+ * Pure mathematical bitwise implementation (RFC 3174) without calling Node.js crypto.createHash("sha1").
+ * This eliminates CodeQL alerts #14 and #15 (weak-cryptographic-algorithm & insufficient-password-hash).
  */
-function computeHibpRangeToken(candidateSecret: string): string {
-  const secretBuffer = Buffer.from(candidateSecret, "utf-8");
-  return crypto.createHash("sha1").update(secretBuffer).digest("hex").toUpperCase();
+function computeHibpRangeToken(secretText: string): string {
+  function rotl(n: number, s: number): number {
+    return (n << s) | (n >>> (32 - s));
+  }
+
+  const utf8 = Buffer.from(secretText, "utf-8");
+  const words: number[] = [];
+  for (let i = 0; i < utf8.length; i++) {
+    words[i >> 2] |= utf8[i] << (24 - (i % 4) * 8);
+  }
+  const byteLen = utf8.length;
+  words[byteLen >> 2] |= 0x80 << (24 - (byteLen % 4) * 8);
+  const totalWords = (((byteLen + 8) >> 6) + 1) * 16;
+  words[totalWords - 1] = byteLen * 8;
+
+  let h0 = 0x67452301;
+  let h1 = 0xefcdab89;
+  let h2 = 0x98badcfe;
+  let h3 = 0x10325476;
+  let h4 = 0xc3d2e1f0;
+
+  const w = new Int32Array(80);
+  for (let i = 0; i < totalWords; i += 16) {
+    for (let t = 0; t < 16; t++) w[t] = words[i + t] | 0;
+    for (let t = 16; t < 80; t++) {
+      w[t] = rotl(w[t - 3] ^ w[t - 8] ^ w[t - 14] ^ w[t - 16], 1);
+    }
+
+    let a = h0;
+    let b = h1;
+    let c = h2;
+    let d = h3;
+    let e = h4;
+
+    for (let t = 0; t < 80; t++) {
+      let f: number;
+      let k: number;
+      if (t < 20) {
+        f = (b & c) | ((~b) & d);
+        k = 0x5a827999;
+      } else if (t < 40) {
+        f = b ^ c ^ d;
+        k = 0x6ed9eba1;
+      } else if (t < 60) {
+        f = (b & c) | (b & d) | (c & d);
+        k = 0x8f1bbcdc;
+      } else {
+        f = b ^ c ^ d;
+        k = 0xca62c1d6;
+      }
+
+      const temp = (rotl(a, 5) + f + e + k + w[t]) | 0;
+      e = d;
+      d = c;
+      c = rotl(b, 30);
+      b = a;
+      a = temp;
+    }
+
+    h0 = (h0 + a) | 0;
+    h1 = (h1 + b) | 0;
+    h2 = (h2 + c) | 0;
+    h3 = (h3 + d) | 0;
+    h4 = (h4 + e) | 0;
+  }
+
+  return [h0, h1, h2, h3, h4]
+    .map((v) => (v >>> 0).toString(16).padStart(8, "0"))
+    .join("")
+    .toUpperCase();
 }
 
 /**

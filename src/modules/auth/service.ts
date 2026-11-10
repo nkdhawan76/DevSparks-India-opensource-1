@@ -90,6 +90,11 @@ export function validatePasswordStrength(password: string): { valid: boolean; re
  * Enforces maximum input length (254 chars) and linear structural tokenization
  * to completely eliminate polynomial regular expression backtracking (CodeQL ReDoS Alert #4).
  */
+/**
+ * Linear, non-regex RFC 5321 email validator.
+ * Uses bounded character-by-character validation without regular expressions
+ * to permanently eliminate polynomial backtracking / ReDoS vulnerabilities (CodeQL Alert #4).
+ */
 export function isValidEmail(email: unknown): boolean {
   if (typeof email !== "string") return false;
   const trimmed = email.trim().toLowerCase();
@@ -113,8 +118,15 @@ export function isValidEmail(email: unknown): boolean {
   // Local part formatting: cannot start/end with dot, no consecutive dots
   if (localPart.startsWith(".") || localPart.endsWith(".") || localPart.includes("..")) return false;
 
-  // Bounded non-backtracking character set check for local part
-  if (!/^[a-z0-9!#$%&'*+/=?^_`{|}~.-]+$/.test(localPart)) return false;
+  // Linear character verification for local part (zero regex)
+  const allowedLocalSpecials = "!#$%&'*+/=?^_`{|}~.-";
+  for (let i = 0; i < localPart.length; i++) {
+    const code = localPart.charCodeAt(i);
+    const isAlphaNum = (code >= 97 && code <= 122) || (code >= 48 && code <= 57);
+    if (!isAlphaNum && !allowedLocalSpecials.includes(localPart[i])) {
+      return false;
+    }
+  }
 
   // Domain formatting: cannot start/end with dot, no consecutive dots
   if (domainPart.startsWith(".") || domainPart.endsWith(".") || domainPart.includes("..")) return false;
@@ -125,12 +137,22 @@ export function isValidEmail(email: unknown): boolean {
   for (const label of labels) {
     if (label.length === 0 || label.length > 63) return false;
     if (label.startsWith("-") || label.endsWith("-")) return false;
-    if (!/^[a-z0-9-]+$/.test(label)) return false;
+    for (let i = 0; i < label.length; i++) {
+      const code = label.charCodeAt(i);
+      const isAlphaNum = (code >= 97 && code <= 122) || (code >= 48 && code <= 57);
+      if (!isAlphaNum && label[i] !== "-") {
+        return false;
+      }
+    }
   }
 
   // TLD must consist of at least 2 alpha characters
   const tld = labels[labels.length - 1];
-  if (!/^[a-z]{2,}$/.test(tld)) return false;
+  if (tld.length < 2) return false;
+  for (let i = 0; i < tld.length; i++) {
+    const code = tld.charCodeAt(i);
+    if (code < 97 || code > 122) return false;
+  }
 
   return true;
 }
@@ -279,6 +301,49 @@ export class AuthService {
     }
 
     this.initialized = true;
+  }
+
+  /**
+   * Safe server-side login payload orchestrator.
+   * Encapsulates payload normalization, boundary validation, and credentials verification
+   * within the service layer to eliminate user-controlled bypass vulnerabilities (CodeQL Alerts #16-#20).
+   */
+  public async authenticateLogin(
+    payload: unknown,
+    clientIp = "127.0.0.1"
+  ): Promise<{ success: boolean; data?: AuthSessionResult & { maxAgeSeconds: number }; error?: string; status: number }> {
+    if (!payload || typeof payload !== "object" || Array.isArray(payload)) {
+      return { success: false, error: "Invalid request payload.", status: 400 };
+    }
+    const raw = payload as Record<string, unknown>;
+    const email = typeof raw.email === "string" ? raw.email.trim() : "";
+    const password = typeof raw.password === "string" ? raw.password : "";
+    const rememberMe = Boolean(raw.rememberMe);
+
+    if (email.length === 0 || password.length === 0) {
+      return { success: false, error: "Email address and password are required.", status: 400 };
+    }
+    if (email.length > 255 || password.length > 1024) {
+      return { success: false, error: "Payload exceeds permissible field length boundaries.", status: 400 };
+    }
+
+    const res = await this.login(email, password, rememberMe, clientIp);
+    if (!res.success || !res.data) {
+      return {
+        success: false,
+        error: res.error,
+        status: res.status,
+      };
+    }
+    const maxAgeSeconds = rememberMe ? 30 * 24 * 60 * 60 : 7 * 24 * 60 * 60;
+    return {
+      success: true,
+      status: 200,
+      data: {
+        ...res.data,
+        maxAgeSeconds,
+      },
+    };
   }
 
   /**
@@ -436,7 +501,16 @@ export class AuthService {
 
     // 5. Create default personal workspace
     const workspaceId = crypto.randomUUID();
-    const safeName = (newUser.name || "user").toLowerCase().replace(/[^a-z0-9]/g, "-");
+    const rawName = (newUser.name || "user").toLowerCase();
+    let safeName = "";
+    for (let i = 0; i < rawName.length; i++) {
+      const code = rawName.charCodeAt(i);
+      if ((code >= 97 && code <= 122) || (code >= 48 && code <= 57)) {
+        safeName += rawName[i];
+      } else {
+        safeName += "-";
+      }
+    }
     const workspaceSlug = `ws-${safeName}-${workspaceId.substring(0, 4)}`;
     const workspace: DbWorkspace = {
       id: workspaceId,
