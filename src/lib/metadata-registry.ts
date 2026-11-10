@@ -99,7 +99,7 @@ export const METADATA_REGISTRY: Record<string, RouteMetadata> = {
     canonicalPath: "/solutions/developers",
     category: "solutions",
     keywords: ["for developers", "developer workflows", "git deployment", "self-host"],
-    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Solutions", path: "/solutions/developers" }, { name: "For Developers", path: "/solutions/developers" }],
+    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Solutions", path: "/solutions" }, { name: "For Developers", path: "/solutions/developers" }],
   },
   "/solutions/devops-teams": {
     title: "DeployCheck for DevOps Teams — Standardized Server Governance",
@@ -107,7 +107,7 @@ export const METADATA_REGISTRY: Record<string, RouteMetadata> = {
     canonicalPath: "/solutions/devops-teams",
     category: "solutions",
     keywords: ["for devops", "server governance", "infrastructure automation"],
-    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Solutions", path: "/solutions/developers" }, { name: "For DevOps Teams", path: "/solutions/devops-teams" }],
+    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Solutions", path: "/solutions" }, { name: "For DevOps Teams", path: "/solutions/devops-teams" }],
   },
   "/solutions/agencies": {
     title: "DeployCheck for Agencies — Multi-Client Workspace Management",
@@ -115,7 +115,7 @@ export const METADATA_REGISTRY: Record<string, RouteMetadata> = {
     canonicalPath: "/solutions/agencies",
     category: "solutions",
     keywords: ["for agencies", "client management", "multi-tenant devops"],
-    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Solutions", path: "/solutions/developers" }, { name: "For Agencies", path: "/solutions/agencies" }],
+    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Solutions", path: "/solutions" }, { name: "For Agencies", path: "/solutions/agencies" }],
   },
   "/solutions/startups": {
     title: "DeployCheck for Startups — High Velocity Without DevOps Overhead",
@@ -123,7 +123,7 @@ export const METADATA_REGISTRY: Record<string, RouteMetadata> = {
     canonicalPath: "/solutions/startups",
     category: "solutions",
     keywords: ["for startups", "lean devops", "low overhead deployment"],
-    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Solutions", path: "/solutions/developers" }, { name: "For Startups", path: "/solutions/startups" }],
+    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Solutions", path: "/solutions" }, { name: "For Startups", path: "/solutions/startups" }],
   },
   "/solutions/security-reliability": {
     title: "DeployCheck for Security & Reliability — Zero Blindspots",
@@ -131,7 +131,7 @@ export const METADATA_REGISTRY: Record<string, RouteMetadata> = {
     canonicalPath: "/solutions/security-reliability",
     category: "solutions",
     keywords: ["security and reliability", "appsec", "policy runners", "uptime assurance"],
-    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Solutions", path: "/solutions/developers" }, { name: "Security & Reliability", path: "/solutions/security-reliability" }],
+    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Solutions", path: "/solutions" }, { name: "Security & Reliability", path: "/solutions/security-reliability" }],
   },
   "/docs": {
     title: "Documentation & User Guides — DeployCheck",
@@ -139,7 +139,7 @@ export const METADATA_REGISTRY: Record<string, RouteMetadata> = {
     canonicalPath: "/docs",
     category: "resources",
     keywords: ["documentation", "user guide", "installation", "deploycheck docs"],
-    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Resources", path: "/docs" }, { name: "Documentation", path: "/docs" }],
+    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Documentation", path: "/docs" }],
   },
   "/docs/api": {
     title: "REST API Reference (/api/v1) — DeployCheck",
@@ -147,7 +147,7 @@ export const METADATA_REGISTRY: Record<string, RouteMetadata> = {
     canonicalPath: "/docs/api",
     category: "resources",
     keywords: ["api reference", "rest api", "openapi", "api/v1"],
-    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Resources", path: "/docs" }, { name: "API Reference", path: "/docs/api" }],
+    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Documentation", path: "/docs" }, { name: "API Reference", path: "/docs/api" }],
   },
   "/docs/getting-started": {
     title: "Getting Started Guide — Step-by-Step Tutorial | DeployCheck",
@@ -155,7 +155,7 @@ export const METADATA_REGISTRY: Record<string, RouteMetadata> = {
     canonicalPath: "/docs/getting-started",
     category: "resources",
     keywords: ["getting started", "quickstart", "tutorial", "first audit"],
-    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Resources", path: "/docs" }, { name: "Getting Started", path: "/docs/getting-started" }],
+    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Documentation", path: "/docs" }, { name: "Getting Started", path: "/docs/getting-started" }],
   },
   "/tutorials": {
     title: "Developer Tutorials & Architecture Recipes — DeployCheck",
@@ -163,7 +163,7 @@ export const METADATA_REGISTRY: Record<string, RouteMetadata> = {
     canonicalPath: "/tutorials",
     category: "resources",
     keywords: ["tutorials", "devops guides", "vps setup guide", "github actions"],
-    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Resources", path: "/docs" }, { name: "Tutorials", path: "/tutorials" }],
+    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Tutorials", path: "/tutorials" }],
   },
   "/changelog": {
     title: "Changelog & Release Notes — DeployCheck",
@@ -171,7 +171,7 @@ export const METADATA_REGISTRY: Record<string, RouteMetadata> = {
     canonicalPath: "/changelog",
     category: "resources",
     keywords: ["changelog", "release notes", "version history", "updates"],
-    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Resources", path: "/docs" }, { name: "Changelog", path: "/changelog" }],
+    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Changelog", path: "/changelog" }],
   },
   "/roadmap": {
     title: "Public Roadmap & Milestone Progress — DeployCheck",
@@ -179,7 +179,7 @@ export const METADATA_REGISTRY: Record<string, RouteMetadata> = {
     canonicalPath: "/roadmap",
     category: "resources",
     keywords: ["roadmap", "milestones", "product development", "feature plans"],
-    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Resources", path: "/docs" }, { name: "Roadmap", path: "/roadmap" }],
+    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Roadmap", path: "/roadmap" }],
   },
   "/about": {
     title: "About DevSparks India — Company & Mission | DeployCheck",
@@ -187,7 +187,7 @@ export const METADATA_REGISTRY: Record<string, RouteMetadata> = {
     canonicalPath: "/about",
     category: "company",
     keywords: ["about devsparks india", "open source company", "mission"],
-    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Company", path: "/about" }, { name: "About Us", path: "/about" }],
+    breadcrumbs: [{ name: "Home", path: "/" }, { name: "About DevSparks", path: "/about" }],
   },
   "/contact": {
     title: "Contact DevSparks India — Inquiries & Support | DeployCheck",
@@ -195,7 +195,7 @@ export const METADATA_REGISTRY: Record<string, RouteMetadata> = {
     canonicalPath: "/contact",
     category: "company",
     keywords: ["contact", "support", "inquiry", "devsparks email"],
-    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Company", path: "/about" }, { name: "Contact", path: "/contact" }],
+    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Contact", path: "/contact" }],
   },
   "/community": {
     title: "Developer Community & GitHub Discussions — DeployCheck",
@@ -203,7 +203,7 @@ export const METADATA_REGISTRY: Record<string, RouteMetadata> = {
     canonicalPath: "/community",
     category: "company",
     keywords: ["community", "github discussions", "developer forum"],
-    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Company", path: "/about" }, { name: "Community", path: "/community" }],
+    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Community", path: "/community" }],
   },
   "/contribute": {
     title: "Contribute to DeployCheck — Open Source Guidelines",
@@ -211,7 +211,7 @@ export const METADATA_REGISTRY: Record<string, RouteMetadata> = {
     canonicalPath: "/contribute",
     category: "company",
     keywords: ["contribute", "open source", "pull requests", "github repo"],
-    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Company", path: "/about" }, { name: "Contribute", path: "/contribute" }],
+    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Contribute", path: "/contribute" }],
   },
   "/support": {
     title: "Developer Support & Troubleshooting — DeployCheck",
@@ -219,49 +219,49 @@ export const METADATA_REGISTRY: Record<string, RouteMetadata> = {
     canonicalPath: "/support",
     category: "company",
     keywords: ["support", "troubleshooting", "helpdesk", "faq"],
-    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Company", path: "/about" }, { name: "Support", path: "/support" }],
+    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Support", path: "/support" }],
   },
   "/privacy": {
     title: "Privacy Policy — DeployCheck by DevSparks India",
     description: "How DeployCheck handles account information, telemetry, and encrypted user credentials with strict data isolation.",
     canonicalPath: "/privacy",
     category: "legal",
-    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Legal", path: "/privacy" }, { name: "Privacy Policy", path: "/privacy" }],
+    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Privacy Policy", path: "/privacy" }],
   },
   "/terms": {
     title: "Terms of Service — DeployCheck by DevSparks India",
     description: "Terms governing usage of DeployCheck open-source software, cloud services, and community participation.",
     canonicalPath: "/terms",
     category: "legal",
-    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Legal", path: "/privacy" }, { name: "Terms of Service", path: "/terms" }],
+    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Terms of Service", path: "/terms" }],
   },
   "/cookies": {
     title: "Cookie Policy — DeployCheck by DevSparks India",
     description: "Information about essential session authentication cookies used by the DeployCheck platform.",
     canonicalPath: "/cookies",
     category: "legal",
-    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Legal", path: "/privacy" }, { name: "Cookie Policy", path: "/cookies" }],
+    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Cookie Policy", path: "/cookies" }],
   },
   "/acceptable-use": {
     title: "Acceptable Use Policy — DeployCheck",
     description: "Standards and guidelines for acceptable usage of the DeployCheck platform, API endpoints, and monitoring infrastructure.",
     canonicalPath: "/acceptable-use",
     category: "legal",
-    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Legal", path: "/privacy" }, { name: "Acceptable Use", path: "/acceptable-use" }],
+    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Acceptable Use Policy", path: "/acceptable-use" }],
   },
   "/security": {
     title: "Security Policy & Responsible Disclosure — DeployCheck",
     description: "DeployCheck security architecture, AES-256 encryption, credential isolation, and responsible vulnerability reporting guidelines.",
     canonicalPath: "/security",
     category: "legal",
-    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Legal", path: "/privacy" }, { name: "Security Policy", path: "/security" }],
+    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Security Policy", path: "/security" }],
   },
   "/license": {
     title: "MIT Open Source License — DeployCheck",
     description: "Full text of the official MIT License governing DevSparks DeployCheck open-source software repository.",
     canonicalPath: "/license",
     category: "legal",
-    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Legal", path: "/privacy" }, { name: "License", path: "/license" }],
+    breadcrumbs: [{ name: "Home", path: "/" }, { name: "MIT License", path: "/license" }],
   },
   "/pricing": {
     title: "Pricing & Open Source Plans — DeployCheck",
@@ -275,7 +275,7 @@ export const METADATA_REGISTRY: Record<string, RouteMetadata> = {
     description: "Real-time health, operational metrics, datacenter latency, and uptime telemetry for the DeployCheck infrastructure.",
     canonicalPath: "/status",
     category: "utility",
-    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Status", path: "/status" }],
+    breadcrumbs: [{ name: "Home", path: "/" }, { name: "System Status", path: "/status" }],
   },
 };
 

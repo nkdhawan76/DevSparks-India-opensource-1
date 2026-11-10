@@ -379,7 +379,7 @@ function LoginForm() {
         </div>
 
         {/* Bottom Switcher */}
-        <div className="login-footer-row mt-3 text-center text-xs text-[#667085]">
+        <div className="login-footer-row mt-4 pt-1 text-center text-xs text-[#667085]">
           <span>Don&apos;t have an account?</span>
           <Link href="/signup" className="font-bold text-[#5938F5] hover:underline ml-1">
             Create Account

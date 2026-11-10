@@ -400,7 +400,7 @@ export default function SignupPage() {
         </div>
 
         {/* Bottom Switcher */}
-        <div className="signup-footer-row mt-3 text-center text-xs text-[#667085]">
+        <div className="signup-footer-row mt-4 pt-1 text-center text-xs text-[#667085]">
           <span>Already have an account?</span>
           <Link href="/login" className="font-bold text-[#5938F5] hover:underline ml-1">
             Sign In

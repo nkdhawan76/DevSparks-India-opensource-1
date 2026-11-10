@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import { Home } from "lucide-react";
 import { StatusBadge } from "./StatusBadge";
 import { CommandPalette } from "./CommandPalette";
 import {
@@ -10,6 +12,7 @@ import {
   HelpCircle,
   Plus,
   ChevronDown,
+  ChevronRight,
   RefreshCw,
   Users,
   Settings,
@@ -82,11 +85,23 @@ export function Header({
 
         {/* Breadcrumb Navigation */}
         {currentSection && (
-          <div className="hidden xl:flex items-center gap-1.5 text-xs text-[#667085] shrink-0 font-medium mr-1">
-            <span>DeployCheck</span>
-            <span className="text-slate-300">/</span>
-            <span className="text-[#17172A] font-semibold">{currentSection}</span>
-          </div>
+          <nav
+            aria-label="App Breadcrumb"
+            className="hidden md:flex items-center gap-1.5 text-xs text-[#667085] shrink-0 font-medium mr-2"
+          >
+            <Link
+              href="/app/dashboard"
+              className="hover:text-[#5938F5] transition-colors inline-flex items-center gap-1 group py-0.5 rounded-[4px] focus:outline-none focus-visible:underline"
+              title="DeployCheck Operations Dashboard"
+            >
+              <Home size={13} className="text-slate-400 group-hover:text-[#5938F5] transition-colors shrink-0" aria-hidden="true" />
+              <span>DeployCheck</span>
+            </Link>
+            <ChevronRight size={13} className="text-slate-300 shrink-0" aria-hidden="true" />
+            <span aria-current="page" className="text-[#17172A] font-semibold truncate max-w-[200px] lg:max-w-none">
+              {currentSection}
+            </span>
+          </nav>
         )}
 
         {/* Global Search Bar */}

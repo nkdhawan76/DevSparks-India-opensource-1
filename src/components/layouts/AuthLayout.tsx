@@ -190,7 +190,7 @@ export function AuthLayout({
             </div>
 
             {/* Right Panel: The Authentication Form (Fully Responsive) */}
-            <div className="auth-pane-content col-span-12 md:col-span-7 bg-white p-4 sm:p-6 flex flex-col justify-center">
+            <div className="auth-pane-content col-span-12 md:col-span-7 bg-white p-5 sm:p-7 md:p-8 flex flex-col justify-center">
               {/* Brand Header Inside Right Pane: strictly "DeployCheck" by "DevSparks India" */}
               <div className="mb-3.5">
                 <Link href="/" className="inline-flex items-center gap-2 group mb-2">

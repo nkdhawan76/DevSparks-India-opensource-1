@@ -42,30 +42,32 @@ export function Breadcrumbs({ items, className = "" }: BreadcrumbsProps) {
         aria-label="Breadcrumb"
         className={`w-full pt-4 sm:pt-5 pb-5 sm:pb-6 px-4 sm:px-6 text-xs font-sans select-none ${className}`}
       >
-        <ol className="max-w-6xl mx-auto flex items-center flex-wrap gap-1.5 text-slate-500">
+        <ol className="max-w-6xl mx-auto flex items-center flex-wrap gap-1.5 sm:gap-2 text-slate-500">
           {items.map((item, index) => {
             const isLast = index === items.length - 1;
             const isFirst = index === 0;
 
             return (
-              <li key={item.path} className="inline-flex items-center gap-1.5">
+              <li key={item.path} className="inline-flex items-center gap-1.5 sm:gap-2">
                 {index > 0 && (
-                  <ChevronRight className="h-3 w-3 text-slate-400 shrink-0" aria-hidden="true" />
+                  <ChevronRight className="h-3 w-3 text-slate-300 shrink-0" aria-hidden="true" />
                 )}
 
                 {isLast ? (
                   <span
                     aria-current="page"
-                    className="font-semibold text-[#17172A] truncate max-w-[200px] sm:max-w-none"
+                    className="font-semibold text-[#17172A] truncate max-w-[280px] sm:max-w-none"
                   >
                     {item.name}
                   </span>
                 ) : (
                   <Link
                     href={item.path}
-                    className="hover:text-[#5938F5] transition-colors inline-flex items-center gap-1"
+                    className="text-[#667085] hover:text-[#5938F5] transition-colors inline-flex items-center gap-1.5 group font-medium focus:outline-none focus-visible:underline rounded-[3px]"
                   >
-                    {isFirst && <Home className="h-3 w-3 shrink-0" aria-hidden="true" />}
+                    {isFirst && (
+                      <Home className="h-3.5 w-3.5 text-slate-400 group-hover:text-[#5938F5] transition-colors shrink-0" aria-hidden="true" />
+                    )}
                     <span>{item.name}</span>
                   </Link>
                 )}

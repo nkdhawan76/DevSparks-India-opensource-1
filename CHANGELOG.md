@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.2.3] - 2026-11-10
+
+### Highlights
+- **Global Breadcrumb Architecture & Hierarchy Overhaul:** Refined breadcrumbs platform-wide across all marketing subpages and the authenticated app dashboard, eliminating duplicate paths and establishing logical 2-level and 3-level navigation hierarchies.
+- **Zero-Duplicate-Path Metadata Registry:** Re-architected `METADATA_REGISTRY` so ancestor items always resolve to genuine section hubs (`/product`, `/solutions`, `/docs`) while the active leaf item displays canonical page titles with `aria-current="page"`.
+- **Responsive App Dashboard Breadcrumb (`Header.tsx`):** Upgraded dashboard breadcrumbs from `hidden xl:flex` to `hidden md:flex`, making them visible across all laptop and tablet screens with clickable Home navigation, `ChevronRight` separators, and accessible labels.
+- **Solutions Hub Route (`/solutions`):** Created `src/app/solutions/page.tsx` redirecting to `/solutions/developers` for clean breadcrumb hierarchy.
+
+### Fixed
+- **Intermediate Breadcrumb Misdirection:** Fixed previous intermediate "Resources", "Company", and "Legal" labels linking to unrelated subpages; each ancestor item now correctly points to its authentic section hub.
+- **Mobile Breadcrumb Truncation:** Expanded mobile page title truncation from `max-w-[200px]` to `max-w-[280px]` with flex-wrap guards preventing layout shift and horizontal overflow.
+
+---
+
 ## [0.2.2] - 2026-11-08
 
 ### Highlights
