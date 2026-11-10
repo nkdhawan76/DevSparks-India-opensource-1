@@ -8,7 +8,7 @@ import {
   Server,
   Rocket,
   Activity,
-  Box,
+  Boxes,
   Globe,
   ArrowRight,
   Zap,
@@ -106,17 +106,21 @@ export function BentoFeatureGrid() {
               Diagnose errors and review patch diffs using your own OpenRouter key. Zero unrestricted shell access; changes execute only after human sign-off.
             </p>
 
-            {/* Embedded Code Diff Visual */}
-            <div className="mt-5 p-3 rounded-xl bg-slate-900 text-slate-200 font-mono text-[10.5px] space-y-1.5 border border-slate-800">
-              <div className="text-[9.5px] text-slate-400 pb-1 border-b border-slate-800 flex justify-between">
-                <span>Code Patch Diff</span>
-                <span className="text-[#5938F5] font-bold">Claude 3.5 / DeepSeek</span>
+            {/* Embedded Code Diff Visual (Strict Light Theme) */}
+            <div className="mt-5 p-3.5 rounded-xl bg-slate-50 border border-[#E5E7EB] font-mono text-[11px] space-y-2 shadow-2xs">
+              <div className="text-[10px] text-slate-500 pb-1.5 border-b border-[#E5E7EB] flex items-center justify-between">
+                <span className="font-semibold text-slate-700">Code Patch Diff #14</span>
+                <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-purple-50 text-[#5938F5] border border-purple-200">
+                  Awaiting Human Approval
+                </span>
               </div>
-              <div className="text-rose-400 bg-rose-950/40 px-2 py-0.5 rounded">
-                - eval(untrustedInput);
+              <div className="text-[#DC2626] bg-rose-50 border border-rose-200/80 px-2.5 py-1 rounded-[6px] font-medium flex items-center gap-1.5">
+                <span className="select-none font-bold text-rose-500">-</span>
+                <span>eval(untrustedInput);</span>
               </div>
-              <div className="text-emerald-400 bg-emerald-950/40 px-2 py-0.5 rounded">
-                + JSON.parse(sanitizedInput);
+              <div className="text-[#16A34A] bg-emerald-50 border border-emerald-200/80 px-2.5 py-1 rounded-[6px] font-medium flex items-center gap-1.5">
+                <span className="select-none font-bold text-emerald-600">+</span>
+                <span>JSON.parse(sanitizedInput);</span>
               </div>
             </div>
           </div>
@@ -274,7 +278,7 @@ export function BentoFeatureGrid() {
           <div>
             <div className="flex items-center justify-between mb-4">
               <div className="w-10 h-10 rounded-xl bg-purple-50 text-[#5938F5] border border-purple-100 flex items-center justify-center group-hover:scale-105 transition-transform">
-                <Box className="h-5 w-5" />
+                <Boxes className="h-5 w-5" />
               </div>
               <Badge variant="outline" className="text-slate-500 border-slate-200 text-[10px] font-bold">
                 Roadmap Milestones 7 & 8

@@ -238,21 +238,27 @@ export function WorkflowTimeline() {
               </div>
             </div>
 
-            {/* Right Terminal / Preview Output */}
+            {/* Right Terminal / Preview Output (Strict Light Theme) */}
             <div className="lg:col-span-6">
-              <div className="rounded-xl bg-slate-900 border border-slate-800 text-slate-200 font-mono text-[11px] p-4 shadow-md space-y-2">
-                <div className="flex items-center justify-between pb-2 border-b border-slate-800 text-[10px] text-slate-400">
-                  <div className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-rose-500" />
-                    <span className="w-2 h-2 rounded-full bg-amber-500" />
-                    <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                    <span className="pl-1">deploycheck terminal runtime</span>
+              <div className="rounded-xl bg-white border border-[#E5E7EB] text-[#17172A] font-mono text-[11px] shadow-xs overflow-hidden">
+                <div className="flex items-center justify-between px-4 py-2.5 bg-slate-100/90 border-b border-[#E5E7EB] text-[10.5px] text-[#667085]">
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-2.5 h-2.5 rounded-full bg-rose-400" />
+                      <span className="w-2.5 h-2.5 rounded-full bg-amber-400" />
+                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
+                    </div>
+                    <span className="font-semibold text-slate-600 pl-1">deploycheck terminal runtime</span>
                   </div>
-                  <span className="text-emerald-400 font-bold">LIVE STAGE</span>
+                  <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    STAGE ACTIVE
+                  </span>
                 </div>
-                <pre className="text-xs text-slate-300 leading-relaxed overflow-x-auto whitespace-pre-wrap">
-                  {activeStep.detail.codePreview}
-                </pre>
+                <div className="p-4 bg-slate-50/70">
+                  <pre className="text-xs text-slate-800 leading-relaxed overflow-x-auto whitespace-pre-wrap font-mono selection:bg-purple-100 selection:text-[#5938F5]">
+                    {activeStep.detail.codePreview}
+                  </pre>
+                </div>
               </div>
             </div>
           </div>

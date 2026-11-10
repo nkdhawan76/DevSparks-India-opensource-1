@@ -197,17 +197,17 @@ export function HeroDashboardPreview() {
         {/* TAB 2: AI DIFF ASSISTANT (BYOK) */}
         {activeTab === "ai" && (
           <div className="space-y-3 font-mono text-[11px]">
-            <div className="p-2.5 rounded-xl bg-slate-900 text-slate-200 border border-slate-800 space-y-1.5 overflow-hidden">
-              <div className="flex items-center justify-between text-[10px] text-slate-400 pb-1 border-b border-slate-800">
-                <span>src/modules/auth/service.ts (Diff Proposal)</span>
-                <span className="text-[#5938F5] bg-purple-950/80 px-2 py-0.5 rounded text-[9px] font-sans font-bold">
+            <div className="p-3 rounded-xl bg-slate-50 text-[#17172A] border border-[#E5E7EB] space-y-2 overflow-hidden shadow-2xs">
+              <div className="flex items-center justify-between text-[10px] text-slate-500 pb-1.5 border-b border-[#E5E7EB]">
+                <span className="font-semibold text-slate-700">src/modules/auth/service.ts (Diff Proposal)</span>
+                <span className="text-[#5938F5] bg-purple-50 border border-purple-200 px-2 py-0.5 rounded text-[9px] font-sans font-bold">
                   BYOK Review
                 </span>
               </div>
-              <div className="text-rose-400 bg-rose-950/30 px-2 py-1 rounded">
+              <div className="text-[#DC2626] bg-rose-50 border border-rose-200/80 px-2.5 py-1 rounded font-mono text-[10.5px]">
                 - const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]&#123;2,&#125;$/;
               </div>
-              <div className="text-emerald-400 bg-emerald-950/30 px-2 py-1 rounded">
+              <div className="text-[#16A34A] bg-emerald-50 border border-emerald-200/80 px-2.5 py-1 rounded font-mono text-[10.5px]">
                 + export function isValidEmail(email: string): boolean &#123; /* linear O(n) tokenization */ &#125;
               </div>
             </div>

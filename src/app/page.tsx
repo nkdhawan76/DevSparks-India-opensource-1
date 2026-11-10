@@ -1,6 +1,6 @@
 import React from "react";
 import { Metadata } from "next";
-import { Shield, Lock, Key } from "lucide-react";
+import { ShieldCheck, Lock, Rocket, Activity, Key } from "lucide-react";
 import { WebsiteHeader } from "@/components/navigation/WebsiteHeader";
 import { WebsiteFooter } from "@/components/navigation/WebsiteFooter";
 import { HeroContent } from "@/components/marketing/HeroContent";
@@ -49,25 +49,48 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* TRUST HIGHLIGHTS BAR */}
-        <section className="py-6 bg-[#F7F8FC] border-b border-[#E5E7EB]">
+        {/* TRUST HIGHLIGHTS BAR — ENGINEERING METRICS */}
+        <section className="py-8 bg-[#F7F8FC] border-b border-[#E5E7EB]">
           <div className="max-w-6xl mx-auto px-4 sm:px-6">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-              <div className="p-3">
-                <div className="text-base font-extrabold text-[#17172A]">Open Source Core</div>
-                <div className="text-xs text-[#667085] mt-0.5">MIT Licensed • 100% Transparent</div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="p-4 rounded-xl bg-white border border-[#E5E7EB] hover:border-purple-300 transition-all shadow-2xs flex items-center gap-3.5 group">
+                <div className="w-10 h-10 rounded-lg bg-purple-50 text-[#5938F5] border border-purple-100 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                  <ShieldCheck className="h-5 w-5" />
+                </div>
+                <div>
+                  <div className="text-lg font-extrabold text-[#17172A] leading-tight tracking-tight">150+ Invariants</div>
+                  <div className="text-[11px] text-[#667085] mt-0.5 font-medium">Deterministic Static CVE & Secrets Scan</div>
+                </div>
               </div>
-              <div className="p-3">
-                <div className="text-base font-extrabold text-[#17172A]">Self-Hosted or Cloud</div>
-                <div className="text-xs text-[#667085] mt-0.5">Complete Sovereign Control</div>
+
+              <div className="p-4 rounded-xl bg-white border border-[#E5E7EB] hover:border-blue-300 transition-all shadow-2xs flex items-center gap-3.5 group">
+                <div className="w-10 h-10 rounded-lg bg-blue-50 text-[#3563E9] border border-blue-100 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                  <Lock className="h-5 w-5" />
+                </div>
+                <div>
+                  <div className="text-lg font-extrabold text-[#17172A] leading-tight tracking-tight">100% BYOK AI</div>
+                  <div className="text-[11px] text-[#667085] mt-0.5 font-medium">AES-256 Encrypted • Zero Data Retention</div>
+                </div>
               </div>
-              <div className="p-3">
-                <div className="text-base font-extrabold text-[#17172A]">Secure by Design</div>
-                <div className="text-xs text-[#667085] mt-0.5">AES-256 Encryption at Rest</div>
+
+              <div className="p-4 rounded-xl bg-white border border-[#E5E7EB] hover:border-purple-300 transition-all shadow-2xs flex items-center gap-3.5 group">
+                <div className="w-10 h-10 rounded-lg bg-purple-50 text-[#5938F5] border border-purple-100 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                  <Rocket className="h-5 w-5" />
+                </div>
+                <div>
+                  <div className="text-lg font-extrabold text-[#17172A] leading-tight tracking-tight">&lt; 500ms Rollbacks</div>
+                  <div className="text-[11px] text-[#667085] mt-0.5 font-medium">Atomic Linux Symlink Switching</div>
+                </div>
               </div>
-              <div className="p-3">
-                <div className="text-base font-extrabold text-[#17172A]">Developer First</div>
-                <div className="text-xs text-[#667085] mt-0.5">BYOK AI • Zero Vendor Lock-in</div>
+
+              <div className="p-4 rounded-xl bg-white border border-[#E5E7EB] hover:border-emerald-300 transition-all shadow-2xs flex items-center gap-3.5 group">
+                <div className="w-10 h-10 rounded-lg bg-emerald-50 text-[#16A34A] border border-emerald-100 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                  <Activity className="h-5 w-5" />
+                </div>
+                <div>
+                  <div className="text-lg font-extrabold text-[#17172A] leading-tight tracking-tight">24/7 Edge Radar</div>
+                  <div className="text-[11px] text-[#667085] mt-0.5 font-medium">Multi-Region Latency & TLS Probes</div>
+                </div>
               </div>
             </div>
           </div>
@@ -80,48 +103,88 @@ export default function HomePage() {
         <WorkflowTimeline />
 
         {/* SECURITY & TRUST DEEP DIVE */}
-        <section className="py-12 sm:py-16 max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <span className="text-xs font-bold text-[#5938F5] uppercase tracking-wider block mb-2">
-              SECURITY & GOVERNANCE
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#17172A] tracking-tight">
+        <section className="py-14 sm:py-20 max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-100 text-[#5938F5] text-[11px] font-bold uppercase tracking-wider mb-3">
+              <ShieldCheck className="h-3.5 w-3.5" />
+              <span>Zero-Trust Governance</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#17172A] tracking-tight leading-tight">
               Enterprise Grade Security Without Enterprise Complexity
             </h2>
-            <p className="mt-3 text-sm text-[#667085] leading-relaxed">
-              We treat your code and server credentials as zero-trust assets. The platform is strictly policy-controlled at every level.
+            <p className="mt-3 text-sm sm:text-base text-[#667085] leading-relaxed">
+              We treat your code, secrets, and server credentials as zero-trust assets. The platform is strictly policy-controlled at every boundary.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="p-6 rounded-2xl bg-white border border-[#E5E7EB] shadow-2xs">
-              <div className="w-10 h-10 rounded-xl bg-purple-50 text-[#5938F5] flex items-center justify-center mb-4">
-                <Key className="h-5 w-5" />
+            <div className="p-6 sm:p-7 rounded-2xl bg-white border border-[#E5E7EB] hover:border-purple-300 hover:shadow-lg hover:-translate-y-1 transition-all duration-200 shadow-2xs flex flex-col justify-between group">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-10 h-10 rounded-xl bg-purple-50 text-[#5938F5] border border-purple-100 flex items-center justify-center group-hover:scale-105 transition-transform">
+                    <Key className="h-5 w-5" />
+                  </div>
+                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-purple-50 text-[#5938F5] border border-purple-200">
+                    AES-256-GCM
+                  </span>
+                </div>
+                <h3 className="text-lg font-bold text-[#17172A] group-hover:text-[#5938F5] transition-colors">
+                  BYOK Credential Isolation
+                </h3>
+                <p className="mt-2 text-xs sm:text-sm text-[#667085] leading-relaxed">
+                  Bring your own OpenRouter AI key. All tokens are encrypted using AES-256-GCM before database storage and never logged in plain text or shared between tenants.
+                </p>
               </div>
-              <h3 className="text-base font-bold text-[#17172A]">BYOK Credential Isolation</h3>
-              <p className="mt-2 text-xs sm:text-sm text-[#667085] leading-relaxed">
-                Bring your own OpenRouter AI key. All tokens are encrypted using AES-256-GCM before database storage and never logged in plain text or shared between tenants.
-              </p>
+              <div className="mt-5 pt-3 border-t border-slate-100 text-[11px] font-medium text-slate-500 flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                <span>Zero model training on your code</span>
+              </div>
             </div>
 
-            <div className="p-6 rounded-2xl bg-white border border-[#E5E7EB] shadow-2xs">
-              <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#3563E9] flex items-center justify-center mb-4">
-                <Shield className="h-5 w-5" />
+            <div className="p-6 sm:p-7 rounded-2xl bg-white border border-[#E5E7EB] hover:border-blue-300 hover:shadow-lg hover:-translate-y-1 transition-all duration-200 shadow-2xs flex flex-col justify-between group">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#3563E9] border border-blue-100 flex items-center justify-center group-hover:scale-105 transition-transform">
+                    <ShieldCheck className="h-5 w-5" />
+                  </div>
+                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-blue-50 text-[#3563E9] border border-blue-200">
+                    Human-in-the-Loop
+                  </span>
+                </div>
+                <h3 className="text-lg font-bold text-[#17172A] group-hover:text-[#3563E9] transition-colors">
+                  Approval-Gated Policy Runner
+                </h3>
+                <p className="mt-2 text-xs sm:text-sm text-[#667085] leading-relaxed">
+                  DeployCheck AI never has unrestricted shell access. AI models only propose structured JSON code patches and diagnostic insights that require explicit human approval.
+                </p>
               </div>
-              <h3 className="text-base font-bold text-[#17172A]">Human-in-the-Loop AI Gates</h3>
-              <p className="mt-2 text-xs sm:text-sm text-[#667085] leading-relaxed">
-                DeployCheck AI never has unrestricted shell access. AI models only propose structured JSON code patches and diagnostic insights that require explicit human approval.
-              </p>
+              <div className="mt-5 pt-3 border-t border-slate-100 text-[11px] font-medium text-slate-500 flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                <span>Mandatory human sign-off on changes</span>
+              </div>
             </div>
 
-            <div className="p-6 rounded-2xl bg-white border border-[#E5E7EB] shadow-2xs">
-              <div className="w-10 h-10 rounded-xl bg-emerald-50 text-[#16A34A] flex items-center justify-center mb-4">
-                <Lock className="h-5 w-5" />
+            <div className="p-6 sm:p-7 rounded-2xl bg-white border border-[#E5E7EB] hover:border-emerald-300 hover:shadow-lg hover:-translate-y-1 transition-all duration-200 shadow-2xs flex flex-col justify-between group">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-50 text-[#16A34A] border border-emerald-100 flex items-center justify-center group-hover:scale-105 transition-transform">
+                    <Lock className="h-5 w-5" />
+                  </div>
+                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200">
+                    SSRF & Host Guard
+                  </span>
+                </div>
+                <h3 className="text-lg font-bold text-[#17172A] group-hover:text-[#16A34A] transition-colors">
+                  Host Verification & SSRF Guard
+                </h3>
+                <p className="mt-2 text-xs sm:text-sm text-[#667085] leading-relaxed">
+                  Server connections require SHA-256 host key fingerprinting to prevent man-in-the-middle attacks. All outbound webhooks block loopback and RFC 1918 private IP ranges.
+                </p>
               </div>
-              <h3 className="text-base font-bold text-[#17172A]">Host Verification on SSH</h3>
-              <p className="mt-2 text-xs sm:text-sm text-[#667085] leading-relaxed">
-                Server connections require SHA-256 host key fingerprinting to prevent man-in-the-middle attacks. Operations execute inside restricted, isolated policy runners.
-              </p>
+              <div className="mt-5 pt-3 border-t border-slate-100 text-[11px] font-medium text-slate-500 flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                <span>Private IP filtering enforced</span>
+              </div>
             </div>
           </div>
         </section>

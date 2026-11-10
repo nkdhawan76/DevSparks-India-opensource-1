@@ -10,12 +10,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.2.3] - 2026-11-10
 
 ### Highlights
+- **Home Page Architectural Redesign:** Complete editorial overhaul of the homepage layout adhering strictly to the **Strict Light Theme Only** invariant and developer-grade visual hierarchy (inspired by Linear, Vercel, Stripe).
+- **Zero AI-Generated Icons (Anti-Slop):** Enforced 100% standard, accessible SVG icons from `lucide-react` platform-wide, completely banning AI-generated pseudo-illustration blobs, generic graphics, or dark-mode surfaces.
+- **Strict Light Developer Consoles & Diffs:** Replaced all dark panels with crisp Light Developer Consoles (`#F8FAFC` backgrounds, `#E2E8F0` borders, light red `-` and light green `+` patch inspection).
+- **Engineering Trust Metric Cards:** Upgraded hero trust highlights into 4 high-craft architectural invariant cards (`150+ Invariants`, `100% BYOK AI`, `< 500ms Rollbacks`, `24/7 Edge Radar`).
+- **Phased Public Roadmap Matrix:** Redesigned roadmap into 4 clear architectural phases (M0–M2 Core, M3–M5 Releases & VPS, M6–M7 Containers & Quotas, M8–M9 Edge & Cloud).
 - **Global Breadcrumb Architecture & Hierarchy Overhaul:** Refined breadcrumbs platform-wide across all marketing subpages and the authenticated app dashboard, eliminating duplicate paths and establishing logical 2-level and 3-level navigation hierarchies.
 - **Zero-Duplicate-Path Metadata Registry:** Re-architected `METADATA_REGISTRY` so ancestor items always resolve to genuine section hubs (`/product`, `/solutions`, `/docs`) while the active leaf item displays canonical page titles with `aria-current="page"`.
 - **Responsive App Dashboard Breadcrumb (`Header.tsx`):** Upgraded dashboard breadcrumbs from `hidden xl:flex` to `hidden md:flex`, making them visible across all laptop and tablet screens with clickable Home navigation, `ChevronRight` separators, and accessible labels.
 - **Solutions Hub Route (`/solutions`):** Created `src/app/solutions/page.tsx` redirecting to `/solutions/developers` for clean breadcrumb hierarchy.
 
 ### Fixed
+- **Dark Mode Surface Remnants:** Purged legacy `bg-slate-900` code diffs and terminal panels from `HeroDashboardPreview.tsx`, `BentoFeatureGrid.tsx`, and `WorkflowTimeline.tsx`.
 - **Intermediate Breadcrumb Misdirection:** Fixed previous intermediate "Resources", "Company", and "Legal" labels linking to unrelated subpages; each ancestor item now correctly points to its authentic section hub.
 - **Mobile Breadcrumb Truncation:** Expanded mobile page title truncation from `max-w-[200px]` to `max-w-[280px]` with flex-wrap guards preventing layout shift and horizontal overflow.
 
