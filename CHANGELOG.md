@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.2.3] - 2026-11-10
 
 ### Highlights
+- **Interactive Cursor Glow Card Borders (`GlowCard.tsx`):** Engineered 120 FPS cursor-following radial border illumination on card perimeters across the platform (Bento grid, Roadmap phases, Trust metrics, and Integrations), using zero-re-render CSS Custom Properties with strict light theme adherence.
 - **Home Page Architectural Redesign:** Complete editorial overhaul of the homepage layout adhering strictly to the **Strict Light Theme Only** invariant and developer-grade visual hierarchy (inspired by Linear, Vercel, Stripe).
 - **Zero AI-Generated Icons (Anti-Slop):** Enforced 100% standard, accessible SVG icons from `lucide-react` platform-wide, completely banning AI-generated pseudo-illustration blobs, generic graphics, or dark-mode surfaces.
 - **Strict Light Developer Consoles & Diffs:** Replaced all dark panels with crisp Light Developer Consoles (`#F8FAFC` backgrounds, `#E2E8F0` borders, light red `-` and light green `+` patch inspection).

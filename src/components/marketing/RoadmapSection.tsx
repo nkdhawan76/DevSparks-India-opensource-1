@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { CheckCircle2, Clock, Zap, ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { GlowCard } from "@/components/common/GlowCard";
 
 interface MilestonePhase {
   phase: string;
@@ -95,9 +96,10 @@ export function RoadmapSection() {
             const isActive = p.status === "Active";
 
             return (
-              <div
+              <GlowCard
                 key={p.phase}
-                className="p-6 sm:p-7 rounded-2xl bg-white border border-[#E5E7EB] hover:border-purple-300 hover:shadow-lg transition-all duration-200 shadow-2xs flex flex-col justify-between group"
+                className="hover:shadow-lg transition-all duration-300 shadow-2xs group"
+                innerClassName="p-6 sm:p-7 flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center justify-between mb-3">
@@ -180,7 +182,7 @@ export function RoadmapSection() {
                     ))}
                   </div>
                 </div>
-              </div>
+              </GlowCard>
             );
           })}
         </div>

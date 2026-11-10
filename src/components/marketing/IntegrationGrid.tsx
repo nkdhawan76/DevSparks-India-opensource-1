@@ -2,6 +2,7 @@ import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { GitHubIcon } from "@/components/common/Icons";
 import { GitBranch, Boxes, Sparkles, Cloud, Activity, CheckCircle2, Zap } from "lucide-react";
+import { GlowCard } from "@/components/common/GlowCard";
 
 interface IntegrationItem {
   name: string;
@@ -85,9 +86,10 @@ export function IntegrationGrid() {
           const isActive = tool.status === "Active";
 
           return (
-            <div
+            <GlowCard
               key={tool.name}
-              className="p-6 rounded-2xl bg-white border border-[#E5E7EB] hover:border-purple-300 hover:-translate-y-1 shadow-2xs hover:shadow-lg transition-all duration-200 flex flex-col justify-between group"
+              className="shadow-2xs hover:shadow-lg transition-all duration-300 group"
+              innerClassName="p-6 flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-center justify-between mb-4">
@@ -125,7 +127,7 @@ export function IntegrationGrid() {
                   <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
                 )}
               </div>
-            </div>
+            </GlowCard>
           );
         })}
       </div>

@@ -14,6 +14,7 @@ import {
   Zap,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { GlowCard } from "@/components/common/GlowCard";
 
 export function BentoFeatureGrid() {
   return (
@@ -35,7 +36,10 @@ export function BentoFeatureGrid() {
       {/* Bento Grid Layout */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 items-stretch">
         {/* CARD 1: Pre-deployment Audit Engine (Span 7 cols) */}
-        <div className="lg:col-span-7 rounded-2xl bg-white border border-[#E5E7EB] hover:border-purple-300 p-6 sm:p-8 shadow-xs hover:shadow-lg transition-all duration-200 flex flex-col justify-between group">
+        <GlowCard
+          className="lg:col-span-7 shadow-xs hover:shadow-lg transition-all duration-300 group"
+          innerClassName="p-6 sm:p-8 flex flex-col justify-between"
+        >
           <div>
             <div className="flex items-center justify-between mb-4">
               <div className="w-10 h-10 rounded-xl bg-purple-50 text-[#5938F5] border border-purple-100 flex items-center justify-center group-hover:scale-105 transition-transform">
@@ -85,10 +89,13 @@ export function BentoFeatureGrid() {
               <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
-        </div>
+        </GlowCard>
 
         {/* CARD 2: Bring Your Own Key AI Assistant (Span 5 cols) */}
-        <div className="lg:col-span-5 rounded-2xl bg-white border border-[#E5E7EB] hover:border-purple-300 p-6 sm:p-8 shadow-xs hover:shadow-lg transition-all duration-200 flex flex-col justify-between group">
+        <GlowCard
+          className="lg:col-span-5 shadow-xs hover:shadow-lg transition-all duration-300 group"
+          innerClassName="p-6 sm:p-8 flex flex-col justify-between"
+        >
           <div>
             <div className="flex items-center justify-between mb-4">
               <div className="w-10 h-10 rounded-xl bg-purple-50 text-[#5938F5] border border-purple-100 flex items-center justify-center group-hover:scale-105 transition-transform">
@@ -134,10 +141,14 @@ export function BentoFeatureGrid() {
               <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
-        </div>
+        </GlowCard>
 
         {/* CARD 3: Sovereign VPS Server Manager (Span 5 cols) */}
-        <div className="lg:col-span-5 rounded-2xl bg-white border border-[#E5E7EB] hover:border-blue-300 p-6 sm:p-8 shadow-xs hover:shadow-lg transition-all duration-200 flex flex-col justify-between group">
+        <GlowCard
+          className="lg:col-span-5 shadow-xs hover:shadow-lg transition-all duration-300 group"
+          innerClassName="p-6 sm:p-8 flex flex-col justify-between"
+          glowColor="rgba(57, 136, 247, 0.55)"
+        >
           <div>
             <div className="flex items-center justify-between mb-4">
               <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#3563E9] border border-blue-100 flex items-center justify-center group-hover:scale-105 transition-transform">
@@ -180,10 +191,13 @@ export function BentoFeatureGrid() {
               <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
-        </div>
+        </GlowCard>
 
         {/* CARD 4: Guided Zero-Downtime Deployment (Span 7 cols) */}
-        <div className="lg:col-span-7 rounded-2xl bg-white border border-[#E5E7EB] hover:border-purple-300 p-6 sm:p-8 shadow-xs hover:shadow-lg transition-all duration-200 flex flex-col justify-between group">
+        <GlowCard
+          className="lg:col-span-7 shadow-xs hover:shadow-lg transition-all duration-300 group"
+          innerClassName="p-6 sm:p-8 flex flex-col justify-between"
+        >
           <div>
             <div className="flex items-center justify-between mb-4">
               <div className="w-10 h-10 rounded-xl bg-purple-50 text-[#5938F5] border border-purple-100 flex items-center justify-center group-hover:scale-105 transition-transform">
@@ -229,10 +243,14 @@ export function BentoFeatureGrid() {
               <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
-        </div>
+        </GlowCard>
 
         {/* CARD 5: Synthetic Uptime & SSL Telemetry (Span 6 cols) */}
-        <div className="lg:col-span-6 rounded-2xl bg-white border border-[#E5E7EB] hover:border-emerald-300 p-6 sm:p-8 shadow-xs hover:shadow-lg transition-all duration-200 flex flex-col justify-between group">
+        <GlowCard
+          className="lg:col-span-6 shadow-xs hover:shadow-lg transition-all duration-300 group"
+          innerClassName="p-6 sm:p-8 flex flex-col justify-between"
+          glowColor="rgba(22, 163, 74, 0.55)"
+        >
           <div>
             <div className="flex items-center justify-between mb-4">
               <div className="w-10 h-10 rounded-xl bg-emerald-50 text-[#16A34A] border border-emerald-100 flex items-center justify-center group-hover:scale-105 transition-transform">
@@ -271,10 +289,13 @@ export function BentoFeatureGrid() {
               <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
-        </div>
+        </GlowCard>
 
         {/* CARD 6: Container Scanning & Multi-Region Probes (Span 6 cols) */}
-        <div className="lg:col-span-6 rounded-2xl bg-white border border-[#E5E7EB] hover:border-purple-300 p-6 sm:p-8 shadow-xs hover:shadow-lg transition-all duration-200 flex flex-col justify-between group">
+        <GlowCard
+          className="lg:col-span-6 shadow-xs hover:shadow-lg transition-all duration-300 group"
+          innerClassName="p-6 sm:p-8 flex flex-col justify-between"
+        >
           <div>
             <div className="flex items-center justify-between mb-4">
               <div className="w-10 h-10 rounded-xl bg-purple-50 text-[#5938F5] border border-purple-100 flex items-center justify-center group-hover:scale-105 transition-transform">
@@ -308,7 +329,7 @@ export function BentoFeatureGrid() {
               <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
-        </div>
+        </GlowCard>
       </div>
     </section>
   );

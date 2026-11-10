@@ -1,6 +1,7 @@
 import React from "react";
 import { Metadata } from "next";
 import { ShieldCheck, Lock, Rocket, Activity, Key } from "lucide-react";
+import { GlowCard } from "@/components/common/GlowCard";
 import { WebsiteHeader } from "@/components/navigation/WebsiteHeader";
 import { WebsiteFooter } from "@/components/navigation/WebsiteFooter";
 import { HeroContent } from "@/components/marketing/HeroContent";
@@ -53,7 +54,7 @@ export default function HomePage() {
         <section className="py-8 bg-[#F7F8FC] border-b border-[#E5E7EB]">
           <div className="max-w-6xl mx-auto px-4 sm:px-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="p-4 rounded-xl bg-white border border-[#E5E7EB] hover:border-purple-300 transition-all shadow-2xs flex items-center gap-3.5 group">
+              <GlowCard className="shadow-2xs hover:shadow-md transition-all duration-300 group" innerClassName="p-4 flex items-center gap-3.5">
                 <div className="w-10 h-10 rounded-lg bg-purple-50 text-[#5938F5] border border-purple-100 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                   <ShieldCheck className="h-5 w-5" />
                 </div>
@@ -61,9 +62,9 @@ export default function HomePage() {
                   <div className="text-lg font-extrabold text-[#17172A] leading-tight tracking-tight">150+ Invariants</div>
                   <div className="text-[11px] text-[#667085] mt-0.5 font-medium">Deterministic Static CVE & Secrets Scan</div>
                 </div>
-              </div>
+              </GlowCard>
 
-              <div className="p-4 rounded-xl bg-white border border-[#E5E7EB] hover:border-blue-300 transition-all shadow-2xs flex items-center gap-3.5 group">
+              <GlowCard className="shadow-2xs hover:shadow-md transition-all duration-300 group" innerClassName="p-4 flex items-center gap-3.5" glowColor="rgba(53, 99, 233, 0.55)">
                 <div className="w-10 h-10 rounded-lg bg-blue-50 text-[#3563E9] border border-blue-100 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                   <Lock className="h-5 w-5" />
                 </div>
@@ -71,9 +72,9 @@ export default function HomePage() {
                   <div className="text-lg font-extrabold text-[#17172A] leading-tight tracking-tight">100% BYOK AI</div>
                   <div className="text-[11px] text-[#667085] mt-0.5 font-medium">AES-256 Encrypted • Zero Data Retention</div>
                 </div>
-              </div>
+              </GlowCard>
 
-              <div className="p-4 rounded-xl bg-white border border-[#E5E7EB] hover:border-purple-300 transition-all shadow-2xs flex items-center gap-3.5 group">
+              <GlowCard className="shadow-2xs hover:shadow-md transition-all duration-300 group" innerClassName="p-4 flex items-center gap-3.5">
                 <div className="w-10 h-10 rounded-lg bg-purple-50 text-[#5938F5] border border-purple-100 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                   <Rocket className="h-5 w-5" />
                 </div>
@@ -81,9 +82,9 @@ export default function HomePage() {
                   <div className="text-lg font-extrabold text-[#17172A] leading-tight tracking-tight">&lt; 500ms Rollbacks</div>
                   <div className="text-[11px] text-[#667085] mt-0.5 font-medium">Atomic Linux Symlink Switching</div>
                 </div>
-              </div>
+              </GlowCard>
 
-              <div className="p-4 rounded-xl bg-white border border-[#E5E7EB] hover:border-emerald-300 transition-all shadow-2xs flex items-center gap-3.5 group">
+              <GlowCard className="shadow-2xs hover:shadow-md transition-all duration-300 group" innerClassName="p-4 flex items-center gap-3.5" glowColor="rgba(22, 163, 74, 0.55)">
                 <div className="w-10 h-10 rounded-lg bg-emerald-50 text-[#16A34A] border border-emerald-100 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
                   <Activity className="h-5 w-5" />
                 </div>
@@ -91,7 +92,7 @@ export default function HomePage() {
                   <div className="text-lg font-extrabold text-[#17172A] leading-tight tracking-tight">24/7 Edge Radar</div>
                   <div className="text-[11px] text-[#667085] mt-0.5 font-medium">Multi-Region Latency & TLS Probes</div>
                 </div>
-              </div>
+              </GlowCard>
             </div>
           </div>
         </section>
@@ -118,7 +119,7 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="p-6 sm:p-7 rounded-2xl bg-white border border-[#E5E7EB] hover:border-purple-300 hover:shadow-lg hover:-translate-y-1 transition-all duration-200 shadow-2xs flex flex-col justify-between group">
+            <GlowCard className="shadow-2xs hover:shadow-lg transition-all duration-300 group" innerClassName="p-6 sm:p-7 flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <div className="w-10 h-10 rounded-xl bg-purple-50 text-[#5938F5] border border-purple-100 flex items-center justify-center group-hover:scale-105 transition-transform">
@@ -139,9 +140,9 @@ export default function HomePage() {
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                 <span>Zero model training on your code</span>
               </div>
-            </div>
+            </GlowCard>
 
-            <div className="p-6 sm:p-7 rounded-2xl bg-white border border-[#E5E7EB] hover:border-blue-300 hover:shadow-lg hover:-translate-y-1 transition-all duration-200 shadow-2xs flex flex-col justify-between group">
+            <GlowCard className="shadow-2xs hover:shadow-lg transition-all duration-300 group" innerClassName="p-6 sm:p-7 flex flex-col justify-between" glowColor="rgba(53, 99, 233, 0.55)">
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#3563E9] border border-blue-100 flex items-center justify-center group-hover:scale-105 transition-transform">
@@ -162,9 +163,9 @@ export default function HomePage() {
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                 <span>Mandatory human sign-off on changes</span>
               </div>
-            </div>
+            </GlowCard>
 
-            <div className="p-6 sm:p-7 rounded-2xl bg-white border border-[#E5E7EB] hover:border-emerald-300 hover:shadow-lg hover:-translate-y-1 transition-all duration-200 shadow-2xs flex flex-col justify-between group">
+            <GlowCard className="shadow-2xs hover:shadow-lg transition-all duration-300 group" innerClassName="p-6 sm:p-7 flex flex-col justify-between" glowColor="rgba(22, 163, 74, 0.55)">
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <div className="w-10 h-10 rounded-xl bg-emerald-50 text-[#16A34A] border border-emerald-100 flex items-center justify-center group-hover:scale-105 transition-transform">
@@ -185,7 +186,7 @@ export default function HomePage() {
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                 <span>Private IP filtering enforced</span>
               </div>
-            </div>
+            </GlowCard>
           </div>
         </section>
 
